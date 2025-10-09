@@ -5,8 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
+//@Table(name = "usuarios") Cuando creemos las tablas habria que poner eso
 public class Usuario {
-    @Id
+    @Id //Clave primaria
+    @Column(nullable = false, unique = true)
     private String login;
     @Column(nullable = false)
     private String pass;
