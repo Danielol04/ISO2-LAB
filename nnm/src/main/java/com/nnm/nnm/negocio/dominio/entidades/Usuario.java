@@ -3,20 +3,21 @@ package com.nnm.nnm.negocio.dominio.entidades;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 @Entity
-//@Table(name = "usuarios") Cuando creemos las tablas habria que poner eso
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Usuario {
     @Id //Clave primaria
-    @Column(nullable = false, unique = true)
+    @Column(name ="id", nullable = false, unique = true) // A mirar que es login
     private String login;
-    @Column(nullable = false)
+    @Column(name = "password",nullable = false)
     private String pass;
-    @Column(nullable = false)
+    @Column(name = "nombre", nullable = false)
     private String nombre;
-    @Column(nullable = false)
+    @Column(name = "apellidos", nullable = false)
     private String apellidos;
-    @Column(nullable = false)
+    @Column(name = "direccion", nullable = false)
     private String direccion;
 
     public Usuario() {

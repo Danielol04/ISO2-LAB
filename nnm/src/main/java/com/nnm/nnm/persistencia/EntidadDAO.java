@@ -1,5 +1,7 @@
 package com.nnm.nnm.persistencia;
 
+import java.util.List;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -31,4 +33,8 @@ public abstract class EntidadDAO<T, ID> {
     public void delete(T entity) {
         entityManager.remove(entity);
     }
+    public List<T> findAll() {
+        return entityManager.createQuery("FROM " + entityClass.getName(), entityClass).getResultList();
+    }
+
 }
