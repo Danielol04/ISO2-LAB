@@ -6,7 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
-@Transactional //Indica que als operaciones tienen que ejecutarase dentro de una transacción de una base de datos
+@Transactional 
 public abstract class EntidadDAO<T, ID> {
     @PersistenceContext
     protected EntityManager entityManager;
