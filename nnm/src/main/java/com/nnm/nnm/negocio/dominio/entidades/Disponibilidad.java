@@ -1,28 +1,18 @@
 package com.nnm.nnm.negocio.dominio.entidades;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Disponibilidad")
 public class Disponibilidad {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @Column(name="Id", nullable = false, unique = true)
     private long Id;
 
-    @ManyToOne
-    @JoinColumn(name= "id_inmueble", referencedColumnName = "id_inmueble", nullable = false)
-
     @Column(name ="id_inmueble", nullable = false)
-    private long id_inmueble;
+    private long id_inmueble; // mantenemos la columna de la base de datos
 
     @Column(name = "fecha_inicio", nullable= false)
     private String fecha_inicio;
@@ -40,44 +30,29 @@ public class Disponibilidad {
     private String politica_cancelacion;
 
     public Disponibilidad(){}
-    
-    public Disponibilidad(long Id, long id_mueble, String fecha_inicio, String fecha_fin, double precio, boolean reserva_directa, String politica_cancelacion ){
-       this.Id= Id;
-       this.id_inmueble = id_mueble;
-       this.fecha_inicio= fecha_inicio;
-       this.fecha_fin= fecha_fin;
-       this.precio= precio;
+
+    public Disponibilidad(long Id, long id_inmueble, String fecha_inicio, String fecha_fin, double precio, boolean reserva_directa, String politica_cancelacion ){
+       this.Id = Id;
+       this.id_inmueble = id_inmueble;
+       this.fecha_inicio = fecha_inicio;
+       this.fecha_fin = fecha_fin;
+       this.precio = precio;
        this.reserva_directa = reserva_directa;
        this.politica_cancelacion = politica_cancelacion;
-
     }
 
-    public long getId(){
-        return Id;
-    }
-    public long getId_inmueble(){
-        return id_inmueble;
-    }
-    public String getFecha_inicio(){
-        return fecha_inicio;
-    }
-    public String getFecha_fin(){
-        return fecha_fin;
-    }
-    public double getPrecio(){
-        return precio;
-    }
-    public boolean getReserva_directa(){
-        return reserva_directa;
-    }
-    public String getPolitica_cancelacion(){
-        return politica_cancelacion;
-    }
-
-    public Disponibilidad getInmueble() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInmueble'");
-    }
-
-
+    // Getters y setters
+    public long getId() { return Id; }
+    public long getId_inmueble() { return id_inmueble; }
+    public void setId_inmueble(long id_inmueble) { this.id_inmueble = id_inmueble; }
+    public String getFecha_inicio() { return fecha_inicio; }
+    public void setFecha_inicio(String fecha_inicio) { this.fecha_inicio = fecha_inicio; }
+    public String getFecha_fin() { return fecha_fin; }
+    public void setFecha_fin(String fecha_fin) { this.fecha_fin = fecha_fin; }
+    public double getPrecio() { return precio; }
+    public void setPrecio(double precio) { this.precio = precio; }
+    public boolean getReserva_directa() { return reserva_directa; }
+    public void setReserva_directa(boolean reserva_directa) { this.reserva_directa = reserva_directa; }
+    public String getPolitica_cancelacion() { return politica_cancelacion; }
+    public void setPolitica_cancelacion(String politica_cancelacion) { this.politica_cancelacion = politica_cancelacion; }
 }
