@@ -26,6 +26,16 @@ public class Reserva {
     @Column(name="politica_cancelacion", nullable = false, unique = false)
     private String politica_cancelacion;
 
+    public Reserva(Long idReserva, Inmueble id_inmueble, Usuario username_inquilino, Date fecha_inicio,
+        Date fecha_fin, String politica_cancelacion) {
+        this.idReserva = idReserva;
+        this.id_inmueble = id_inmueble;
+        this.username_inquilino = username_inquilino;
+        this.fecha_inicio = fecha_inicio;
+        this.fecha_fin = fecha_fin;
+        this.politica_cancelacion = politica_cancelacion;
+
+    }
 
     public void setId(Long idReserva) {
         this.idReserva = idReserva;

@@ -19,9 +19,6 @@ public class Usuario {
     private String apellidos;
     @Column(name = "direccion", nullable = false)
     private String direccion;
-
-    public Usuario() {
-    }
     public Usuario(String login, String pass, String nombre, String apellidos, String direccion) {
         super();
         this.login = login;
