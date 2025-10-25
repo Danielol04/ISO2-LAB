@@ -13,12 +13,12 @@ import com.nnm.nnm.negocio.controller.GestorUsuarios;
 
 import jakarta.servlet.http.HttpSession;
 @Controller
-public abstract class VentanaRegistro {
+public class VentanaRegistro {
 
-    protected static final Logger log = LoggerFactory.getLogger(VentanaRegistro.class);
+    private static final Logger log = LoggerFactory.getLogger(VentanaRegistro.class);
 
     @Autowired
-    protected GestorUsuarios gestorUsuarios; 
+    private GestorUsuarios gestorUsuarios; 
 
     @GetMapping("/login")
     public String mostrarLogin(Model model) {

@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import com.nnm.nnm.negocio.dominio.entidades.Inquilino;
 import com.nnm.nnm.negocio.dominio.entidades.Propietario;
 import com.nnm.nnm.negocio.dominio.entidades.Usuario;
+import com.nnm.nnm.persistencia.InquilinoDAO;
+import com.nnm.nnm.persistencia.PropietarioDAO;
 import com.nnm.nnm.persistencia.UsuarioDAO;
 
 @Service
@@ -13,6 +15,10 @@ public class GestorUsuarios {
 
     @Autowired
     private UsuarioDAO usuarioDAO;
+    @Autowired
+    private InquilinoDAO inquilinoDAO;
+    @Autowired
+    private PropietarioDAO propietarioDAO;
 
     public boolean autenticarUsuario(String username, String password) {
         Usuario usuario = usuarioDAO.findById(username);
@@ -25,10 +31,10 @@ public class GestorUsuarios {
     }
 
     public void registrarInquilino(Inquilino inquilino) {
-        usuarioDAO.save(inquilino);
+        inquilinoDAO.save(inquilino);
     }
     public void registrarPropietario(Propietario propietario) {
-        usuarioDAO.save(propietario);
+        propietarioDAO.save(propietario);
     }
-    
+
 }

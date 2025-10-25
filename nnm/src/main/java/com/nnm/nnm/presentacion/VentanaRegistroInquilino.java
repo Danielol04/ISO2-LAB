@@ -1,25 +1,32 @@
 package com.nnm.nnm.presentacion;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.nnm.nnm.negocio.controller.GestorUsuarios;
 import com.nnm.nnm.negocio.dominio.entidades.Inquilino;
 
 @Controller
-@RequestMapping("/registro")
-public class VentanaRegistroInquilino extends VentanaRegistro {
+public class VentanaRegistroInquilino {
+    private  static final Logger log = LoggerFactory.getLogger(VentanaRegistroInquilino.class);
+    
+    @Autowired
+    private GestorUsuarios gestorUsuarios; 
 
-    @GetMapping("/inquilino")
+    @GetMapping("/registro/inquilino")
     public String mostrarFormulario(Model model) {
+        log.info("Mostrando formulario de inquilino");
         model.addAttribute("inquilino", new Inquilino());
         return "inquilino";
     }
 
-    @PostMapping("/inquilino")
+    @PostMapping("/registro/inquilino")
     public String procesarRegistro(@ModelAttribute Inquilino inquilino, Model model) {
         if (gestorUsuarios.existeUsuario(inquilino.getUsername())) {
             model.addAttribute("error", "El nombre de usuario ya existe");

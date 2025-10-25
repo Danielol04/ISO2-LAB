@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro Inquilino</title>
+</head>
+<body>
+    <h1>Registro de Inquilino</h1>
+
+    <!-- Mostrar mensaje de error -->
+    <div th:if="${error}" style="color:rgb(255, 0, 0);">
+        <p th:text="${error}"></p>
+    </div>
+
+    <form th:action="@{/registro/inquilino}" th:object="${inquilino}" method="post">
+        <div>
+            <label>Usuario:</label>
+            <input type="text" th:field="*{username}" required />
+        </div>
+        <div>
+            <label>Contraseña:</label>
+            <input type="password" th:field="*{password}" required />
+        </div>
+        <div>
+            <label>Correo:</label>
+            <input type="email" th:field="*{correo}" required />
+        </div>
+        <div>
+            <label>Nombre:</label>
+            <input type="text" th:field="*{nombre}" required />
+        </div>
+        <div>
+            <label>Apellidos:</label>
+            <input type="text" th:field="*{apellidos}" required />
+        </div>
+        <div>
+            <label>Dirección:</label>
+            <input type="text" th:field="*{direccion}" required />
+        </div>
+        <div>
+            <button type="submit">Registrar Inquilino</button>
+        </div>
+    </form> 
+</body>
+</html>

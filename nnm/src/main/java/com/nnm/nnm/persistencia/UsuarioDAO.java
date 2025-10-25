@@ -10,4 +10,5 @@ public class UsuarioDAO extends EntidadDAO<Usuario, String> {
     public UsuarioDAO() {
         super(Usuario.class);
     }
+    
 }

@@ -1,40 +1,40 @@
 package com.nnm.nnm.persistencia;
-
 import java.util.List;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import jakarta.transaction.Transactional;
 
-@Transactional 
+@Transactional
 public abstract class EntidadDAO<T, ID> {
-    @PersistenceContext
-    protected EntityManager entityManager;
 
-    private Class<T> entityClass;
+    @Autowired
+    protected GestorBD gestorBD;
 
-    public EntidadDAO(Class<T> entityClass) {
+    private final Class<T> entityClass;
+
+    protected EntidadDAO(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
 
     public T findById(ID id) {
-        return entityManager.find(entityClass, id);
+        String jpql = "FROM " + entityClass.getSimpleName() + " e WHERE e.id = :id";
+        return gestorBD.selectSingle(jpql, entityClass, "id", id);
     }
 
-    public T save(T entity) {
-        entityManager.persist(entity);
-        return entity;
+    public List<T> findAll() {
+        return gestorBD.select("FROM " + entityClass.getSimpleName(), entityClass);
+    }
+
+    public void save(T entity) {
+        gestorBD.insert(entity);
     }
 
     public T update(T entity) {
-        return entityManager.merge(entity);
+        return gestorBD.update(entity);
     }
 
     public void delete(T entity) {
-        entityManager.remove(entity);
+        gestorBD.delete(entity);
     }
-    public List<T> findAll() {
-        return entityManager.createQuery("FROM " + entityClass.getName(), entityClass).getResultList();
-    }
-
 }
