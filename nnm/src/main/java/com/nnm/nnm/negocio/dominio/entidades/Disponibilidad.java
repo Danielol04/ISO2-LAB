@@ -74,5 +74,10 @@ public class Disponibilidad {
         return politica_cancelacion;
     }
 
+    public Disponibilidad getInmueble() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getInmueble'");
+    }
+
 
 }
