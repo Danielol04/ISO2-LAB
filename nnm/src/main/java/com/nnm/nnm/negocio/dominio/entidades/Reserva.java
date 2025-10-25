@@ -10,15 +10,15 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "reserva")
 public class Reserva {
-    @Id
+    @Id//Clave primaria
     @Column(name = "id_reserva", nullable = false, unique = true)
     private Long idReserva;
     @OneToMany
     @JoinColumn(name="id_inmueble", referencedColumnName = "id")
-    private Long id_inmueble;
+    private Inmueble id_inmueble;
     @OneToMany
     @JoinColumn(name="username_inquilino", referencedColumnName = "username")
-    private String username_inquilino;
+    private Usuario username_inquilino;
     @Column(name="fecha_inicio", nullable = false, unique = false)
     private Date fecha_inicio;
     @Column(name="fecha_fin", nullable = false, unique = false)
