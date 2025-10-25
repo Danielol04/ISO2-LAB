@@ -6,7 +6,8 @@ import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
 @Entity
 @Table(name = "Disponibilidad")
 public class Disponibilidad {
@@ -16,7 +17,7 @@ public class Disponibilidad {
     @Column(name="Id", nullable = false, unique = true)
     private long Id;
 
-    @ManyToOne
+    @OneToMany
     @JoinColumn(name= "id_inmueble", referencedColumnName = "id_inmueble", nullable = false)
 
     @Column(name ="id_inmueble", nullable = false)
