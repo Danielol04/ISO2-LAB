@@ -37,7 +37,7 @@ public class VentanaRegistro {
         log.info("Login exitoso para usuario: {}", username);
         session.setAttribute("usuario", username);
 
-        return "menuPrincipal";
+        return "home";
     }
 
 

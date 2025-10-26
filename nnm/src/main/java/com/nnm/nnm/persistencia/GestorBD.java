@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
@@ -17,14 +18,23 @@ public class GestorBD {
 
     // SELECT genérico
     public <T> List<T> select(String jpql, Class<T> entityClass) {
-        return entityManager.createQuery(jpql, entityClass).getResultList();
+        try {
+            return entityManager.createQuery(jpql, entityClass).getResultList();
+        } catch (NoResultException e) {
+            return List.of();
+        }
     }
 
     // SELECT con parámetro (por ejemplo WHERE)
     public <T> T selectSingle(String jpql, Class<T> entityClass, String paramName, Object value) {
-        return entityManager.createQuery(jpql, entityClass)
+        try {
+            return entityManager.createQuery(jpql, entityClass)
                 .setParameter(paramName, value)
                 .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+        
     }
 
     // INSERT genérico
@@ -34,7 +44,11 @@ public class GestorBD {
 
     // UPDATE genérico
     public <T> T update(T entity) {
-        return entityManager.merge(entity);
+        try {
+            return entityManager.merge(entity);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     // DELETE genérico
