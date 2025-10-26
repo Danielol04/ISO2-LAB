@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Alta Inmueble</title></head>
+<body>
+<h2>Registrar nuevo inmueble</h2>
+
+<form th:action="@{/inmuebles/alta}" th:object="${inmueble}" method="post">
+    Propietario: <input type="text" th:field="*{username_propietario}" required><br>
+    Tipo: <input type="text" th:field="*{tipo_inmueble}" required><br>
+    Dirección: <input type="text" th:field="*{direccion}" required><br>
+    Localidad: <input type="text" th:field="*{localidad}" required><br>
+    Provincia: <input type="text" th:field="*{provincia}" required><br>
+    Código Postal: <input type="text" th:field="*{codigo_postal}" required><br>
+    Precio por noche: <input type="number" th:field="*{precio_noche}" required><br><br>
+    <button type="submit">Registrar</button>
+</form>
+
+<br>
+<a href="/inmuebles/listar">Ver todos los inmuebles</a>
+</body>
+</html>

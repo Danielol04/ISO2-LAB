@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Nueva Disponibilidad</title>
+</head>
+<body>
+<h2>Registrar Disponibilidad</h2>
+
+<form th:action="@{/Disponibilidad/guardar}" th:object="${disponibilidad}" method="post">
+    Inmueble:
+    <select th:field="*{id_inmueble}">
+        <option th:each="inmueble : ${inmuebles}"
+                th:value="${inmueble.id}"
+                th:text="${inmueble.direccion}">Inmueble</option>
+    </select><br>
+    Fecha inicio: <input type="text" th:field="*{fecha_inicio}" placeholder="YYYY-MM-DD"><br>
+    Fecha fin: <input type="text" th:field="*{fecha_fin}" placeholder="YYYY-MM-DD"><br>
+    Precio: <input type="number" th:field="*{precio}"><br>
+    Reserva directa: <input type="checkbox" th:field="*{reserva_directa}"><br>
+    Política de cancelación: <input type="text" th:field="*{politica_cancelacion}"><br>
+    <button type="submit">Guardar</button>
+</form>
+
+<p th:text="${error}"></p>
+<p th:text="${mensaje}"></p>
+
+<a href="/Disponibilidad/listar">Ver todas las disponibilidades</a>
+</body>
+</html>
