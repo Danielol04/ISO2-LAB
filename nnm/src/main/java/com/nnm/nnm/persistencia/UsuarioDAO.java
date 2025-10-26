@@ -10,4 +10,9 @@ public class UsuarioDAO extends EntidadDAO<Usuario, String> {
     public UsuarioDAO() {
         super(Usuario.class);
     }
+    public Usuario findByUsername(String username) {
+        String jpql = "FROM Usuario e WHERE e.username = :username";
+        return gestorBD.selectSingle(jpql, Usuario.class, "username", username);
+    }
+
 }
