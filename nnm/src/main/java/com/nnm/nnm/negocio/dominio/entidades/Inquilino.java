@@ -3,6 +3,11 @@ package com.nnm.nnm.negocio.dominio.entidades;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.CascadeType;
+import java.util.List;
 
 @Entity
 @Table(name = "inquilino")
