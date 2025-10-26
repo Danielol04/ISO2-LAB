@@ -44,7 +44,7 @@ public class VentanaReserva {
         Model model) {
         
         String username= principal.getName();
-        Usuario usuario= usuarioDAO.findbyLogin(username);
+        Usuario usuario= InquilinoDAO.findbyUsername(username);
 
 
         reserva.setId_inmueble(idInmueble);
