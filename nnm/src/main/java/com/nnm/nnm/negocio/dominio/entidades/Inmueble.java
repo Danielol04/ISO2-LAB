@@ -1,73 +1,66 @@
 package com.nnm.nnm.negocio.dominio.entidades;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+
+import jakarta.persistence.*;
+
 @Entity
 @Table(name = "inmueble")
 public class Inmueble {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column( name= "Id", nullable = false, unique = true)
+    @Column(name= "Id", nullable = false, unique = true)
     private long Id;
-    @ManyToOne
-    @JoinColumn(name = "username_propietario", referencedColumnName = "username", nullable = false)
-    private Propietario propietario;
- 
-    @Column( name= "username_propietario", nullable = false)
+
+    @Column(name= "username_propietario", nullable = false)
     private String username_propietario;
-    @Column( name= "tipo_inmueble", nullable= false )
+
+    @Column(name= "tipo_inmueble", nullable= false)
     private String tipo_inmueble;
+
     @Column(name= "direccion", nullable = false)
     private String direccion;
+
     @Column(name= "localidad", nullable= false)
     private String localidad;
-    @Column(name = "provincia", nullable = false)
+
+    @Column(name= "provincia", nullable = false)
     private String provincia;
-    @Column(name = "codigo_postal", nullable = false)
+
+    @Column(name= "codigo_postal", nullable = false)
     private String codigo_postal;
-    @Column(name = "precio_noche", nullable = false)
+
+    @Column(name= "precio_noche", nullable = false)
     private double precio_noche;
 
-    public Inmueble(){}
+    public Inmueble() {}
 
-    public Inmueble(long Id, String username_propietario, String tipo_inmueble, String direccion, String localidad, String provincia, String codigo_postal, double precio_noche ){
-    this.Id =Id;
-    this.username_propietario = username_propietario;
-    this.direccion= direccion;
-    this.localidad = localidad;
-    this.provincia = provincia;
-    this.codigo_postal = codigo_postal;
-    this.precio_noche = precio_noche;
-
-    
-    }
-    public long getId(){
-        return Id;
-    }
-    public String getUsername_propietario(){
-        return username_propietario;
-    }
-    public String getDireccion(){
-        return direccion;
-    }
-    public String getLocalidad(){
-        return localidad;
-    }
-    public String getProvincia(){
-        return provincia;
-    }
-    public String getCodigo_postal(){
-        return codigo_postal;
-
-    }
-    public double getPrecio_noche(){
-        return precio_noche;
+    public Inmueble(long Id, String username_propietario, String tipo_inmueble,
+                    String direccion, String localidad, String provincia,
+                    String codigo_postal, double precio_noche) {
+        this.Id = Id;
+        this.username_propietario = username_propietario;
+        this.tipo_inmueble = tipo_inmueble;
+        this.direccion = direccion;
+        this.localidad = localidad;
+        this.provincia = provincia;
+        this.codigo_postal = codigo_postal;
+        this.precio_noche = precio_noche;
     }
 
+    public long getId() { return Id; }
+    public String getUsername_propietario() { return username_propietario; }
+    public String getTipo_inmueble() { return tipo_inmueble; }
+    public String getDireccion() { return direccion; }
+    public String getLocalidad() { return localidad; }
+    public String getProvincia() { return provincia; }
+    public String getCodigo_postal() { return codigo_postal; }
+    public double getPrecio_noche() { return precio_noche; }
 
+    public void setUsername_propietario(String username_propietario) { this.username_propietario = username_propietario; }
+    public void setTipo_inmueble(String tipo_inmueble) { this.tipo_inmueble = tipo_inmueble; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
+    public void setLocalidad(String localidad) { this.localidad = localidad; }
+    public void setProvincia(String provincia) { this.provincia = provincia; }
+    public void setCodigo_postal(String codigo_postal) { this.codigo_postal = codigo_postal; }
+    public void setPrecio_noche(double precio_noche) { this.precio_noche = precio_noche; }
 }
