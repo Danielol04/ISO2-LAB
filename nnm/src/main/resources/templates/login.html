@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+
+    <!-- Mostrar mensaje de error si existe -->
+    <div th:if="${error}" style="color:rgb(253, 3, 3);">
+        <p th:text="${error}"></p>
+    </div>
+
+    <!-- Formulario de login -->
+    <form th:action="@{/login}" method="post">
+        <div>
+            <label for="username">Usuario:</label>
+            <input type="text" id="username" name="username" required />
+        </div>
+        <div>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required />
+        </div>
+        <div>
+            <button type="submit">Ingresar</button>
+        </div>
+    </form>
+
+    <hr />
+
+    <!-- Botones para registro -->
+    <div>
+        <button onclick="window.location.href='/registro/inquilino'">Registrar Inquilino</button>
+        <button onclick="window.location.href='/registro/propietario'">Registrar Propietario</button>
+    </div>
+</body>
+</html>
