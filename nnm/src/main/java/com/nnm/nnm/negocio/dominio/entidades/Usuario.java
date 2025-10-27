@@ -5,45 +5,50 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Usuario {
-    @Id //Clave primaria
-    @Column(name ="id", nullable = false, unique = true) // A mirar que es login
-    private String login;
+@Table(name = "usuario")
+public abstract class Usuario {
+    @Id 
+    @Column(name ="username", nullable = false, unique = true)
+    private String username;
     @Column(name = "password",nullable = false)
-    private String pass;
+    private String password;
+    @Column(name = "correo", nullable = false)
+    private String correo;
     @Column(name = "nombre", nullable = false)
     private String nombre;
     @Column(name = "apellidos", nullable = false)
     private String apellidos;
     @Column(name = "direccion", nullable = false)
     private String direccion;
-    public Usuario() {
-    }
-    public Usuario(String login, String pass, String nombre, String apellidos, String direccion) {
-        super();
-        this.login = login;
-        this.pass = pass;
+
+    public Usuario() {}
+    
+    public Usuario(String username, String password, String correo, String nombre, String apellidos, String direccion) {
+        this.username = username;
+        this.password = password;
+        this.correo = correo;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.direccion = direccion;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getPass() {
-        return pass;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPass(String pass) {
-        this.pass = pass;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getNombre() {
@@ -69,4 +74,11 @@ public class Usuario {
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
+    public String getCorreo() {
+        return correo;
+    }
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
 }

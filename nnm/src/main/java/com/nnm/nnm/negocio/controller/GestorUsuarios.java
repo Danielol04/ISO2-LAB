@@ -1,37 +1,40 @@
 package com.nnm.nnm.negocio.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.stereotype.Service;
 
+import com.nnm.nnm.negocio.dominio.entidades.Inquilino;
+import com.nnm.nnm.negocio.dominio.entidades.Propietario;
 import com.nnm.nnm.negocio.dominio.entidades.Usuario;
+import com.nnm.nnm.persistencia.InquilinoDAO;
+import com.nnm.nnm.persistencia.PropietarioDAO;
 import com.nnm.nnm.persistencia.UsuarioDAO;
 
-
-@Controller
+@Service
 public class GestorUsuarios {
-    public static final Logger log = LoggerFactory.getLogger(GestorUsuarios.class);
 
     @Autowired
     private UsuarioDAO usuarioDAO;
-    
-    @GetMapping("/usuarios")
-    public String usuariosForm(Model model) {
-        model.addAttribute("usuario", new Usuario());
-        log.info(usuarioDAO.findAll().toString());
-        return "usuario";
+    @Autowired
+    private InquilinoDAO inquilinoDAO;
+    @Autowired
+    private PropietarioDAO propietarioDAO;
+
+    public boolean autenticarUsuario(String username, String password) {
+        Usuario usuario = usuarioDAO.findByUsername(username);
+        return (usuario != null && usuario.getPassword().equals(password)); // True si el usuario existe y la contraseña coincide
+    }
+   
+    // Verifica si un usuario existe en la base de datos
+    public boolean existeUsuario(String username) {
+        return usuarioDAO.findByUsername(username) != null; // True si el usuario existe, false si no
     }
 
-    @PostMapping("/usuarios")
-    public String usuariosSubmit(@ModelAttribute Usuario usuario, Model model) {
-        model.addAttribute("usuario", usuario);
-        Usuario savedUser = usuarioDAO.save(usuario);
-        log.info("Usuario guardado: " + savedUser);
-        return "result";
+    public void registrarInquilino(Inquilino inquilino) {
+        inquilinoDAO.save(inquilino);
     }
+    public void registrarPropietario(Propietario propietario) {
+        propietarioDAO.save(propietario);
+    }
+
 }
