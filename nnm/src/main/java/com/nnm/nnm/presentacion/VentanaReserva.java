@@ -26,7 +26,7 @@ public class VentanaReserva {
     private GestorReservas gestorReservas;
 
     @Autowired
-    private UsuarioDAO usuarioDAO;
+    private InquilinoDAO inquilinoDAO;
 
     @GetMapping("/formulario")
     public String mostrarFormularioReserva(Model model) {
