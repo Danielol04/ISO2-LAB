@@ -1,6 +1,8 @@
 package com.nnm.nnm.negocio.dominio.entidades;
 
 import jakarta.persistence.*;
+import java.sql.Date;
+
 
 @Entity
 @Table(name = "Disponibilidad")
@@ -12,14 +14,14 @@ public class Disponibilidad {
     private long Id;
 
     // Mantener la columna de la base de datos
-    @Column(name ="id_inmueble", nullable = false)
-    private long id_inmueble;
+    @JoinColumn(name ="id_inmueble", referencedColumnName = "id" ,nullable = false)
+    private Inmueble inmueble;
 
     @Column(name = "fecha_inicio", nullable= false)
-    private String fecha_inicio;
+    private Date fecha_inicio;
 
     @Column(name = "fecha_fin", nullable = false)
-    private String fecha_fin;
+    private Date fecha_fin;
 
     @Column(name = "precio", nullable = false)
     private double precio;
@@ -34,10 +36,10 @@ public class Disponibilidad {
     public Disponibilidad() {}
 
     // Constructor con todos los campos
-    public Disponibilidad(long Id, long id_inmueble, String fecha_inicio, String fecha_fin,
+    public Disponibilidad(long Id, Inmueble inmueble, Date fecha_inicio, Date fecha_fin,
                           double precio, boolean reserva_directa, String politica_cancelacion) {
        this.Id = Id;
-       this.id_inmueble = id_inmueble;
+       this.inmueble = inmueble;
        this.fecha_inicio = fecha_inicio;
        this.fecha_fin = fecha_fin;
        this.precio = precio;
@@ -48,14 +50,14 @@ public class Disponibilidad {
     // Getters y setters
     public long getId() { return Id; }
 
-    public long getId_inmueble() { return id_inmueble; }
-    public void setId_inmueble(long id_inmueble) { this.id_inmueble = id_inmueble; }
+    public Inmueble getInmueble() { return inmueble; }
+    public void setInmueble(Inmueble inmueble) { this.inmueble = inmueble; }
 
-    public String getFecha_inicio() { return fecha_inicio; }
-    public void setFecha_inicio(String fecha_inicio) { this.fecha_inicio = fecha_inicio; }
+    public Date getFecha_inicio() { return fecha_inicio; }
+    public void setFecha_inicio(Date fecha_inicio) { this.fecha_inicio = fecha_inicio; }
 
-    public String getFecha_fin() { return fecha_fin; }
-    public void setFecha_fin(String fecha_fin) { this.fecha_fin = fecha_fin; }
+    public Date getFecha_fin() { return fecha_fin; }
+    public void setFecha_fin(Date fecha_fin) { this.fecha_fin = fecha_fin; }
 
     public double getPrecio() { return precio; }
     public void setPrecio(double precio) { this.precio = precio; }

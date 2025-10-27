@@ -3,6 +3,8 @@ import java.sql.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -11,6 +13,7 @@ import jakarta.persistence.Table;
 @Table(name = "reserva")
 public class Reserva {
     @Id//Clave primaria
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_reserva", nullable = false, unique = true)
     private Long idReserva;
     @ManyToOne//Relacion de muchas reservas a un inmueble
@@ -18,7 +21,7 @@ public class Reserva {
     private Inmueble id_inmueble;
     @ManyToOne//Relacion de muchas reservas a un usuario
     @JoinColumn(name="username_inquilino", referencedColumnName = "username")
-    private Usuario username_inquilino;
+    private Inquilino username_inquilino;
     @Column(name="fecha_inicio", nullable = false, unique = false)
     private Date fecha_inicio;
     @Column(name="fecha_fin", nullable = false, unique = false)
@@ -29,7 +32,7 @@ public class Reserva {
     public Reserva() {
     }
     
-    public Reserva(Long idReserva, Inmueble id_inmueble, Usuario username_inquilino, Date fecha_inicio,
+    public Reserva(Long idReserva, Inmueble id_inmueble, Inquilino username_inquilino, Date fecha_inicio,
         Date fecha_fin, String politica_cancelacion) {
         this.idReserva = idReserva;
         this.id_inmueble = id_inmueble;
@@ -55,7 +58,7 @@ public class Reserva {
     public Usuario getUsername_inquilino() {
         return username_inquilino;
     }
-    public void setUsername_inquilino(Usuario username_inquilino) {
+    public void setUsername_inquilino(Inquilino username_inquilino) {
         this.username_inquilino = username_inquilino;
     }
     public Date getFecha_inicio() {

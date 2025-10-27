@@ -1,5 +1,7 @@
 package com.nnm.nnm.presentacion;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,13 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.nnm.nnm.negocio.controller.GestorInmuebles;
 import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
 
-
-
-
-
 @Controller
 @RequestMapping("/Inmueble")
 public class VentanaAltaInmueble{
+    
+    private static final Logger log = LoggerFactory.getLogger(VentanaRegistro.class);
 
     @Autowired
     private GestorInmuebles gestorInmuebles;
@@ -24,8 +24,9 @@ public class VentanaAltaInmueble{
     //mostramos el formulario de alta
     @GetMapping("/nuevo")
     public String mostrarFormulario(Model model){
+        log.info("Mostrando formulario de AltaInmueble");
         model.addAttribute("inmueble", new Inmueble());
-        return "altaInmueble";  
+        return "AltaInmuebles";  
     }
 
     //procesamos el formulario de alta
@@ -33,15 +34,16 @@ public class VentanaAltaInmueble{
         try{
             if(inmueble.getDireccion() == null ||inmueble.getDireccion().isEmpty() ){
                 model.addAttribute("Error", "La direccion del Inmueble es obligatoria");
-                return "altaInmueble";
+                return "AltaInmuebles";
             }
 
             gestorInmuebles.registrarInmueble(inmueble);
+            log.info("Mostrando formulario de AltaInmueble");
             model.addAttribute("mensaje", "Inmueble registrado correctamente");
             return "resultadoAltaInmueble"; //confirmacion
         } catch (Exception e){
             model.addAttribute("error", "error al registrar el inmueble:" + e.getMessage());
-            return "altaInmueble";
+            return "AltaInmuebles";
         }
       
 

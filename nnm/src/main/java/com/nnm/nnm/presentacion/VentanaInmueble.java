@@ -3,7 +3,10 @@ package com.nnm.nnm.presentacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.nnm.nnm.negocio.controller.GestorInmuebles;
 import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
@@ -18,7 +21,7 @@ public class VentanaInmueble{
     @GetMapping("/alta")
     public String mostrarFormulario(Model model) {
         model.addAttribute("inmueble", new Inmueble());
-        return "altaInmueble";
+        return "AltaInmuebles";
     }
 
     @PostMapping("/alta")

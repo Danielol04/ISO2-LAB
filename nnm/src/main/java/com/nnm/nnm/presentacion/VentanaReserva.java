@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nnm.nnm.negocio.controller.GestorReservas;
 import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
+import com.nnm.nnm.negocio.dominio.entidades.Inquilino;
 import com.nnm.nnm.negocio.dominio.entidades.Reserva;
-import com.nnm.nnm.negocio.dominio.entidades.Usuario;
-import com.nnm.nnm.persistencia.UsuarioDAO;
+import com.nnm.nnm.persistencia.InquilinoDAO;
 
 @Controller
 @RequestMapping("/Reserva")
@@ -31,7 +31,7 @@ public class VentanaReserva {
     @GetMapping("/formulario")
     public String mostrarFormularioReserva(Model model) {
         model.addAttribute("reserva", new Reserva());
-        return "NuevaReserva"; // nombre de la vista del formulario
+        return "nuevaReserva"; // nombre de la vista del formulario
     }
 
     @PostMapping("/crearReserva")
@@ -44,7 +44,7 @@ public class VentanaReserva {
         Model model) {
         
         String username= principal.getName();
-        Usuario usuario= InquilinoDAO.findbyUsername(username);
+        Inquilino usuario= inquilinoDAO.findById(username);
 
 
         reserva.setId_inmueble(idInmueble);
