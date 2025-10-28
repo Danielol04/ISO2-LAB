@@ -1,21 +1,20 @@
 package com.nnm.nnm.negocio.dominio.entidades;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.CascadeType;
-import java.util.List;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "inquilino")
 @PrimaryKeyJoinColumn(name = "username") 
 public class Inquilino extends Usuario {
 
-    @OneToOne
-    @JoinColumn(name = "id_lista_deseos", referencedColumnName = "id")
+    @OneToOne(mappedBy="inquilino", cascade = CascadeType.ALL)
     private ListaDeseos listaDeseos;
 
     @OneToMany(mappedBy = "inquilino", cascade = CascadeType.ALL)

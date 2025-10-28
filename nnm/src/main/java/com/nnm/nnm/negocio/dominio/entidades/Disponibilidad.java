@@ -1,19 +1,29 @@
 package com.nnm.nnm.negocio.dominio.entidades;
 
-import jakarta.persistence.*;
 import java.sql.Date;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 
 @Entity
-@Table(name = "Disponibilidad")
+@Table(name = "disponibilidad")
 public class Disponibilidad {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="Id", nullable = false, unique = true)
-    private long Id;
+    @Column(name="id", nullable = false, unique = true)
+    private long id;
 
-    // Mantener la columna de la base de datos
+    @ManyToOne
     @JoinColumn(name ="id_inmueble", referencedColumnName = "id" ,nullable = false)
     private Inmueble inmueble;
 
@@ -29,16 +39,17 @@ public class Disponibilidad {
     @Column(name= "reserva_directa", nullable =  false)
     private boolean reserva_directa;
 
+    @Enumerated(EnumType.STRING)
     @Column(name= "politica_cancelacion", nullable = false)
-    private String politica_cancelacion;
+    private PoliticaCancelacion politica_cancelacion;
 
     // Constructor vacío para JPA
     public Disponibilidad() {}
 
     // Constructor con todos los campos
-    public Disponibilidad(long Id, Inmueble inmueble, Date fecha_inicio, Date fecha_fin,
-                          double precio, boolean reserva_directa, String politica_cancelacion) {
-       this.Id = Id;
+    public Disponibilidad(long id, Inmueble inmueble, Date fecha_inicio, Date fecha_fin,
+                          double precio, boolean reserva_directa, PoliticaCancelacion politica_cancelacion) {
+       this.id = id;
        this.inmueble = inmueble;
        this.fecha_inicio = fecha_inicio;
        this.fecha_fin = fecha_fin;
@@ -48,7 +59,7 @@ public class Disponibilidad {
     }
 
     // Getters y setters
-    public long getId() { return Id; }
+    public long getId() { return id; }
 
     public Inmueble getInmueble() { return inmueble; }
     public void setInmueble(Inmueble inmueble) { this.inmueble = inmueble; }
@@ -65,6 +76,6 @@ public class Disponibilidad {
     public boolean getReserva_directa() { return reserva_directa; }
     public void setReserva_directa(boolean reserva_directa) { this.reserva_directa = reserva_directa; }
 
-    public String getPolitica_cancelacion() { return politica_cancelacion; }
-    public void setPolitica_cancelacion(String politica_cancelacion) { this.politica_cancelacion = politica_cancelacion; }
+    public PoliticaCancelacion getPolitica_cancelacion() { return politica_cancelacion; }
+    public void setPolitica_cancelacion(PoliticaCancelacion politica_cancelacion) { this.politica_cancelacion = politica_cancelacion; }
 }

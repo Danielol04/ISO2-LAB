@@ -29,4 +29,16 @@ public class ListaDeseos {
 
     public ListaDeseos() {}
 
+    public long getId() {
+        return id;
+    }
+    public void setId(long id) {
+        this.id = id;
+    }
+    public Inquilino getInquilino() {
+        return inquilino;
+    }
+    public void setInquilino(Inquilino inquilino) {
+        this.inquilino = inquilino;
+    }
 }
