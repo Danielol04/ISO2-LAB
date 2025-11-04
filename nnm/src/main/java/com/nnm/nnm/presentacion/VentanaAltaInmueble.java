@@ -16,7 +16,7 @@ import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
 @RequestMapping("/Inmueble")
 public class VentanaAltaInmueble{
     
-    private static final Logger log = LoggerFactory.getLogger(VentanaRegistro.class);
+    private static final Logger log = LoggerFactory.getLogger(VentanaAltaInmueble.class);
 
     @Autowired
     private GestorInmuebles gestorInmuebles;

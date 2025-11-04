@@ -13,32 +13,32 @@ import com.nnm.nnm.negocio.controller.GestorUsuarios;
 
 import jakarta.servlet.http.HttpSession;
 @Controller
-public class VentanaRegistro {
+public class VentanaLogin {
 
-    private static final Logger log = LoggerFactory.getLogger(VentanaRegistro.class);
+    private static final Logger log = LoggerFactory.getLogger(VentanaLogin.class);
 
     @Autowired
     private GestorUsuarios gestorUsuarios; 
 
     @GetMapping("/login")
-    public String mostrarLogin(Model model) {
+    public String mostrarLogin() {
         log.info("Mostrando formulario de login");
-        model.addAttribute("usuarioLogin", new Object()); 
         return "login";
     }
 
     @PostMapping("/login")
     public String procesarLogin(@RequestParam String username,  @RequestParam String password, Model model, HttpSession session) {
-        if (!gestorUsuarios.autenticarUsuario(username, password)) {
+        String rol_usuario = gestorUsuarios.login(username, password);
+        if (rol_usuario == null) {
             log.warn("Login fallido para usuario: {}", username);
             model.addAttribute("error", "Usuario o contraseña incorrectos");
             return "login";
         }
+
         log.info("Login exitoso para usuario: {}", username);
-        session.setAttribute("usuario", username);
-
-        return "home";
+        session.setAttribute("usernmame", username);
+        session.setAttribute("rol", rol_usuario);
+        return "redirect:/";
     }
-
 
 }
