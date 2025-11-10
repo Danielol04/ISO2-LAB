@@ -28,8 +28,7 @@ public class VentanaLogin {
 
     @PostMapping("/login")
     public String procesarLogin(@RequestParam String username,  @RequestParam String password, Model model, HttpSession session) {
-        String rol_usuario = gestorUsuarios.login(username, password);
-        if (rol_usuario == null) {
+        if (gestorUsuarios.login(username, password) == false) {
             log.warn("Login fallido para usuario: {}", username);
             model.addAttribute("error", "Usuario o contraseña incorrectos");
             return "login";
@@ -37,8 +36,7 @@ public class VentanaLogin {
 
         log.info("Login exitoso para usuario: {}", username);
         session.setAttribute("usernmame", username);
-        session.setAttribute("rol", rol_usuario);
-        return "redirect:/";
+        return "redirect:/home";
     }
 
 }
