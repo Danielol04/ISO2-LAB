@@ -3,26 +3,86 @@ import java.sql.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 @Entity
 @Table(name = "reserva")
 public class Reserva {
     @Id//Clave primaria
-    @Column(name = "id_reserva", nullable = false, unique = true)
-    private Long idReserva;
-    @OneToMany
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, unique = true)
+    private Long id;
+
+    @ManyToOne//Relacion de muchas reservas a un inmueble
     @JoinColumn(name="id_inmueble", referencedColumnName = "id")
     private Inmueble id_inmueble;
-    @OneToMany
-    @JoinColumn(name="username_inquilino", referencedColumnName = "username")
-    private Usuario username_inquilino;
+
+    @ManyToOne//Relacion de muchas reservas a un usuario
+    @JoinColumn(name="inquilino", referencedColumnName = "username")
+    private Inquilino inquilino;
+
     @Column(name="fecha_inicio", nullable = false, unique = false)
     private Date fecha_inicio;
     @Column(name="fecha_fin", nullable = false, unique = false)
     private Date fecha_fin;
     @Column(name="politica_cancelacion", nullable = false, unique = false)
     private String politica_cancelacion;
+
+    
+
+    public Reserva() {
+    }
+    
+    public Reserva(Long idReserva, Inmueble id_inmueble, Inquilino inquilino, Date fecha_inicio,
+        Date fecha_fin, String politica_cancelacion) {
+        this.id = idReserva;
+        this.id_inmueble = id_inmueble;
+        this.inquilino = inquilino;
+        this.fecha_inicio = fecha_inicio;
+        this.fecha_fin = fecha_fin;
+        this.politica_cancelacion = politica_cancelacion;
+
+    }
+
+    public void setId(Long idReserva) {
+        this.id = idReserva;
+    }
+    public Long getId() {
+        return id;
+    }
+    public Inmueble getId_inmueble() {
+        return id_inmueble;
+    }
+    public void setId_inmueble(Inmueble id_inmueble) {
+        this.id_inmueble = id_inmueble;
+    }
+    public Inquilino getInquilino() {
+        return inquilino;
+    }
+    public void setInquilino(Inquilino inquilino) {
+        this.inquilino = inquilino;
+    }
+    public Date getFecha_inicio() {
+        return fecha_inicio;
+    }
+    public void setFecha_inicio(Date fecha_inicio) {
+        this.fecha_inicio = fecha_inicio;
+    }
+    public Date getFecha_fin() {
+        return fecha_fin;
+    }
+
+    public void setFecha_fin(Date fecha_fin) {
+        this.fecha_fin = fecha_fin;
+    }
+    public String getPolitica_cancelacion() {
+        return politica_cancelacion;
+    }
+    public void setPolitica_cancelacion(String politica_cancelacion) {
+        this.politica_cancelacion = politica_cancelacion;
+    }
 }

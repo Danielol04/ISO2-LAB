@@ -1,0 +1,51 @@
+package com.nnm.nnm.presentacion;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.nnm.nnm.negocio.controller.GestorReservas;
+import com.nnm.nnm.negocio.dominio.entidades.Reserva;
+import com.nnm.nnm.persistencia.InquilinoDAO;
+
+@Controller
+@RequestMapping("/Reserva")
+public class VentanaReserva {
+
+    @Autowired
+    private GestorReservas gestorReservas;
+
+    @Autowired
+    private InquilinoDAO inquilinoDAO;
+
+    @GetMapping("/crearReserva")
+    public String mostrarFormularioReserva(Model model) {
+        model.addAttribute("reserva", new Reserva());
+        return "nuevaReserva"; // nombre de la vista del formulario
+    }
+/*
+    @PostMapping("/crearReserva")
+    public String crearReserva(@ModelAttribute Reserva reserva,
+        @RequestParam("idInmueble") Inmueble idInmueble,
+        @RequestParam("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaInicio,
+        @RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaFin,
+        @RequestParam("politicaCancelacion") String politicaCancelacion,
+        Principal principal, // usuario logueado
+        Model model) {
+        
+        String username= principal.getName();
+        Inquilino usuario= inquilinoDAO.findById(username); 
+
+
+        reserva.setId_inmueble(idInmueble);
+        reserva.setFecha_inicio((java.sql.Date) fechaInicio);
+        reserva.setFecha_fin(fechaFin);
+        reserva.setPolitica_cancelacion(politicaCancelacion);
+        reserva.setInquilino(usuario);
+
+        gestorReservas.registrarReserva(reserva);
+        return "reserva_result"; // página de confirmación
+    }
+*/
+}
