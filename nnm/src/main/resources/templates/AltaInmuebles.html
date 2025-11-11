@@ -1,21 +1,78 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Alta Inmueble</title></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Inmueble</title>
+</head>
 <body>
-<h2>Registrar nuevo inmueble</h2>
+    <h1>Registro de Inmueble</h1>
 
-<form th:action="@{/inmuebles/alta}" th:object="${inmueble}" method="post">
-    Propietario: <input type="text" th:field="*{username_propietario}" required><br>
-    Tipo: <input type="text" th:field="*{tipo_inmueble}" required><br>
-    Dirección: <input type="text" th:field="*{direccion}" required><br>
-    Localidad: <input type="text" th:field="*{localidad}" required><br>
-    Provincia: <input type="text" th:field="*{provincia}" required><br>
-    Código Postal: <input type="text" th:field="*{codigo_postal}" required><br>
-    Precio por noche: <input type="number" th:field="*{precio_noche}" required><br><br>
-    <button type="submit">Registrar</button>
-</form>
+    <!-- Mostrar mensaje de error -->
+    <div th:if="${error}" style="color:red;">
+        <p th:text="${error}"></p>
+    </div>
 
-<br>
-<a href="/inmuebles/listar">Ver todos los inmuebles</a>
+    <!-- Mostrar mensaje de éxito -->
+    <div th:if="${mensaje}" style="color:green;">
+        <p th:text="${mensaje}"></p>
+    </div>
+
+    <form th:action="@{/inmuebles/alta}" th:object="${inmueble}" method="post" enctype="multipart/form-data">
+
+        <div>
+            <label>Título:</label>
+            <input type="text" th:field="*{titulo}" required />
+        </div>
+
+        <div>
+            <label>Tipo de Inmueble:</label>
+            <input type="text" th:field="*{tipo_inmueble}" required />
+        </div>
+
+        <div>
+            <label>Dirección:</label>
+            <input type="text" th:field="*{direccion}" required />
+        </div>
+
+        <div>
+            <label>Localidad:</label>
+            <input type="text" th:field="*{localidad}" required />
+        </div>
+
+        <div>
+            <label>Provincia:</label>
+            <input type="text" th:field="*{provincia}" required />
+        </div>
+
+        <div>
+            <label>Código Postal:</label>
+            <input type="text" th:field="*{codigo_postal}" required />
+        </div>
+
+        <div>
+            <label>Precio por Noche (€):</label>
+            <input type="number" th:field="*{precio_noche}" min="0" step="0.01" required />
+        </div>
+
+        <div>
+            <label>Número de Baños:</label>
+            <input type="number" th:field="*{Numero_baños}" min="0" required />
+        </div>
+
+        <div>
+            <label>Habitaciones:</label>
+            <input type="number" th:field="*{habitaciones}" min="0" required />
+        </div>
+
+        <div>
+            <label>Foto:</label>
+            <input type="file" th:field="*{foto}" accept="image/*" />
+        </div>
+
+        <div>
+            <button type="submit">Registrar Inmueble</button>
+            <button type="button" onclick="window.location.href='/inmuebles/listar'">Ver Lista de Inmuebles</button>
+        </div>
+    </form>
 </body>
 </html>

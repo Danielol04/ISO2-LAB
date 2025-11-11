@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -24,6 +25,9 @@ public class Inmueble {
     @ManyToOne
     @JoinColumn(name= "username_propietario", referencedColumnName = "username" ,nullable = false)
     private Propietario propietario;
+    
+    @Column (name= "titulo", nullable = false)
+    private String titulo;
 
     @Column(name= "tipo_inmueble", nullable= false)
     private String tipo_inmueble;
@@ -42,6 +46,17 @@ public class Inmueble {
 
     @Column(name= "precio_noche", nullable = false)
     private double precio_noche;
+
+    @Column(name= "numero_baños", nullable = false)
+    private int Numero_baños;
+
+    @Column(name= "habitaciones", nullable = false)
+    private int habitaciones;
+    
+    @Lob
+    @Column(name = "foto", columnDefinition = "BLOB")
+    private byte[] foto;
+
 
     @OneToMany(mappedBy="inmueble", cascade = CascadeType.ALL)
     private List<Disponibilidad> disponibilidades;
