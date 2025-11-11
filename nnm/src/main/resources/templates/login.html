@@ -11,6 +11,11 @@
     <div th:if="${error}" style="color:rgb(253, 3, 3);">
         <p th:text="${error}"></p>
     </div>
+    
+    <!-- Mostrar mensaje enviado desde el controlador -->
+    <div th:if="${mensaje}" style="color:green;">
+        <p th:text="${mensaje}"></p>
+    </div>
 
     <!-- Formulario de login -->
     <form th:action="@{/login}" method="post">

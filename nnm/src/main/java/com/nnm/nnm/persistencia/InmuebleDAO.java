@@ -13,12 +13,9 @@ public class InmuebleDAO extends EntidadDAO<Inmueble, Long> {
         super(Inmueble.class);
     }
 
-    public List<Inmueble> findByPropietario(String usernamePropietario) {
-        String jpql = "FROM Inmueble i WHERE i.username_propietario = :username";
-        return gestorBD.select(jpql, Inmueble.class)
-                       .stream()
-                       .filter(i -> i.getPropietario().getUsername().equals(usernamePropietario))
-                       .toList();
+    public List<Inmueble> findByPropietario(String username) {
+        String jpql = "FROM Inmueble i WHERE i.propietario.username = :username";
+        return gestorBD.selectList(jpql, Inmueble.class, "username", username);
     }
     @Override
     public Inmueble findById(Long id) {

@@ -20,18 +20,12 @@ public class GestorUsuarios {
     @Autowired
     private PropietarioDAO propietarioDAO;
 
-    public String login(String username, String password) {
+    public boolean login(String username, String password) {
         Usuario usuario = usuarioDAO.findByUsername(username);
-        String rol = "";
-        if(usuario == null) return null; // No se encontro el usuario
-        if(!usuario.getPassword().equals(password)) return null; // Contraseña incorrecta
+        if(usuario == null) return false; // No se encontro el usuario
+        if(!usuario.getPassword().equals(password)) return false; // Contraseña incorrecta
 
-        if(usuario instanceof Inquilino) {
-            rol = "INQUILINO";
-        } else if(usuario instanceof Propietario) {
-            rol =  "PROPIETARIO";
-        }
-        return rol;
+       return true;
     }
     public boolean existeUsuario(String username) {
         return usuarioDAO.findByUsername(username) != null;
@@ -42,6 +36,13 @@ public class GestorUsuarios {
     public void registrarPropietario(Propietario propietario) {
         propietarioDAO.save(propietario);
     }
-
+    public boolean esPropietario(String username) {
+        Usuario usuario = usuarioDAO.findByUsername(username);
+        return usuario instanceof Propietario;
+    }
+    public boolean esInquilino(String username) {
+        Usuario usuario = usuarioDAO.findByUsername(username);
+        return usuario instanceof Inquilino;
+    }
 
 }
