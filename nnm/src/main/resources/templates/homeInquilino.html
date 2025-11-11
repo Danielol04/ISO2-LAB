@@ -17,12 +17,12 @@
 
     <!-- Botones a la derecha -->
     <div class="navbar-right">
-        <a href="/lista_deseos" class="btn-deseos">Lista de deseos</a>
+        <a href="/lista-deseos" class="btn-deseos">Lista de deseos</a>
 
         <div class="dropdown">
         <button class="btn-circular">☰</button>
         <div class="dropdown-content">
-            <a href="/datos_personales">Datos personales</a>
+            <a href="/datos-personales">Datos personales</a>
             <a href="/logout">Cerrar sesión</a>
         </div>
         </div>
@@ -96,11 +96,11 @@
 
           <p>
             <img src="/images/habiitacion.png" alt="Habitaciones" class="icono">
-            <span th:text="${inmueble.habitaciones}"></span> habitaciones
+            <span th:text="${inmueble.numero_habitaciones}"></span> habitaciones
           </p>
           <p>
             <img src="/images/baños.png" alt="Baños" class="icono">
-            <span th:text="${inmueble.baños}"></span> baños
+            <span th:text="${inmueble.numero_baños}"></span> baños
           </p>
 
           <p>

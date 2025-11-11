@@ -41,7 +41,7 @@ public class VentanaHome {
                 return "homeInquilino";
             } else {
                 log.info("Mostrando la página de inicio generico");
-                propiedades = gestorInmuebles.listarInmuebles(); 
+                propiedades = gestorInmuebles.listarInmuebles();
                 model.addAttribute("propiedades", propiedades);
                 return "home";
             }

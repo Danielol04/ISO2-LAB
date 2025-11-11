@@ -33,9 +33,21 @@ public class GestorBD {
                 .getSingleResult();
         } catch (NoResultException e) {
             return null;
-        }
-        
+        }   
     }
+
+    // SELECT con parámetro (por ejemplo WHERE) 
+    public <T> List<T> selectList(String jpql, Class<T> entityClass, String paramName, Object value) {
+        try {
+            return entityManager.createQuery(jpql, entityClass)
+            .setParameter(paramName, value)
+            .getResultList();
+        } catch (NoResultException e) {
+            return List.of();
+        }
+    
+}
+
 
     // INSERT genérico
     public <T> void insert(T entity) {
