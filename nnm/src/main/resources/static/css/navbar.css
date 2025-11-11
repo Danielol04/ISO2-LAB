@@ -1,4 +1,5 @@
 .navbar {
+  height: 80px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13,6 +14,7 @@
 
 .logo-link {
   display: inline-block;
+  align-items: center;
 }
 
 .logo-img {
@@ -20,6 +22,8 @@
   width: auto;
   cursor: pointer;
   transition: transform 0.2s ease;
+  transform-origin: center;
+  display: block;
 }
 
 .logo-img:hover {
@@ -39,16 +43,16 @@
 .btn-login:hover {
   background-color: #e6762f;
 }
-
 .btn-deseos {
   background-color: #FF8C42;
-  color: white;
+  color: rgb(255, 255, 255);
   padding: 0.6rem 1rem;
   border-radius: 4px;
   text-decoration: none;
   font-weight: bold;
   margin-right: 1rem;
   transition: background-color 0.3s ease;
+  border: none;
 }
 
 .btn-deseos:hover {

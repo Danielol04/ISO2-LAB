@@ -32,17 +32,18 @@ public class VentanaHome {
                 log.info("Redirigiendo al propietario a su página de inicio");
                 propiedades = gestorInmuebles.listarInmueblesPorPropietario(username); 
                 model.addAttribute("propiedades", propiedades);
-                return "home";
+                return "homePropietario";
 
             } else if (gestorUsuarios.esInquilino(username)) {
                 log.info("Redirigiendo al inquilino a su página de inicio");
                 propiedades = gestorInmuebles.listarInmuebles(); 
                 model.addAttribute("propiedades", propiedades);
                 return "homeInquilino";
+            } else {
+                log.info("Mostrando la página de inicio generico");
+                propiedades = gestorInmuebles.listarInmuebles(); 
+                model.addAttribute("propiedades", propiedades);
+                return "home";
             }
-            log.info("Mostrando la página de inicio generico");
-            propiedades = gestorInmuebles.listarInmuebles(); 
-            model.addAttribute("propiedades", propiedades);
-            return "home";
         }
 }

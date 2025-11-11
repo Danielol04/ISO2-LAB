@@ -35,8 +35,13 @@ public class VentanaLogin {
         }
 
         log.info("Login exitoso para usuario: {}", username);
-        session.setAttribute("usernmame", username);
+        session.setAttribute("username", username);
         return "redirect:/home";
+    }
+    @GetMapping("/logout")
+    public String cerrarSesion(HttpSession sesion){
+        sesion.invalidate();
+        return "redirect:/login";
     }
 
 }
