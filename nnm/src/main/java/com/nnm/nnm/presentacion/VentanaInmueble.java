@@ -1,5 +1,7 @@
 package com.nnm.nnm.presentacion;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.nnm.nnm.negocio.controller.GestorInmuebles;
 import com.nnm.nnm.negocio.controller.GestorUsuarios;
@@ -36,23 +40,26 @@ public class VentanaInmueble{
     }
 
     @PostMapping("/alta")
-    public String registrar(@ModelAttribute Inmueble inmueble, HttpSession session/*,@RequestParam("foto") MultipartFile foto */) {
+    public String registrar(@ModelAttribute Inmueble inmueble, HttpSession session,@RequestParam("imagen") MultipartFile foto ) {
         try {
-            /* 
+            
             if (!foto.isEmpty()) {
                 inmueble.setFoto(foto.getBytes());
             }
-            */
+            
             String usernamePropietario = (String) session.getAttribute("username");
             if(gestorUsuarios.esPropietario(usernamePropietario)) {
+                
+                Propietario propietario = gestorUsuarios.obtenerPropietarioPorUsername(usernamePropietario);
+                inmueble.setUsername_propietario(propietario);
+                gestorInmuebles.registrarInmueble(inmueble);
+                log.info("Inmueble registrado: {}", inmueble.getTitulo());
+                return"redirect:/home";
+            }else{
                 log.warn("No se encontró el username del propietario en la sesión");
                 return "redirect:/login"; // Redirigir al login si no hay usuario en sesión
             }
-            Propietario propietario = gestorUsuarios.obtenerPropietarioPorUsername(usernamePropietario);
-            inmueble.setUsername_propietario(propietario);
-            gestorInmuebles.registrarInmueble(inmueble);
-            log.info("Inmueble registrado: {}", inmueble.getTitulo());
-        } catch (Exception e) {
+        } catch (IOException e) {
             log.error("Error al guardar la foto del inmueble", e);
             // manejar el error según tu necesidad
         }

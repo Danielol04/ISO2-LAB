@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -26,7 +27,7 @@ public class Inmueble {
     private Propietario propietario;
     
     @Column (name= "titulo", nullable = false)
-    private String titulo;
+    private String titulo="";
 
     @Column(name= "tipo_inmueble", nullable= false)
     private String tipo_inmueble;
@@ -47,14 +48,14 @@ public class Inmueble {
     private double precio_noche;
 
     @Column(name= "numero_banos", nullable = false)
-    private int numero_banos;
+    private int numero_banos=1;
 
     @Column(name= "habitaciones", nullable = false)
-    private int habitaciones;
+    private int habitaciones=1;
     
-    /*@Lob
+    @Lob
     @Column(name = "foto", columnDefinition = "BLOB")
-    private byte[] foto;*/
+    private byte[] foto;
 
 
     @OneToMany(mappedBy="inmueble", cascade = CascadeType.ALL)
@@ -76,7 +77,7 @@ public class Inmueble {
         this.precio_noche = precio_noche;
         this.numero_banos = numero_banos;
         this.habitaciones = habitaciones;
-        //this.foto = foto;
+        this.foto = foto;
     }
 
     public long getId() { return id; }
@@ -103,7 +104,7 @@ public class Inmueble {
     public void setPrecio_noche(double precio_noche) { this.precio_noche = precio_noche; }
     public void setNumero_banos(int numero_banos) { this.numero_banos = numero_banos; }
     public void setHabitaciones(int habitaciones) { this.habitaciones = habitaciones; }
-    //public void setFoto(byte[] foto) { this.foto = foto; }
+    public void setFoto(byte[] foto) { this.foto = foto; }
     public void setDisponibilidades(List<Disponibilidad> disponibilidades) { this.disponibilidades = disponibilidades; }
 
 }
