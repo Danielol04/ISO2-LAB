@@ -36,9 +36,9 @@ public class VentanaLogin {
         }
 
         log.info("Login exitoso para usuario: {}", username);
-        session.setAttribute("usernmame", username);
+        session.setAttribute("username", username);
         session.setAttribute("rol", rol_usuario);
-        return "redirect:/";
+        return "redirect:/inmuebles/alta";
     }
 
 }

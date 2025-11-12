@@ -56,7 +56,7 @@
 
         <div>
             <label>Número de Baños:</label>
-            <input type="number" th:field="*{Numero_baños}" min="0" required />
+            <input type="number" th:field="*{numero_banos}" min="0" required />
         </div>
 
         <div>
@@ -64,10 +64,10 @@
             <input type="number" th:field="*{habitaciones}" min="0" required />
         </div>
 
-        <div>
+        <!--<div>
             <label>Foto:</label>
-            <input type="file" th:field="*{foto}" accept="image/*" />
-        </div>
+            <input type="file" name="foto" accept="image/*" />
+        </div>-->
 
         <div>
             <button type="submit">Registrar Inmueble</button>
