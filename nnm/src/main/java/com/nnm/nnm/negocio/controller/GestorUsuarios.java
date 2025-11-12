@@ -36,6 +36,12 @@ public class GestorUsuarios {
     public void registrarPropietario(Propietario propietario) {
         propietarioDAO.save(propietario);
     }
+    public Propietario obtenerPropietarioPorUsername(String usernamePropietario) {
+        return propietarioDAO.findByUsername(usernamePropietario);
+    }
+
+    public Inquilino obtenerInquilinoPorUsername(String usernameInquilino) {
+        return inquilinoDAO.findByUsername(usernameInquilino);
     public boolean esPropietario(String username) {
         Usuario usuario = usuarioDAO.findByUsername(username);
         return usuario instanceof Propietario;
@@ -45,4 +51,8 @@ public class GestorUsuarios {
         return usuario instanceof Inquilino;
     }
 
+    public boolean esPropietario(String username) {
+        Usuario usuario = usuarioDAO.findByUsername(username);
+        return usuario instanceof Propietario;
+    }
 }

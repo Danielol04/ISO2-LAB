@@ -10,4 +10,9 @@ public class PropietarioDAO extends EntidadDAO<Propietario, String> {
     public PropietarioDAO() {
         super(Propietario.class);
     }
+
+    public Propietario findByUsername(String username) {
+        String jpql = "FROM Propietario e WHERE e.username = :username";
+        return gestorBD.selectSingle(jpql, Propietario.class, "username", username);
+    }
 }
