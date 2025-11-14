@@ -17,13 +17,12 @@
 
     <!-- Botones a la derecha -->
     <div class="navbar-right">
-        <a href="/lista-deseos" class="btn-deseos">Lista de deseos</a>
-
+        <a th:href="@{/lista-deseos}" class="btn-deseos">Lista de deseos</a>
         <div class="dropdown">
         <button class="btn-circular">☰</button>
         <div class="dropdown-content">
-            <a href="/datos-personales">Datos personales</a>
-            <a href="/logout">Cerrar sesión</a>
+            <a th:href="@{/datos-personales}">Datos personales</a>
+            <a th:href="@{/logout}">Cerrar sesión</a>
         </div>
         </div>
     </div>
@@ -74,39 +73,36 @@
     <section class="propiedades-box">
       <h2 class="titulo-seccion">Propiedades Disponibles</h2>
 
-      <div th:if="${#lists.isEmpty(propiedades)}" class="mensaje-vacio">
-        <p>No hay propiedades disponibles</p>
-      </div>
-
       <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
         <div th:each="inmueble : ${propiedades}" class="propiedad">
-          <img th:src="@{${inmueble.imagen}}" alt="Imagen del inmueble">
-          <h3 th:text="${inmueble.titulo}">Título</h3>
+            <img th:src="@{${inmueble.foto}}" alt="Imagen del inmueble">
+            <h3 th:text="${inmueble.titulo}">Título</h3>
 
-          <p>
-            <img src="/images/ubicacion.png" alt="Ubicación" class="icono">
-            <span th:text="${inmueble.localidad}">Localidad</span>,
-            <span th:text="${inmueble.provincia}">Provincia</span>
-          </p>
+            <p>
+                <img src="/images/ubicacion.png" alt="Ubicación" class="icono">
+                <span th:text="${inmueble.localidad}">Localidad</span>,
+                <span th:text="${inmueble.provincia}">Provincia</span>,
+                <span th:text="${inmueble.codigo_postal}">Codigo Postal</span>
+            </p>
 
-          <p>
-            <strong>Dirección:</strong>
-            <span th:text="${inmueble.direccion}">Dirección</span>
-          </p>
+            <p>
+                <strong>Dirección:</strong>
+                <span th:text="${inmueble.direccion}">Dirección</span>
+            </p>
 
-          <p>
-            <img src="/images/habiitacion.png" alt="Habitaciones" class="icono">
-            <span th:text="${inmueble.numero_habitaciones}"></span> habitaciones
-          </p>
-          <p>
-            <img src="/images/baños.png" alt="Baños" class="icono">
-            <span th:text="${inmueble.numero_baños}"></span> baños
-          </p>
+            <p>
+                <img src="/images/habiitacion.png" alt="Habitaciones" class="icono">
+                <span th:text="${inmueble.habitaciones}"></span> habitaciones
+            </p>
+            <p>
+                <img src="/images/baños.png" alt="Baños" class="icono">
+                <span th:text="${inmueble.numero_banos}"></span> baños
+            </p>
 
-          <p>
-            <strong>Precio:</strong>
-            <span class="precio-noche" th:text="${#numbers.formatDecimal(inmueble.precio_noche, 2, 'POINT')}"></span>€/noche
-          </p>
+            <p>
+                <strong>Precio:</strong>
+               <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span> /noche
+            </p>
 
           <div class="botones-propiedad">
             <form th:action="@{/favoritos/agregar}" method="post">

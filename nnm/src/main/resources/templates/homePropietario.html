@@ -16,14 +16,15 @@
 
     <!-- Botones a la derecha -->
     <div class="navbar-right">
-        <a href="/reservasPropietarop" class="btn-deseos">Solicitudes</a>
-        <a href="/inmuble/alta" class="btn-deseos">Añadir Propiedad</a>
-
+        <a th:href="@{/reservas/Propietario}" class="btn-deseos">Solicitudes</a>
+        <a th:href="@{/inmuebles/alta}" class="btn-deseos">Registrar Inmuebles</a>
+        
         <div class="dropdown">
+
         <button class="btn-circular">☰</button>
         <div class="dropdown-content">
-            <a href="/datos_personales">Datos personales</a>
-            <a href="/logout">Cerrar sesión</a>
+            <a th:href="@{/datos_personales}">Datos personales</a>
+            <a th:href="@{/logout}">Cerrar sesión</a>
         </div>
         </div>
     </div>
@@ -71,50 +72,53 @@
       
     </section>
             <!-- CONTENEDOR DE PROPIEDADES -->
-        <section class="propiedades-box">
+      <section class="propiedades-box">
         <h2 class="titulo-seccion">Tus Propiedades</h2>
 
         <div th:if="${#lists.isEmpty(propiedades)}" class="mensaje-vacio">
-            <p>No tienes propiedades registradas</p>
+          <p>No tienes propiedades registradas</p>
         </div>
 
         <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
-            <div th:each="inmueble : ${propiedades}" class="propiedad">
-            <img th:src="@{${inmueble.imagen}}" alt="Imagen del inmueble">
-            <h3 th:text="${inmueble.titulo}">Título</h3>
+          <div th:each="inmueble : ${propiedades}" class="tarjeta-propiedad">
+            <div class="imagen-contenedor">
+              <img th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}" alt="Imagen del inmueble">
+            </div>
 
-            <p>
+            <div class="contenido-propiedad">
+              <h3 class="titulo-propiedad" th:text="${inmueble.titulo}">Título</h3>
+
+              <p class="ubicacion">
                 <img src="/images/ubicacion.png" alt="Ubicación" class="icono">
-                <span th:text="${inmueble.localidad}">Localidad</span>,
-                <span th:text="${inmueble.provincia}">Provincia</span>
-            </p>
+                <span th:text="${inmueble.localidad}"></span>,
+                <span th:text="${inmueble.provincia}"></span>,
+                <span th:text="${inmueble.codigo_postal}"></span>
+              </p>
 
-            <p>
+              <p>
                 <strong>Dirección:</strong>
                 <span th:text="${inmueble.direccion}">Dirección</span>
-            </p>
+              </p>
 
-            <p>
-                <img src="/images/habiitacion.png" alt="Habitaciones" class="icono">
-                <span th:text="${inmueble.numero_habitaciones}"></span> habitaciones
-            </p>
-            <p>
+              <p class="caracteristicas">
+                <img src="/images/habitacion.png" alt="Habitaciones" class="icono">
+                <span th:text="${inmueble.habitaciones}">habitaciones</span>
+              </p>
+              <p> 
                 <img src="/images/baños.png" alt="Baños" class="icono">
-                <span th:text="${inmueble.numero_baños}"></span> baños
-            </p>
+                <span th:text="${inmueble.numero_banos}">baños</span> 
+              </p>
 
-            <p>
-                <strong>Precio:</strong>
-                <span class="precio-noche" th:text="${#numbers.formatDecimal(inmueble.precio_noche, 2, 'POINT')}"></span>€/noche
-            </p>
+              <p class="precio">
+                <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
+              </p>
 
-            <!-- Botón exclusivo para propietarios -->
-            <div class="botones-propiedad">
-                <form th:action="@{/disponibilidad/alta}" method="get">
-                <button type="submit" class="btn-deseos">Añadir disponibilidades</button>
-                </form>
+              <form th:action="@{/disponibilidad/alta}" method="get">
+                <input type="hidden" th:name="id" th:value="${inmueble.id}">
+                <button type="submit" class="btn-reservar">Añadir disponibilidades</button>
+              </form>
             </div>
-            </div>
+          </div>
         </div>
     </section>
   </main>

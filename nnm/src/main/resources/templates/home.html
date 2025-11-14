@@ -64,35 +64,37 @@
         <p>No hay propiedades disponibles</p>
       </div>
 
-      <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
-        <div th:each="inmueble : ${propiedades}" class="propiedad">
-          <img th:src="@{${inmueble.imagen}}" alt="Imagen del inmueble">
-          <h3 th:text="${inmueble.titulo}">Título</h3>
+        <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
+            <div th:each="inmueble : ${propiedades}" class="propiedad">
+            <img th:src="@{${inmueble.foto}}" alt="Imagen del inmueble">
+            <h3 th:text="${inmueble.titulo}">Título</h3>
 
-          <p>
-            <img src="/images/ubicacion.png" alt="Ubicación" class="icono">
-            <span th:text="${inmueble.localidad}">Localidad</span>,
-            <span th:text="${inmueble.provincia}">Provincia</span>
-          </p>
+            <p>
+                <img src="/images/ubicacion.png" alt="Ubicación" class="icono">
+                <span th:text="${inmueble.localidad}">Localidad</span>,
+                <span th:text="${inmueble.provincia}">Provincia</span>,
+                <span th:text="${inmueble.codigo_postal}">Codigo Postal</span>
+            </p>
 
-          <p>
-            <strong>Dirección:</strong>
-            <span th:text="${inmueble.direccion}">Dirección</span>
-          </p>
+            <p>
+                <strong>Dirección:</strong>
+                <span th:text="${inmueble.direccion}">Dirección</span>
+            </p>
 
-          <p>
-            <img src="/images/habiitacion.png" alt="Habitaciones" class="icono">
-            <span th:text="${inmueble.numero_habitaciones}"></span> habitaciones
-          </p>
-          <p>
-            <img src="/images/baños.png" alt="Baños" class="icono">
-            <span th:text="${inmueble.numero_baños}"></span> baños
-          </p>
+            <p>
+                <img src="/images/habiitacion.png" alt="Habitaciones" class="icono">
+                <span th:text="${inmueble.habitaciones}"></span> habitaciones
+            </p>
+            <p>
+                <img src="/images/baños.png" alt="Baños" class="icono">
+                <span th:text="${inmueble.numero_banos}"></span> baños
+            </p>
 
-          <p>
-            <strong>Precio:</strong>
-            <span class="precio-noche" th:text="${#numbers.formatDecimal(inmueble.precio_noche, 2, 'POINT')}"></span>€/noche
-          </p>
+            <p>
+                <strong>Precio:</strong>
+                <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span> /noche
+            </p>
+
 
           <div class="botones-propiedad">
             <form th:action="@{/favoritos/agregar}" method="post">
