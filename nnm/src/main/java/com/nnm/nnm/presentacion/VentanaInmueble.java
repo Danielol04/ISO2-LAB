@@ -75,7 +75,7 @@ public class VentanaInmueble{
         return "redirect:/home";
     }
 
-    @GetMapping("/inmueble/{id}/foto")
+    @GetMapping("/{id}/foto")
     @ResponseBody
     public ResponseEntity<byte[]> mostrarFoto(@PathVariable Long id) {
         byte[] imagenBytes;
@@ -103,7 +103,6 @@ public class VentanaInmueble{
                 tipoMime = "application/octet-stream";
             }
         }
-        log.info("Devolviendo foto");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(tipoMime));
         return new ResponseEntity<>(imagenBytes, headers, HttpStatus.OK);

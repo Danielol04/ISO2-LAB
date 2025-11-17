@@ -73,35 +73,42 @@
     <section class="propiedades-box">
       <h2 class="titulo-seccion">Propiedades Disponibles</h2>
 
+      <div th:if="${#lists.isEmpty(propiedades)}" class="mensaje-vacio">
+        <p>No tienes propiedades registradas</p>
+      </div>
+
       <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
-        <div th:each="inmueble : ${propiedades}" class="propiedad">
-            <img th:src="@{${inmueble.foto}}" alt="Imagen del inmueble">
-            <h3 th:text="${inmueble.titulo}">Título</h3>
+        <div th:each="inmueble : ${propiedades}" class="tarjeta-propiedad">
+          <div class="imagen-contenedor">
+            <img th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}" alt="Imagen del inmueble">
+          </div>
 
-            <p>
-                <img src="/images/ubicacion.png" alt="Ubicación" class="icono">
-                <span th:text="${inmueble.localidad}">Localidad</span>,
-                <span th:text="${inmueble.provincia}">Provincia</span>,
-                <span th:text="${inmueble.codigo_postal}">Codigo Postal</span>
+          <div class="contenido-propiedad">
+            <h3 class="titulo-propiedad" th:text="${inmueble.titulo}">Título</h3>
+
+            <p class="ubicacion">
+              <img src="/images/ubicacion.png" alt="Ubicación" class="icono">
+              <span th:text="${inmueble.localidad}"></span>,
+              <span th:text="${inmueble.provincia}"></span>,
+              <span th:text="${inmueble.codigo_postal}"></span>
             </p>
 
             <p>
-                <strong>Dirección:</strong>
-                <span th:text="${inmueble.direccion}">Dirección</span>
+              <strong>Dirección:</strong>
+              <span th:text="${inmueble.direccion}">Dirección</span>
             </p>
 
-            <p>
-                <img src="/images/habiitacion.png" alt="Habitaciones" class="icono">
-                <span th:text="${inmueble.habitaciones}"></span> habitaciones
+            <p class="caracteristicas">
+              <img src="/images/habitacion.png" alt="Habitaciones" class="icono">
+              <span th:text="${inmueble.habitaciones}">habitaciones</span>
             </p>
-            <p>
-                <img src="/images/baños.png" alt="Baños" class="icono">
-                <span th:text="${inmueble.numero_banos}"></span> baños
+            <p> 
+              <img src="/images/baños.png" alt="Baños" class="icono">
+              <span th:text="${inmueble.numero_banos}">baños</span> 
             </p>
 
-            <p>
-                <strong>Precio:</strong>
-               <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span> /noche
+            <p class="precio">
+              <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
             </p>
 
           <div class="botones-propiedad">
