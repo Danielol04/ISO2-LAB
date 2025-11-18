@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.nnm.nnm.negocio.controller.GestorDisponibilidad;
 
 @Controller
-@RequestMapping("/disponibilidad")
+@RequestMapping("/disponibilidades")
 public class VentanaDisponibilidad {
 
     @Autowired
