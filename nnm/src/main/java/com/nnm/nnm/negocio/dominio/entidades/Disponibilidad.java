@@ -1,6 +1,6 @@
 package com.nnm.nnm.negocio.dominio.entidades;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,35 +28,20 @@ public class Disponibilidad {
     private Inmueble inmueble;
 
     @Column(name = "fecha_inicio", nullable= false)
-    private Date fecha_inicio;
+    private LocalDate fechaInicio;
 
     @Column(name = "fecha_fin", nullable = false)
-    private Date fecha_fin;
-
-    @Column(name = "precio", nullable = false)
-    private double precio;
+    private LocalDate fechaFin;
 
     @Column(name= "reserva_directa", nullable =  false)
-    private boolean reserva_directa;
+    private boolean reservaDirecta;
 
     @Enumerated(EnumType.STRING)
     @Column(name= "politica_cancelacion", nullable = false)
-    private PoliticaCancelacion politica_cancelacion;
+    private PoliticaCancelacion politicaCancelacion;
 
     // Constructor vacío para JPA
     public Disponibilidad() {}
-
-    // Constructor con todos los campos
-    public Disponibilidad(long id, Inmueble inmueble, Date fecha_inicio, Date fecha_fin,
-                          double precio, boolean reserva_directa, PoliticaCancelacion politica_cancelacion) {
-       this.id = id;
-       this.inmueble = inmueble;
-       this.fecha_inicio = fecha_inicio;
-       this.fecha_fin = fecha_fin;
-       this.precio = precio;
-       this.reserva_directa = reserva_directa;
-       this.politica_cancelacion = politica_cancelacion;
-    }
 
     // Getters y setters
     public long getId() { return id; }
@@ -64,18 +49,15 @@ public class Disponibilidad {
     public Inmueble getInmueble() { return inmueble; }
     public void setInmueble(Inmueble inmueble) { this.inmueble = inmueble; }
 
-    public Date getFecha_inicio() { return fecha_inicio; }
-    public void setFecha_inicio(Date fecha_inicio) { this.fecha_inicio = fecha_inicio; }
+    public LocalDate getFechaInicio() { return fechaInicio; }
+    public void setFechaInicio(LocalDate fecha_inicio) { this.fechaInicio = fecha_inicio; }
 
-    public Date getFecha_fin() { return fecha_fin; }
-    public void setFecha_fin(Date fecha_fin) { this.fecha_fin = fecha_fin; }
+    public LocalDate getFechaFin() { return fechaFin; }
+    public void setFechaFin(LocalDate fecha_fin) { this.fechaFin = fecha_fin; }
 
-    public double getPrecio() { return precio; }
-    public void setPrecio(double precio) { this.precio = precio; }
+    public boolean getReservaDirecta() { return reservaDirecta; }
+    public void setReservaDirecta(boolean reservaDirecta) { this.reservaDirecta = reservaDirecta; }
 
-    public boolean getReserva_directa() { return reserva_directa; }
-    public void setReserva_directa(boolean reserva_directa) { this.reserva_directa = reserva_directa; }
-
-    public PoliticaCancelacion getPolitica_cancelacion() { return politica_cancelacion; }
-    public void setPolitica_cancelacion(PoliticaCancelacion politica_cancelacion) { this.politica_cancelacion = politica_cancelacion; }
+    public PoliticaCancelacion getPoliticaCancelacion() { return politicaCancelacion; }
+    public void setPoliticaCancelacion(PoliticaCancelacion politica_cancelacion) { this.politicaCancelacion = politica_cancelacion; }
 }
