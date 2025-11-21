@@ -85,12 +85,12 @@ public class VentanaInmueble{
 
         if (inmueble == null || inmueble.getFoto() == null) {
             // Cargar imagen genérica desde recursos
-            try (InputStream is = getClass().getResourceAsStream("/static/images/foto-generica.png")) {
+            try (InputStream is = getClass().getResourceAsStream("/static/images/foto-NotFound.jpg")) {
                 if (is == null) {
                     return ResponseEntity.notFound().build();
                 }
                 imagenBytes = is.readAllBytes();
-                tipoMime = "image/png";
+                tipoMime = "image/jpg";
             } catch (IOException e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }

@@ -113,8 +113,7 @@
                 <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
               </p>
 
-              <form th:action="@{/disponibilidad/alta}" method="get">
-                <input type="hidden" th:name="id" th:value="${inmueble.id}">
+              <form th:action="@{/disponibilidades/crear/{id}(id=${inmueble.id})}" method="get">
                 <button type="submit" class="btn-reservar">Añadir disponibilidades</button>
               </form>
             </div>

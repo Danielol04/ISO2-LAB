@@ -1,5 +1,7 @@
 package com.nnm.nnm.negocio.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +17,8 @@ public class GestorDisponibilidad {
     public void registrarDisponibilidad(Disponibilidad d) {
         disponibilidadDAO.save(d);
     }
-/*
+
     public List<Disponibilidad> obtenerDisponibilidadPorInmueble(long id_inmueble) {
         return disponibilidadDAO.findByInmueble(id_inmueble);
-    } */
+    } 
 }
