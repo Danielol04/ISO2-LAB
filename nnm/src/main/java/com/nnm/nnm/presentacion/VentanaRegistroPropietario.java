@@ -36,6 +36,6 @@ public class VentanaRegistroPropietario {
         gestorUsuarios.registrarPropietario(propietario);
         model.addAttribute("mensaje", "Propietario registrado correctamente");
         log.info("Propietario registrado: {}", propietario.getUsername());
-        return "resultadoRegistro";
+        return "login";
     }
 }

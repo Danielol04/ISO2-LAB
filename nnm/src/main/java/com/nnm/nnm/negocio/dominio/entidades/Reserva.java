@@ -3,6 +3,8 @@ import java.sql.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -11,14 +13,18 @@ import jakarta.persistence.Table;
 @Table(name = "reserva")
 public class Reserva {
     @Id//Clave primaria
-    @Column(name = "id_reserva", nullable = false, unique = true)
-    private Long idReserva;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, unique = true)
+    private Long id;
+
     @ManyToOne//Relacion de muchas reservas a un inmueble
     @JoinColumn(name="id_inmueble", referencedColumnName = "id")
     private Inmueble id_inmueble;
+
     @ManyToOne//Relacion de muchas reservas a un usuario
-    @JoinColumn(name="username_inquilino", referencedColumnName = "username")
-    private Usuario username_inquilino;
+    @JoinColumn(name="inquilino", referencedColumnName = "username")
+    private Inquilino inquilino;
+
     @Column(name="fecha_inicio", nullable = false, unique = false)
     private Date fecha_inicio;
     @Column(name="fecha_fin", nullable = false, unique = false)
@@ -26,14 +32,16 @@ public class Reserva {
     @Column(name="politica_cancelacion", nullable = false, unique = false)
     private String politica_cancelacion;
 
+    
+
     public Reserva() {
     }
     
-    public Reserva(Long idReserva, Inmueble id_inmueble, Usuario username_inquilino, Date fecha_inicio,
+    public Reserva(Long idReserva, Inmueble id_inmueble, Inquilino inquilino, Date fecha_inicio,
         Date fecha_fin, String politica_cancelacion) {
-        this.idReserva = idReserva;
+        this.id = idReserva;
         this.id_inmueble = id_inmueble;
-        this.username_inquilino = username_inquilino;
+        this.inquilino = inquilino;
         this.fecha_inicio = fecha_inicio;
         this.fecha_fin = fecha_fin;
         this.politica_cancelacion = politica_cancelacion;
@@ -41,10 +49,10 @@ public class Reserva {
     }
 
     public void setId(Long idReserva) {
-        this.idReserva = idReserva;
+        this.id = idReserva;
     }
     public Long getId() {
-        return idReserva;
+        return id;
     }
     public Inmueble getId_inmueble() {
         return id_inmueble;
@@ -52,11 +60,11 @@ public class Reserva {
     public void setId_inmueble(Inmueble id_inmueble) {
         this.id_inmueble = id_inmueble;
     }
-    public Usuario getUsername_inquilino() {
-        return username_inquilino;
+    public Inquilino getInquilino() {
+        return inquilino;
     }
-    public void setUsername_inquilino(Usuario username_inquilino) {
-        this.username_inquilino = username_inquilino;
+    public void setInquilino(Inquilino inquilino) {
+        this.inquilino = inquilino;
     }
     public Date getFecha_inicio() {
         return fecha_inicio;

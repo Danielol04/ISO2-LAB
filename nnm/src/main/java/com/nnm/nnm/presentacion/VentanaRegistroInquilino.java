@@ -35,7 +35,7 @@ public class VentanaRegistroInquilino {
         gestorUsuarios.registrarInquilino(inquilino);
         model.addAttribute("mensaje", "Inquilino registrado correctamente");
         log.info("Inquilino registrado: {}", inquilino.getUsername());
-        return "resultadoRegistro";
+        return "login";
     }
 }
 

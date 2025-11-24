@@ -1,29 +1,48 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Nueva Disponibilidad</title>
+    <meta charset="UTF-8">
+    <title>Crear Disponibilidad</title>
 </head>
 <body>
-<h2>Registrar Disponibilidad</h2>
 
-<form th:action="@{/Disponibilidad/guardar}" th:object="${disponibilidad}" method="post">
-    Inmueble:
-    <select th:field="*{id_inmueble}">
-        <option th:each="inmueble : ${inmuebles}"
-                th:value="${inmueble.id}"
-                th:text="${inmueble.direccion}">Inmueble</option>
-    </select><br>
-    Fecha inicio: <input type="text" th:field="*{fecha_inicio}" placeholder="YYYY-MM-DD"><br>
-    Fecha fin: <input type="text" th:field="*{fecha_fin}" placeholder="YYYY-MM-DD"><br>
-    Precio: <input type="number" th:field="*{precio}"><br>
-    Reserva directa: <input type="checkbox" th:field="*{reserva_directa}"><br>
-    Política de cancelación: <input type="text" th:field="*{politica_cancelacion}"><br>
-    <button type="submit">Guardar</button>
+<h1>Crear Disponibilidad</h1>
+
+<div th:if="${error}" style="color: rgb(253, 3, 3); margin-bottom: 1rem;">
+    <p th:text="${error}"></p>
+</div>
+
+<form th:action="@{/disponibilidades/crear/{id}(id=${idInmueble})}"
+      th:object="${disponibilidad}" method="post">
+
+    <div>
+        <label for="fechaInicio">Fecha inicio:</label>
+        <input type="date" th:field="*{fechaInicio}" id="fechaInicio" required />
+    </div>
+
+    <div>
+        <label for="fechaFin">Fecha fin:</label>
+        <input type="date" th:field="*{fechaFin}" id="fechaFin" required />
+    </div>
+
+    <div>
+        <label for="reservaDirecta">
+            <input type="checkbox" th:field="*{reservaDirecta}" id="reservaDirecta" />
+            Reserva directa (permitir reservas sin aprobación)
+        </label>
+    </div>
+
+    <div>
+        <label for="politica">Política de cancelación:</label>
+        <select th:field="*{politicaCancelacion}" id="politica" required>
+            <option th:each="p : ${politicas}"
+                    th:value="${p}"
+                    th:text="${p}"></option>
+        </select>
+    </div>
+
+    <button type="submit">Crear Disponibilidad</button>
 </form>
 
-<p th:text="${error}"></p>
-<p th:text="${mensaje}"></p>
-
-<a href="/Disponibilidad/listar">Ver todas las disponibilidades</a>
 </body>
 </html>

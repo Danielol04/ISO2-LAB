@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Inicio Propietario</title>
+  <link rel="stylesheet" href="/css/home.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+    <!-- Logo a la izquierda -->
+    <a th:href="@{/home}" class="logo-link">
+        <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
+    </a>
+
+    <!-- Botones a la derecha -->
+    <div class="navbar-right">
+        <a th:href="@{/reservas/Propietario}" class="btn-deseos">Solicitudes</a>
+        <a th:href="@{/inmuebles/alta}" class="btn-deseos">Registrar Inmuebles</a>
+        
+        <div class="dropdown">
+
+        <button class="btn-circular">☰</button>
+        <div class="dropdown-content">
+            <a th:href="@{/datos_personales}">Datos personales</a>
+            <a th:href="@{/logout}">Cerrar sesión</a>
+        </div>
+        </div>
+    </div>
+    </nav>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="main-content">
+    <!-- CONTENEDOR DE BÚSQUEDA -->
+    <section class="busqueda-box">
+      <h1 class="titulo-seccion">Buscar Propiedades</h1>
+      <form th:action="@{/buscar}" method="get" class="search-form">
+        <div class="form-group">
+          <label for="fechaDesde">Disponible desde:</label>
+          <input type="date" id="fechaDesde" name="fechaDesde">
+        </div>
+
+        <div class="form-group">
+          <label for="fechaHasta">Disponible hasta:</label>
+          <input type="date" id="fechaHasta" name="fechaHasta">
+        </div>
+
+        <div class="form-group">
+          <label for="habitaciones">Nº de habitaciones:</label>
+          <select id="habitaciones" name="habitaciones">
+            <option value="">Seleccionar</option>
+            <option value="1">1 habitación</option>
+            <option value="2">2 habitaciones</option>
+            <option value="3">3 habitaciones</option>
+            <option value="4">4 o más</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="precio">Rango de precio:</label>
+          <select id="precio" name="precio">
+            <option value="">Seleccionar</option>
+            <option value="1">Menos de 100.000€</option>
+            <option value="2">100.000€ - 300.000€</option>
+            <option value="3">Más de 300.000€</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-buscar">Buscar</button>
+      </form>
+      
+    </section>
+            <!-- CONTENEDOR DE PROPIEDADES -->
+      <section class="propiedades-box">
+        <h2 class="titulo-seccion">Tus Propiedades</h2>
+
+        <div th:if="${#lists.isEmpty(propiedades)}" class="mensaje-vacio">
+          <p>No tienes propiedades registradas</p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
+          <div th:each="inmueble : ${propiedades}" class="tarjeta-propiedad">
+            <div class="imagen-contenedor">
+              <img th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}" alt="Imagen del inmueble">
+            </div>
+
+            <div class="contenido-propiedad">
+              <h3 class="titulo-propiedad" th:text="${inmueble.titulo}">Título</h3>
+
+              <p class="ubicacion">
+                <img src="/images/ubicacion.png" alt="Ubicación" class="icono">
+                <span th:text="${inmueble.localidad}"></span>,
+                <span th:text="${inmueble.provincia}"></span>,
+                <span th:text="${inmueble.codigo_postal}"></span>
+              </p>
+
+              <p>
+                <strong>Dirección:</strong>
+                <span th:text="${inmueble.direccion}">Dirección</span>
+              </p>
+
+              <p class="caracteristicas">
+                <img src="/images/habitacion.png" alt="Habitaciones" class="icono">
+                <span th:text="${inmueble.habitaciones}">habitaciones</span>
+              </p>
+              <p> 
+                <img src="/images/baños.png" alt="Baños" class="icono">
+                <span th:text="${inmueble.numero_banos}">baños</span> 
+              </p>
+
+              <p class="precio">
+                <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
+              </p>
+
+              <form th:action="@{/disponibilidades/crear/{id}(id=${inmueble.id})}" method="get">
+                <button type="submit" class="btn-reservar">Añadir disponibilidades</button>
+              </form>
+            </div>
+          </div>
+        </div>
+    </section>
+  </main>
+</body>
+</html>

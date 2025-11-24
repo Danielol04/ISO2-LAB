@@ -20,21 +20,36 @@ public class GestorUsuarios {
     @Autowired
     private PropietarioDAO propietarioDAO;
 
-    public boolean autenticarUsuario(String username, String password) {
+    public boolean login(String username, String password) {
         Usuario usuario = usuarioDAO.findByUsername(username);
-        return (usuario != null && usuario.getPassword().equals(password)); // True si el usuario existe y la contraseña coincide
-    }
-   
-    // Verifica si un usuario existe en la base de datos
-    public boolean existeUsuario(String username) {
-        return usuarioDAO.findByUsername(username) != null; // True si el usuario existe, false si no
-    }
+        if(usuario == null) return false; // No se encontro el usuario
+        if(!usuario.getPassword().equals(password)) return false; // Contraseña incorrecta
 
+       return true;
+    }
+    public boolean existeUsuario(String username) {
+        return usuarioDAO.findByUsername(username) != null;
+    }
     public void registrarInquilino(Inquilino inquilino) {
         inquilinoDAO.save(inquilino);
     }
     public void registrarPropietario(Propietario propietario) {
         propietarioDAO.save(propietario);
     }
+    public Propietario obtenerPropietarioPorUsername(String usernamePropietario) {
+        return propietarioDAO.findByUsername(usernamePropietario);
+    }
 
+    public Inquilino obtenerInquilinoPorUsername(String usernameInquilino) {
+        return inquilinoDAO.findByUsername(usernameInquilino);
+    }
+    public boolean esPropietario(String username) {
+        Usuario usuario = usuarioDAO.findByUsername(username);
+        return usuario instanceof Propietario;
+    }
+
+    public boolean esInquilino(String username) {
+        Usuario usuario = usuarioDAO.findByUsername(username);
+        return usuario instanceof Inquilino;
+    }
 }

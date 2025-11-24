@@ -2,33 +2,43 @@ package com.nnm.nnm.negocio.dominio.entidades;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 @Entity
 @Table(name = "lista_deseos")
 
 public class ListaDeseos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="Id", nullable = false, unique = true)
-    private long Id;
+    @Column(name="id", nullable = false, unique = true)
+    private long id;
 
+    @OneToOne
+    @JoinColumn(name= "username_inquilino", referencedColumnName = "username", nullable = false, unique = true)
+    private Inquilino inquilino;
+/*
     @ManyToMany
-    @JoinColumn(name= "username_inquilino", referencedColumnName = "username_inquilino", nullable = false)
+    @JoinTable(name = "lista_deseos_inmueble",joinColumns = @JoinColumn(name = "id_lista_deseos"),
+    inverseJoinColumns = @JoinColumn(name = "id_inmueble"))
+    private Set<Inmueble> inmuebles = new HashSet<>();
+*/
 
-    @Column(name= "username_inquilino", nullable= false)
-    private String username_inquilino;
+    public ListaDeseos() {}
 
-    @ManyToMany
-    @JoinColumn(name= "id_inmueble", referencedColumnName = "id_inmueble", nullable = false)
-    
-    @Column( name= "id_inmueble", nullable= false)
-    private long id_inmueble;
-
-
-
+    public long getId() {
+        return id;
+    }
+    public void setId(long id) {
+        this.id = id;
+    }
+    public Inquilino getInquilino() {
+        return inquilino;
+    }
+    public void setInquilino(Inquilino inquilino) {
+        this.inquilino = inquilino;
+    }
 }

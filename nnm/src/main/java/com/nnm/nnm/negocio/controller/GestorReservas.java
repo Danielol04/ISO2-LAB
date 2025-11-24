@@ -25,13 +25,13 @@ public class GestorReservas {
     // Autentica si una reserva corresponde a un usuario específico
     public boolean autenticarReserva(long idReserva, String usernameUsuario) {
         Reserva reserva = reservaDAO.findById(idReserva);
-        return reserva != null && reserva.getUsername_inquilino().getLogin().equals(usernameUsuario);
+        return reserva != null && reserva.getInquilino().getUsername().equals(usernameUsuario);
     }
 
     // método para cancelar una reserva
     public boolean cancelarReserva(long idReserva, String usernameUsuario) {
         Reserva reserva = reservaDAO.findById(idReserva);
-        if(reserva != null && reserva.getUsername_inquilino().getLogin().equals(usernameUsuario)){
+        if(reserva != null && reserva.getInquilino().getUsername().equals(usernameUsuario)){
             reservaDAO.delete(reserva);
             return true;
         }
