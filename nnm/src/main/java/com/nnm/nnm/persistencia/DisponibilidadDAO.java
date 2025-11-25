@@ -17,4 +17,6 @@ public class DisponibilidadDAO extends EntidadDAO<Disponibilidad, Long> {
         String jpql = "FROM Disponibilidad d WHERE d.inmueble.id = :id_inmueble";
         return gestorBD.selectList(jpql, Disponibilidad.class, "id_inmueble", id_inmueble);
     }
+
+    
 }
