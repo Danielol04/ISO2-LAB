@@ -32,8 +32,7 @@ public class VentanaDisponibilidad {
     private GestorDisponibilidad gestorDisponibilidad;
     @Autowired
     private GestorInmuebles gestorInmuebles;
-
-    //id del inmueble
+    
     @GetMapping("/crear/{id}")
     public String mostrarFormulario(@PathVariable long id ,Model model, HttpSession session) {
         String username = (String) session.getAttribute("username");
