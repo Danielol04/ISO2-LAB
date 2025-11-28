@@ -8,16 +8,24 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "reserva")
 public class Reserva {
     @Id//Clave primaria
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
+
+    // Campo temporal: no persistente, solo para recibir el ID desde el formulario
+    @Transient
+    private Long idInmueble;
 
     @ManyToOne//Relacion de muchas reservas a un inmueble
     @JoinColumn(name="id_inmueble", referencedColumnName = "id")
@@ -58,8 +66,14 @@ public class Reserva {
     public Inmueble getInmueble() {
         return Inmueble;
     }
-    public void setIdInmueble(Inmueble Inmueble) {
+    public void setInmueble(Inmueble Inmueble) {
         this.Inmueble = Inmueble;
+    }
+    public Long getIdInmueble() {
+        return idInmueble;
+    }
+    public void setIdInmueble(Long idInmueble) {
+        this.idInmueble = idInmueble;
     }
     public Inquilino getInquilino() {
         return inquilino;

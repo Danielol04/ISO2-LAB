@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title th:text="'Detalle de ' + ${inmueble.titulo}">Detalle del Inmueble</title>
-
   <link rel="stylesheet" th:href="@{/css/navbar.css}">
   <link rel="stylesheet" th:href="@{/css/reservar.css}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
+
   <!-- NAVBAR -->
   <nav class="navbar">
     <a th:href="@{/home}" class="logo-link">
@@ -27,30 +28,38 @@
     </div>
   </nav>
 
-  <!-- CONTENIDO PRINCIPAL -->
+  <!-- CONTENIDO -->
   <main class="main-content">
     <section class="contenedor-detalle">
-      <!-- INFO DEL INMUEBLE -->
+
+      <!-- INFO INMUEBLE -->
       <div class="info-inmueble">
         <div class="box">
-          <h1 th:text="${inmueble.titulo}">Título del inmueble</h1>
+          <h1 th:text="${inmueble.titulo}">Título</h1>
         </div>
 
         <div class="box foto-inmueble">
-          <img th:if="${inmueble.foto != null}" th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}" alt="Foto del inmueble">
+          <img th:if="${inmueble.foto != null}"
+               th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}">
           <div th:if="${inmueble.foto == null}" class="placeholder">Sin imagen</div>
         </div>
 
         <div class="box">
-          <p><strong>Ubicación:</strong> <span th:text="${inmueble.localidad}"></span>, <span th:text="${inmueble.provincia}"></span></p>
+          <p><strong>Ubicación:</strong>
+            <span th:text="${inmueble.localidad}"></span>,
+            <span th:text="${inmueble.provincia}"></span>
+          </p>
           <p><strong>Dirección:</strong> <span th:text="${inmueble.direccion}"></span></p>
           <p><strong>Habitaciones:</strong> <span th:text="${inmueble.habitaciones}"></span></p>
           <p><strong>Baños:</strong> <span th:text="${inmueble.numero_banos}"></span></p>
-          <p class="precio"><strong>Precio:</strong> <span th:text="${inmueble.precio_noche}"></span> €/noche</p>
+          <p class="precio">
+            <strong>Precio:</strong>
+            <span th:text="${inmueble.precio_noche}"></span> €/noche
+          </p>
         </div>
       </div>
 
-      <!-- PANEL DE RESERVA -->
+      <!-- RESERVA -->
       <div class="reserva-box">
         <h3>Selecciona tus fechas</h3>
 
@@ -59,6 +68,7 @@
 
           <div class="campo-fecha">
             <label>Fechas</label>
+
             <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 10px;">
               <input type="text" id="inputLlegada" name="fechaInicio" placeholder="Llegada" readonly>
               <input type="text" id="inputSalida" name="fechaFin" placeholder="Salida" readonly>
@@ -77,69 +87,88 @@
           <button type="submit" class="btn-reservar-lateral">Reservar</button>
         </form>
       </div>
+
     </section>
   </main>
 
+  <!-- FECHAS DISPONIBLES DESDE BACKEND -->
+  <script th:inline="javascript">
+    const fechasDisponibles = []; 
+  </script>
+
+  <!-- LÓGICA CALENDARIO -->
   <script>
+    const hoy = new Date();
+    hoy.setHours(0,0,0,0);
+
     let fechaInicio = null;
     let fechaFin = null;
     let mesActual = new Date().getMonth();
     let anoActual = new Date().getFullYear();
 
-    const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    const nombresMeses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio",
+      "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 
     const inputLlegada = document.getElementById('inputLlegada');
     const inputSalida = document.getElementById('inputSalida');
     const calendario = document.getElementById('calendarioRango');
 
-    // Mostrar calendario al hacer clic
-    inputLlegada.addEventListener('click', () => {
-      calendario.style.display = calendario.style.display === 'block' ? 'none' : 'block';
-      renderCalendarios();
-    });
-    inputSalida.addEventListener('click', () => {
-      calendario.style.display = calendario.style.display === 'block' ? 'none' : 'block';
-      renderCalendarios();
+    [inputLlegada, inputSalida].forEach(input => {
+      input.addEventListener('click', () => {
+        calendario.style.display = calendario.style.display === 'block' ? 'none' : 'block';
+        renderCalendarios();
+      });
     });
 
-    // Cerrar calendario al hacer clic fuera
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.calendario') && !e.target.closest('#inputLlegada') && !e.target.closest('#inputSalida')) {
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.calendario') &&
+          !e.target.closest('#inputLlegada') &&
+          !e.target.closest('#inputSalida')) {
         calendario.style.display = 'none';
       }
     });
 
-    // Renderizar meses
     function renderCalendarios() {
       const contenedor = document.getElementById('contenedorMeses');
       contenedor.innerHTML = '';
 
-      const mesSiguiente = (mesActual + 1) % 12;
-      const anoSiguiente = mesActual === 11 ? anoActual + 1 : anoActual;
+      const mesSig = (mesActual + 1) % 12;
+      const anoSig = mesActual === 11 ? anoActual + 1 : anoActual;
 
       contenedor.appendChild(crearCalendario(anoActual, mesActual));
-      contenedor.appendChild(crearCalendario(anoSiguiente, mesSiguiente));
+      contenedor.appendChild(crearCalendario(anoSig, mesSig));
 
       document.getElementById('tituloMeses').textContent =
-        `${nombresMeses[mesActual]} ${anoActual} – ${nombresMeses[mesSiguiente]} ${anoSiguiente}`;
+        `${nombresMeses[mesActual]} ${anoActual} – ${nombresMeses[mesSig]} ${anoSig}`;
+
       actualizarVisuales();
     }
 
     function crearCalendario(ano, mes) {
       const tabla = document.createElement('table');
-      const diasSemana = ["L", "M", "X", "J", "V", "S", "D"];
-      let html = `<thead><tr>${diasSemana.map(d => `<th>${d}</th>`).join('')}</tr></thead><tbody><tr>`;
+      const diasSemana = ["L","M","X","J","V","S","D"];
+      let html = `<thead><tr>${diasSemana.map(d=>`<th>${d}</th>`).join('')}</tr></thead><tbody><tr>`;
 
       const primerDia = new Date(ano, mes, 1);
       const offset = (primerDia.getDay() + 6) % 7;
-      for (let i = 0; i < offset; i++) html += '<td></td>';
+      for (let i=0;i<offset;i++) html += '<td></td>';
 
       let fecha = new Date(ano, mes, 1);
       while (fecha.getMonth() === mes) {
         const dia = fecha.getDate();
-        const id = `d-${ano}-${mes}-${dia}`;
-        html += `<td id="${id}" onclick="seleccionarDia(${ano}, ${mes}, ${dia})">${dia}</td>`;
+        const fechaCelda = new Date(ano, mes, dia);
+        fechaCelda.setHours(0,0,0,0);
+
+        const str = `${ano}-${String(mes+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
+        const disponible = fechasDisponibles.includes(str);
+        const esPasado = fechaCelda < hoy;
+
+        if (!esPasado && disponible) {
+          html += `<td onclick="seleccionarDia(${ano},${mes},${dia})">${dia}</td>`;
+        } else {
+          html += `<td class="dia-no-disponible">${dia}</td>`;
+        }
+
         if (fecha.getDay() === 0) html += '</tr><tr>';
         fecha.setDate(dia + 1);
       }
@@ -152,69 +181,60 @@
     function seleccionarDia(ano, mes, dia) {
       const seleccion = new Date(ano, mes, dia);
 
-      if (!fechaInicio || (fechaInicio && fechaFin)) {
+      if (!fechaInicio || fechaFin) {
         fechaInicio = seleccion;
         fechaFin = null;
-      } else if (seleccion < fechaInicio) {
-        fechaFin = fechaInicio;
-        fechaInicio = seleccion;
       } else {
-        fechaFin = seleccion;
+        fechaFin = seleccion < fechaInicio ? fechaInicio : seleccion;
+        if (seleccion < fechaInicio) fechaInicio = seleccion;
       }
 
       actualizarVisuales();
 
       if (fechaInicio && fechaFin) {
-        inputLlegada.value = formatearFecha(fechaInicio);
-        inputSalida.value = formatearFecha(fechaFin);
+        inputLlegada.value = formatear(fechaInicio);
+        inputSalida.value = formatear(fechaFin);
         calendario.style.display = 'none';
       }
     }
 
-    function formatearFecha(fecha) {
-      const yyyy = fecha.getFullYear();
-      const mm = String(fecha.getMonth() + 1).padStart(2, '0');
-      const dd = String(fecha.getDate()).padStart(2, '0');
-      return `${yyyy}-${mm}-${dd}`;
+    function formatear(f) {
+      return `${f.getFullYear()}-${String(f.getMonth()+1).padStart(2,'0')}-${String(f.getDate()).padStart(2,'0')}`;
     }
 
     function actualizarVisuales() {
-      document.querySelectorAll('.calendario td').forEach(td => td.classList.remove('dia-seleccionado', 'rango'));
+      document.querySelectorAll('.calendario td')
+        .forEach(td => td.classList.remove('dia-seleccionado','rango'));
 
       if (!fechaInicio) return;
 
-      if (!fechaFin) {
-        const id = `d-${fechaInicio.getFullYear()}-${fechaInicio.getMonth()}-${fechaInicio.getDate()}`;
-        const td = document.getElementById(id);
-        if (td) td.classList.add('dia-seleccionado');
-      } else {
-        let current = new Date(fechaInicio);
-        while (current <= fechaFin) {
-          const id = `d-${current.getFullYear()}-${current.getMonth()}-${current.getDate()}`;
-          const td = document.getElementById(id);
-          if (td) {
-            if (current.getTime() === fechaInicio.getTime() || current.getTime() === fechaFin.getTime())
-              td.classList.add('dia-seleccionado');
-            else td.classList.add('rango');
-          }
-          current.setDate(current.getDate() + 1);
+      let current = new Date(fechaInicio);
+      const end = fechaFin || fechaInicio;
+
+      while (current <= end) {
+        const td = [...document.querySelectorAll('.calendario td')]
+          .find(t => t.textContent == current.getDate());
+        if (td && !td.classList.contains('dia-no-disponible')) {
+          td.classList.add(current.getTime()===fechaInicio.getTime() ||
+                           current.getTime()===fechaFin?.getTime()
+                           ? 'dia-seleccionado' : 'rango');
         }
+        current.setDate(current.getDate() + 1);
       }
     }
 
-    document.getElementById('btnPrev').addEventListener('click', () => {
-      mesActual--;
-      if (mesActual < 0) { mesActual = 11; anoActual--; }
+    document.getElementById('btnPrev').onclick = () => {
+      mesActual--; if (mesActual < 0) { mesActual = 11; anoActual--; }
       renderCalendarios();
-    });
+    };
 
-    document.getElementById('btnNext').addEventListener('click', () => {
-      mesActual++;
-      if (mesActual > 11) { mesActual = 0; anoActual++; }
+    document.getElementById('btnNext').onclick = () => {
+      mesActual++; if (mesActual > 11) { mesActual = 0; anoActual++; }
       renderCalendarios();
-    });
+    };
 
     renderCalendarios();
   </script>
+
 </body>
 </html>

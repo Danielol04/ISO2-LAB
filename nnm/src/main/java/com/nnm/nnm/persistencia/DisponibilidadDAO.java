@@ -23,7 +23,7 @@ public class DisponibilidadDAO extends EntidadDAO<Disponibilidad, Long> {
     public List<Disponibilidad> encontrarAdyacentes(long idInmueble,PoliticaCancelacion politicaCancelacion,boolean reservaDirecta, LocalDate fechaInicio, LocalDate fechaFin) {
         LocalDate fechaInicioAdj = fechaFin.plusDays(1);
         LocalDate fechaFinAdj = fechaInicio.minusDays(1);
-        String jpql ="FROM Disponibilidad d WHERE d.inmueble.id = :idInmueble AND d.politicaCancelacion = :politica_cancelacion AND (d.fechaInicio = :fechaFin OR d.fechaFin = :fechaInicio)";
+        String jpql ="FROM Disponibilidad d WHERE d.inmueble.id = :idInmueble AND d.politicaCancelacion = :politica_cancelacion AND d.reservaDirecta = :reservaDirecta AND (d.fechaInicio = :fechaFin OR d.fechaFin = :fechaInicio)";
     
         return gestorBD.selectList(jpql, Disponibilidad.class, 
             "idInmueble", idInmueble,

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nnm.nnm.negocio.dominio.entidades.Disponibilidad;
+import com.nnm.nnm.negocio.dominio.entidades.PoliticaCancelacion;
 import com.nnm.nnm.persistencia.DisponibilidadDAO;
 
 @Service
@@ -91,5 +92,27 @@ public class GestorDisponibilidad {
         return disponibilidadDAO.findByInmueble(id_inmueble);
     }
 
+    public Boolean obtenerTipoReserva(long idInmueble, LocalDate fechaInicio, LocalDate fechaFin) {
+        List<Disponibilidad> disponibles = obtenerDisponibilidadPorInmueble(idInmueble);
+    
+        for (Disponibilidad d : disponibles) {
+            // Comprobamos si la disponibilidad cubre todo el rango solicitado
+            if (!fechaInicio.isBefore(d.getFechaInicio()) && !fechaFin.isAfter(d.getFechaFin())) {
+                return d.getReservaDirecta(); // Devuelve true si es directa, false si no
+            }
+        }
+        return null;
+    }
 
+    public PoliticaCancelacion obtenerPoliticaCancelacion(long idInmueble, LocalDate fechaInicio, LocalDate fechaFin) {
+        List<Disponibilidad> disponibles = obtenerDisponibilidadPorInmueble(idInmueble);
+    
+        for (Disponibilidad d : disponibles) {
+            // Comprobamos si la disponibilidad cubre todo el rango solicitado
+            if (!fechaInicio.isBefore(d.getFechaInicio()) && !fechaFin.isAfter(d.getFechaFin())) {
+                return d.getPoliticaCancelacion();
+            }
+        }
+        return null;
+    }
 }
