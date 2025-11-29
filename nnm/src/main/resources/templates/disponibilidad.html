@@ -41,8 +41,8 @@
     <!-- DETALLES NUEVA DISPONIBILIDAD -->
     <div class="section">
       <h2>Detalles de la nueva disponibilidad</h2>
-      <form class="form-inline" th:action="@{'/disponibilidades/crear/' + ${idInmueble}}" th:object="${disponibilidad}"
-        method="post">
+      <form id="formCrear" class="form-inline" th:action="@{'/disponibilidades/crear/' + ${idInmueble}}"
+        th:object="${disponibilidad}" method="post">
         <div class="checkbox-line">
           <input type="checkbox" name="reservaDirecta" id="direct-booking">
           <label for="direct-booking">Reserva directa</label>
@@ -66,11 +66,13 @@
       <h2>Disponibilidades creadas</h2>
       <div th:each="d : ${disponibilidades}" class="disponibilidad-item">
         <div>
-          <span th:text="${#temporals.format(d.fechaInicio, 'd ''de'' MMMM, yyyy')} + ' - ' + ${#temporals.format(d.fechaFin, 'd ''de'' MMMM, yyyy')}"></span>
+          <span
+            th:text="${#temporals.format(d.fechaInicio, 'd ''de'' MMMM, yyyy')} + ' - ' + ${#temporals.format(d.fechaFin, 'd ''de'' MMMM, yyyy')}"></span>
           <span th:text="'Política de cancelación: ' + ${d.politicaCancelacion}"></span>
-          <span th:text="${d.reservaDirecta} ? '· Reserva directa' : 'Solicitud previa'"></span>
+          <span th:text="${d.reservaDirecta} ? 'Reserva directa' : 'Solicitud previa'"></span>
         </div>
-        <button class="eliminar" title="Eliminar">&#128465;</button>
+        <button class="eliminar" title="Eliminar" th:onclick="'confirmarEliminacion(' + ${d.id} + ')'">
+          &#128465;</button>
       </div>
     </div>
   </div>
@@ -212,6 +214,81 @@
     };
 
     renderCalendarios();
+  </script>
+  <!-- JS ELIMINAR DISPONIBILIDAD -->
+  <div id="popupEliminar" class="popup-overlay" style="display:none;">
+    <div class="popup">
+      <p>¿Está seguro de que quiere borrar esta disponibilidad?</p>
+      <div class="popup-buttons">
+        <button onclick="cerrarPopup()">No</button>
+        <form id="formEliminar" method="post">
+          <button type="submit">Sí</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- JS POPUP ELIMINAR DISPONIBILIDAD -->
+  <script>
+    let idAEliminar = null;
+    function confirmarEliminacion(id) {
+      idAEliminar = id;
+      document.getElementById("formEliminar").action = "/disponibilidades/eliminar/" + id;
+      document.getElementById("popupEliminar").style.display = "flex";
+    }
+    function cerrarPopup() {
+      document.getElementById("popupEliminar").style.display = "none";
+      idAEliminar = null;
+    }
+  </script>
+  <div id="popupError" class="popup-overlay" style="display:none;">
+    <div class="popup popup-error">
+      <p id="mensajeError"></p>
+    </div>
+  </div>
+  <script>
+    function mostrarPopupError(mensaje) {
+      const popup = document.getElementById("popupError");
+      document.getElementById("mensajeError").textContent = mensaje;
+
+      popup.style.display = "flex";
+
+      setTimeout(() => {
+        popup.style.display = "none";
+      }, 3000);
+    }
+  </script>
+
+  <!-- POPUP ERROR -->
+  <div id="popupError" class="popup-overlay" style="display:none;">
+    <div class="popup popup-error">
+      <p id="mensajeError"></p>
+    </div>
+  </div>
+
+  <script>
+    function mostrarPopupError(mensaje) {
+      const popup = document.getElementById("popupError");
+      document.getElementById("mensajeError").textContent = mensaje;
+
+      popup.style.display = "flex";
+
+      setTimeout(() => {
+        popup.style.display = "none";
+      }, 3000);
+    }
+  </script>
+
+  <!-- VALIDACIÓN FINAL -->
+  <script>
+    document.getElementById("formCrear").addEventListener("submit", function (event) {
+      const inicio = document.getElementById("inputLlegada").value;
+      const fin = document.getElementById("inputSalida").value;
+
+      if (!inicio || !fin) {
+        event.preventDefault();
+        mostrarPopupError("Debes seleccionar la fecha de inicio y la fecha de fin.");
+      }
+    });
   </script>
 </body>
 

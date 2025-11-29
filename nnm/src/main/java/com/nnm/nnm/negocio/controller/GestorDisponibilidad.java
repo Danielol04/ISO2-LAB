@@ -92,6 +92,14 @@ public class GestorDisponibilidad {
         return disponibilidadDAO.findByInmueble(id_inmueble);
     }
 
+    public void eliminarDisponibilidad(Disponibilidad disponibilidad) {
+        disponibilidadDAO.delete(disponibilidad);
+    }
+
+    public Disponibilidad obtenerDisponibilidadPorId(long id) {
+        return disponibilidadDAO.findById(id);
+    }
+
     public Boolean obtenerTipoReserva(long idInmueble, LocalDate fechaInicio, LocalDate fechaFin) {
         List<Disponibilidad> disponibles = obtenerDisponibilidadPorInmueble(idInmueble);
     

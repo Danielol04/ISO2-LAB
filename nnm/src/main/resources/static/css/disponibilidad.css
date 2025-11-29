@@ -8,14 +8,14 @@ body {
 
 .container {
     max-width: 960px;
-    margin: 40px auto;
-    padding: 2rem;
+    margin: 10px auto 2rem auto;    
+    padding: 1.5rem 2rem
 }
 
 h1,
 h2 {
     font-weight: 600;
-    margin-bottom: 1rem;
+    margin: 0.5rem 0 1rem 0;
 }
 
 hr {
@@ -70,9 +70,6 @@ td {
     font-size: 0.95rem;
 }
 
-td:hover {
-    background-color: #f0f0f0;
-}
 td:hover:not(.dia-no-disponible):not(.dia-seleccionado) {
     background-color: #dcdcdc;
 }
@@ -83,7 +80,7 @@ td:hover:not(.dia-no-disponible):not(.dia-seleccionado) {
 }
 
 .dia-seleccionado {
-    background-color: #000;
+    background-color: #FF8C42;
     color: #fff;
     border-radius: 50%;
     border: 2px solid #fff;
@@ -167,7 +164,7 @@ input[type="checkbox"] {
 }
 
 button {
-    background: #000;
+    background: #FF8C42;
     color: white;
     font-weight: 600;
     cursor: pointer;
@@ -208,19 +205,70 @@ button:hover {
     border: none;
     color: #bbb;
     cursor: pointer;
-    width: 32px;               /* ancho fijo */
-    height: 32px;              /* alto fijo */
-    flex: 0 0 auto;            /* no crece ni encoge en flex */
+    width: 32px;
+    height: 32px;
+    flex: 0 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 50%;        /* círculo perfecto */
+    border-radius: 50%;
     padding: 0;
     transition: color 0.2s ease, background 0.2s ease;
     line-height: 1;
 }
 
 .eliminar:hover {
-    color: #e53935;            
+    color: #e53935;
     background: rgba(0, 0, 0, 0.05);
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.popup {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    min-width: 300px;
+    text-align: center;
+}
+
+.popup-buttons {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+}
+
+.popup-buttons button,
+.popup-buttons form {
+    flex: 1;
+}
+
+.popup-buttons form button {
+    width: 100%;
+}
+
+.popup-error {
+    background: #ffdddd;
+    border-left: 5px solid #ff5555;
+    padding: 15px;
+    color: #a00000;
+    font-weight: bold;
+    text-align: center;
+}
+
+#popupError {
+    display: none;
+    justify-content: center;
+    align-items: center;
 }

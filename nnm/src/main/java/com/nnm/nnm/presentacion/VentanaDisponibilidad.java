@@ -65,8 +65,7 @@ public class VentanaDisponibilidad {
     }
 
     @PostMapping("/crear/{id}")
-    public String crearDisponibilidad(@PathVariable long id,
-            @ModelAttribute("disponibilidad") Disponibilidad disponibilidad, HttpSession session, Model model) {
+    public String crearDisponibilidad(@PathVariable long id, @ModelAttribute("disponibilidad") Disponibilidad disponibilidad, HttpSession session, Model model) {
 
         String username = (String) session.getAttribute("username");
         if (username == null) {
@@ -108,6 +107,30 @@ public class VentanaDisponibilidad {
         log.info("Creando disponibilidad para el inmueble: {}", id);
         gestorDisponibilidad.registrarDisponibilidad(disponibilidad);
         return "redirect:/disponibilidades/crear/" + id;
+    }
+
+    @PostMapping("/eliminar/{id}")
+    public String eliminar(@PathVariable long id, HttpSession session) {
+
+
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return "redirect:/login";
+        }
+        Disponibilidad disponibilidad = gestorDisponibilidad.obtenerDisponibilidadPorId(id);
+        if (disponibilidad == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Disponibilidad no encontrada");
+        }
+
+        // verificar propietario
+        if (!disponibilidad.getInmueble().getPropietario().getUsername().equals(username)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permiso");
+        }
+        long idInmueble = disponibilidad.getInmueble().getId();
+
+        gestorDisponibilidad.eliminarDisponibilidad(disponibilidad);
+
+        return "redirect:/disponibilidades/crear/" + idInmueble;
     }
 
     private void errorDisponibilidad(Model model, String mensajeError, long id) {
