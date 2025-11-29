@@ -61,7 +61,7 @@
       <h2 class="titulo-seccion">Propiedades Disponibles</h2>
 
       <div th:if="${#lists.isEmpty(propiedades)}" class="mensaje-vacio">
-        <p>No hay propiedades disponibles</p>
+        <p>No tienes propiedades registradas</p>
       </div>
 
       <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">

@@ -1,7 +1,5 @@
 package com.nnm.nnm.presentacion;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -28,92 +26,74 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/disponibilidades")
 public class VentanaDisponibilidad {
-    private static final Logger log = LoggerFactory.getLogger(VentanaDisponibilidad.class);
+     private static final Logger log = LoggerFactory.getLogger(VentanaDisponibilidad.class);
 
     @Autowired
     private GestorDisponibilidad gestorDisponibilidad;
     @Autowired
     private GestorInmuebles gestorInmuebles;
-
+    
     @GetMapping("/crear/{id}")
-    public String mostrarFormulario(@PathVariable long id, Model model, HttpSession session) {
+    public String mostrarFormulario(@PathVariable long id ,Model model, HttpSession session) {
         String username = (String) session.getAttribute("username");
-        if (username == null) {
-            return "redirect:/login";
-        }
-        Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(id);
-        List<Disponibilidad> disponibilidades = gestorDisponibilidad.obtenerDisponibilidadPorInmueble(id);
-        model.addAttribute("disponibilidad", new Disponibilidad());
-        model.addAttribute("politicas", PoliticaCancelacion.values());
-        model.addAttribute("idInmueble", id);
-        model.addAttribute("inmueble", inmueble);
-        model.addAttribute("disponibilidades", disponibilidades);
-
-        List<String> fechasDisponibles = new ArrayList<>();
-        for (Disponibilidad d : disponibilidades) {
-            LocalDate fecha = d.getFechaInicio();
-            while (!fecha.isAfter(d.getFechaFin())) {
-                fechasDisponibles.add(fecha.toString());
-                fecha = fecha.plusDays(1);
+        if(username == null) {
+                return "redirect:/login";
             }
+                
+            model.addAttribute("disponibilidad", new Disponibilidad());
+            model.addAttribute("politicas", PoliticaCancelacion.values());
+            model.addAttribute("idInmueble", id);
+            log.info("Mostrando formulario de Disponibilidad para el inmueble: {}", id);
+            return "Disponibilidad";
         }
+        @PostMapping("/crear/{id}")
+        public String crearDisponibilidad(@PathVariable long id, @ModelAttribute("disponibilidad") Disponibilidad disponibilidad, HttpSession session, Model model) {
 
-        model.addAttribute("fechasDisponibles", fechasDisponibles);
-
-        log.info("Mostrando formulario de Disponibilidad para el inmueble: {}", id);
-        return "disponibilidad";
-    }
-
-    @PostMapping("/crear/{id}")
-    public String crearDisponibilidad(@PathVariable long id,
-            @ModelAttribute("disponibilidad") Disponibilidad disponibilidad, HttpSession session, Model model) {
-
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
-            return "redirect:/login";
-        }
-        String mensajeError = "";
-        Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(id);
-        if (inmueble == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inmueble no encontrado");
-        }
-
-        if (!inmueble.getPropietario().getUsername().equals(username)) {
+            String username = (String) session.getAttribute("username");
+            if (username == null) {
+                return "redirect:/login";
+            }
+            String mensajeError = "";
+            Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(id);
+            if (inmueble == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inmueble no encontrado");
+            }
+            
+            if (!inmueble.getPropietario().getUsername().equals(username)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permiso");
+            }
+
+            disponibilidad.setInmueble(inmueble);
+
+            if(disponibilidad.getFechaFin().isBefore(disponibilidad.getFechaInicio())) {
+                mensajeError = "La fecha de fin no puede ser anterior a la fecha de inicio.";
+                errorDisponibilidad(model, mensajeError, id);
+                return "Disponibilidad";
+            }
+            
+            // Validar que no haya solapamiento con otras disponibilidades del mismo inmueble
+            List<Disponibilidad> disponibilidadesExistentes = gestorDisponibilidad.obtenerDisponibilidadPorInmueble(id);
+            boolean solapa = disponibilidadesExistentes.stream().anyMatch(d ->
+                !d.getFechaFin().isBefore(disponibilidad.getFechaInicio()) &&
+                !d.getFechaInicio().isAfter(disponibilidad.getFechaFin())
+            );
+
+            if (solapa) {
+                mensajeError = "Las fechas se solapan con una disponibilidad existente.";
+                errorDisponibilidad(model, mensajeError, id);
+                return "Disponibilidad";
+            }
+
+            log.info("Creando disponibilidad para el inmueble: {}", id);
+            gestorDisponibilidad.registrarDisponibilidad(disponibilidad);
+            return "redirect:/home";
         }
 
-        disponibilidad.setInmueble(inmueble);
-
-        if (disponibilidad.getFechaFin().isBefore(disponibilidad.getFechaInicio())) {
-            mensajeError = "La fecha de fin no puede ser anterior a la fecha de inicio.";
-            errorDisponibilidad(model, mensajeError, id);
-            // redirectAttributes.addFlashAttribute("error", mensajeError);
-            return "redirect:/disponibilidades/crear/" + id;
+        private void errorDisponibilidad(Model model, String mensajeError, long id) {
+            model.addAttribute("error", mensajeError);
+            model.addAttribute("politicas", PoliticaCancelacion.values());
+            model.addAttribute("idInmueble", id);
         }
-
-        // Validar que no haya solapamiento con otras disponibilidades del mismo
-        // inmueble
-        List<Disponibilidad> disponibilidadesExistentes = gestorDisponibilidad.obtenerDisponibilidadPorInmueble(id);
-        boolean solapa = disponibilidadesExistentes.stream()
-                .anyMatch(d -> !d.getFechaFin().isBefore(disponibilidad.getFechaInicio()) &&
-                        !d.getFechaInicio().isAfter(disponibilidad.getFechaFin()));
-
-        if (solapa) {
-            mensajeError = "Las fechas se solapan con una disponibilidad existente.";
-            errorDisponibilidad(model, mensajeError, id);
-            return "redirect:/disponibilidades/crear/" + id;
-
-        }
-
-        log.info("Creando disponibilidad para el inmueble: {}", id);
-        gestorDisponibilidad.registrarDisponibilidad(disponibilidad);
-        return "redirect:/disponibilidades/crear/" + id;
-    }
-
-    private void errorDisponibilidad(Model model, String mensajeError, long id) {
-        model.addAttribute("error", mensajeError);
-        model.addAttribute("politicas", PoliticaCancelacion.values());
-        model.addAttribute("idInmueble", id);
-    }
+    
 
 }
