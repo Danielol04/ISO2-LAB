@@ -1,4 +1,5 @@
 package com.nnm.nnm.negocio.dominio.entidades;
+
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
@@ -13,42 +14,43 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "reserva")
 public class Reserva {
-    @Id//Clave primaria
+    @Id // Clave primaria
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
-    // Campo temporal: no persistente, solo para recibir el ID desde el formulario
-    @Transient
-    private Long idInmueble;
-
-    @ManyToOne//Relacion de muchas reservas a un inmueble
-    @JoinColumn(name="id_inmueble", referencedColumnName = "id")
+    @ManyToOne // Relacion de muchas reservas a un inmueble
+    @JoinColumn(name = "id_inmueble", referencedColumnName = "id")
     private Inmueble Inmueble;
 
-    @ManyToOne//Relacion de muchas reservas a un usuario
-    @JoinColumn(name="inquilino", referencedColumnName = "username")
+    @ManyToOne // Relacion de muchas reservas a un usuario
+    @JoinColumn(name = "inquilino", referencedColumnName = "username")
     private Inquilino inquilino;
 
-    @Column(name="fecha_inicio", nullable = false, unique = false)
+    @Column(name = "fecha_inicio", nullable = false, unique = false)
     private LocalDate fechaInicio;
-    @Column(name="fecha_fin", nullable = false, unique = false)
+    @Column(name = "fecha_fin", nullable = false, unique = false)
     private LocalDate fechaFin;
     @Enumerated(EnumType.STRING)
-    @Column(name= "politica_cancelacion", nullable = false)
+    @Column(name = "politica_cancelacion", nullable = false)
     private PoliticaCancelacion politicaCancelacion;
 
+    @Column(name = "aceptada", nullable = false)
+    private boolean aceptada = false;
+
+    @Column(name = "pagada", nullable = false)
+    private boolean pagada = false;
 
     public Reserva() {
     }
-    
+
     public Reserva(Long idReserva, Inmueble Inmueble, Inquilino inquilino, LocalDate fechaInicio,
-        LocalDate fechaFin, PoliticaCancelacion politicaCancelacion) {
+            LocalDate fechaFin, PoliticaCancelacion politicaCancelacion) {
         this.id = idReserva;
         this.Inmueble = Inmueble;
         this.inquilino = inquilino;
@@ -60,33 +62,35 @@ public class Reserva {
     public void setId(Long idReserva) {
         this.id = idReserva;
     }
+
     public Long getId() {
         return id;
     }
+
     public Inmueble getInmueble() {
         return Inmueble;
     }
+
     public void setInmueble(Inmueble Inmueble) {
         this.Inmueble = Inmueble;
     }
-    public Long getIdInmueble() {
-        return idInmueble;
-    }
-    public void setIdInmueble(Long idInmueble) {
-        this.idInmueble = idInmueble;
-    }
+
     public Inquilino getInquilino() {
         return inquilino;
     }
+
     public void setInquilino(Inquilino inquilino) {
         this.inquilino = inquilino;
     }
+
     public LocalDate getFechaInicio() {
         return fechaInicio;
     }
+
     public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
+
     public LocalDate getFechaFin() {
         return fechaFin;
     }
@@ -94,20 +98,32 @@ public class Reserva {
     public void setFechaFin(LocalDate fechaFin) {
         this.fechaFin = fechaFin;
     }
+
     public PoliticaCancelacion getPoliticaCancelacion() {
         return politicaCancelacion;
     }
+
     public void setPoliticaCancelacion(PoliticaCancelacion politicaCancelacion) {
         this.politicaCancelacion = politicaCancelacion;
     }
 
-    public boolean isPagado(){
-        // Lógica para determinar si la reserva ha sido pagada
-        return false; // Valor por defecto, implementar según la lógica de negocio
+    public boolean getPagado() {
+        return pagada;
     }
 
-    public boolean isActiva(){
-        // Lógica para determinar si la reserva está activa
-        return false; // Valor por defecto, implementar según la lógica de negocio
+    public void setPagado(boolean pagada) {
+        this.pagada = pagada;
+    }
+
+    public boolean isActiva() {
+        return false;
+    }
+
+    public boolean getAceptada() {
+        return aceptada;
+    }
+
+    public void setAceptada(boolean aceptada) {
+        this.aceptada = aceptada;
     }
 }

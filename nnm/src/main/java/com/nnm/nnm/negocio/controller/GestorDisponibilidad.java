@@ -18,15 +18,14 @@ public class GestorDisponibilidad {
 
     public void registrarDisponibilidad(Disponibilidad nueva) {
         List<Disponibilidad> adyacentes = disponibilidadDAO.encontrarAdyacentes(
-            nueva.getInmueble().getId(),
-            nueva.getPoliticaCancelacion(),
-            nueva.getReservaDirecta(),
-            nueva.getFechaInicio(),
-            nueva.getFechaFin()
-        );
-        if(adyacentes.isEmpty()){
+                nueva.getInmueble().getId(),
+                nueva.getPoliticaCancelacion(),
+                nueva.getReservaDirecta(),
+                nueva.getFechaInicio(),
+                nueva.getFechaFin());
+        if (adyacentes.isEmpty()) {
             disponibilidadDAO.save(nueva);
-        }else{
+        } else {
             // Hay vecinos, unirlos
             LocalDate minFechaInicio = nueva.getFechaInicio();
             LocalDate maxFechaFin = nueva.getFechaFin();
@@ -44,15 +43,14 @@ public class GestorDisponibilidad {
 
             // Crear una nueva disponibilidad fusionada
             Disponibilidad fusionada = new Disponibilidad(
-                nueva.getInmueble(),
-                minFechaInicio,
-                maxFechaFin,
-                nueva.getPoliticaCancelacion(),
-                nueva.getReservaDirecta()
-            );
+                    nueva.getInmueble(),
+                    minFechaInicio,
+                    maxFechaFin,
+                    nueva.getPoliticaCancelacion(),
+                    nueva.getReservaDirecta());
 
             disponibilidadDAO.save(fusionada);
-            
+
         }
 
     }
@@ -62,7 +60,7 @@ public class GestorDisponibilidad {
         Disponibilidad d = disponibilidadDAO.findDisponibilidadparaReserva(idInmueble, reservaInicio, reservaFin);
         // Borrar la disponibilidad original
         disponibilidadDAO.delete(d);
-    
+
         // Crear disponibilidad antes de la reserva
         if (reservaInicio.isAfter(d.getFechaInicio())) {
             Disponibilidad antes = new Disponibilidad();
@@ -73,7 +71,7 @@ public class GestorDisponibilidad {
             antes.setPoliticaCancelacion(d.getPoliticaCancelacion());
             disponibilidadDAO.save(antes);
         }
-    
+
         // Crear disponibilidad después de la reserva
         if (reservaFin.isBefore(d.getFechaFin())) {
             Disponibilidad despues = new Disponibilidad();
@@ -85,8 +83,6 @@ public class GestorDisponibilidad {
             disponibilidadDAO.save(despues);
         }
     }
-    
-    
 
     public List<Disponibilidad> obtenerDisponibilidadPorInmueble(long id_inmueble) {
         return disponibilidadDAO.findByInmueble(id_inmueble);
@@ -102,7 +98,7 @@ public class GestorDisponibilidad {
 
     public Boolean obtenerTipoReserva(long idInmueble, LocalDate fechaInicio, LocalDate fechaFin) {
         List<Disponibilidad> disponibles = obtenerDisponibilidadPorInmueble(idInmueble);
-    
+
         for (Disponibilidad d : disponibles) {
             // Comprobamos si la disponibilidad cubre todo el rango solicitado
             if (!fechaInicio.isBefore(d.getFechaInicio()) && !fechaFin.isAfter(d.getFechaFin())) {
@@ -114,7 +110,7 @@ public class GestorDisponibilidad {
 
     public PoliticaCancelacion obtenerPoliticaCancelacion(long idInmueble, LocalDate fechaInicio, LocalDate fechaFin) {
         List<Disponibilidad> disponibles = obtenerDisponibilidadPorInmueble(idInmueble);
-    
+
         for (Disponibilidad d : disponibles) {
             // Comprobamos si la disponibilidad cubre todo el rango solicitado
             if (!fechaInicio.isBefore(d.getFechaInicio()) && !fechaFin.isAfter(d.getFechaFin())) {

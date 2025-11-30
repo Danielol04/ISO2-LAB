@@ -29,6 +29,10 @@ public class GestorReservas {
         reservaDAO.save(reserva);
     }
 
+    public void actualizarReserva(Reserva reserva) {
+        reservaDAO.update(reserva);
+    }
+
     // Autentica si una reserva corresponde a un usuario específico
     public boolean autenticarReserva(long idReserva, String usernameUsuario) {
         Reserva reserva = reservaDAO.findById(idReserva);
@@ -53,4 +57,25 @@ public class GestorReservas {
         return reservaDAO.findById(idReserva);
     }
 
+    public void aceptarSolicitudReserva(long idSolicitud) {
+        SolicitudReserva solicitud = solicitudReservaDAO.findById(idSolicitud);
+        if (solicitud != null) {
+            Reserva reserva = obtenerReservaPorId(idSolicitud);
+            reserva.setAceptada(true);
+            gestorDisponibilidad.actualizarDisponibilidadPorReserva(
+                reserva.getInmueble().getId(),
+                reserva.getFechaInicio(),
+                reserva.getFechaFin()
+            );
+            reservaDAO.save(reserva);
+            solicitudReservaDAO.delete(solicitud);
+        }
+    }
+
+    public void rechazarSolicitudReserva(long idSolicitud) {
+        SolicitudReserva solicitud = solicitudReservaDAO.findById(idSolicitud);
+        if (solicitud != null) {
+            solicitudReservaDAO.delete(solicitud);
+        }
+    }
 }

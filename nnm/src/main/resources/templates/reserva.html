@@ -62,10 +62,8 @@
       <!-- RESERVA -->
       <div class="reserva-box">
         <h3>Selecciona tus fechas</h3>
-
-        <form th:action="@{/reserva/crearReserva}" method="post">
+        <form th:action="@{'/reserva/crear/' + ${idInmueble}}" th:object="${reserva}" method="post">
           <input type="hidden" name="idInmueble" th:value="${inmueble.id}">
-
           <div class="campo-fecha">
             <label>Fechas</label>
 
@@ -93,7 +91,7 @@
 
   <!-- FECHAS DISPONIBLES DESDE BACKEND -->
   <script th:inline="javascript">
-    const fechasDisponibles = []; 
+    const fechasDisponibles = [];
   </script>
 
   <!-- LÓGICA CALENDARIO -->
