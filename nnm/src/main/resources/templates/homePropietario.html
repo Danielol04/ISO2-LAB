@@ -80,7 +80,8 @@
         </div>
 
         <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
-          <div th:each="inmueble : ${propiedades}" class="tarjeta-propiedad">
+
+          <div th:each="inmueble : ${propiedades}" class="tarjeta-propiedad" th:id="'inmueble-' + ${inmueble.id}">
             <div class="imagen-contenedor">
               <img th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}" alt="Imagen del inmueble">
             </div>
@@ -113,6 +114,9 @@
                 <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
               </p>
 
+              <button type="button" class="btn-eliminar" 
+              th:onclick="'eliminarInmueble(' + ${inmueble.id} + ')'">Eliminar 
+              </button>
               <form th:action="@{/disponibilidades/crear/{id}(id=${inmueble.id})}" method="get">
                 <button type="submit" class="btn-reservar">Añadir disponibilidades</button>
               </form>
@@ -121,5 +125,16 @@
         </div>
     </section>
   </main>
+    <div id="ventana-confirmacion" class="ventana-confirmacion">
+      <div class="ventana-contenido">
+          <p id="vc-texto">¿Estás seguro de eliminar el inmueble?</p>
+          <div class="vc-botones">
+              <button id="vc-cancelar">Cancelar</button>
+              <button id="vc-aceptar">Eliminar</button>
+          </div>
+      </div>
+    </div>
+
+  <script src="/js/inmuebles.js"></script>
 </body>
 </html>
