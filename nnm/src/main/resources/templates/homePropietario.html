@@ -5,6 +5,8 @@
   <title>Inicio Propietario</title>
   <link rel="stylesheet" href="/css/home.css">
   <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/popup.css">
+
 </head>
 <body>
     <!-- NAVBAR -->
@@ -115,7 +117,7 @@
               </p>
 
               <button type="button" class="btn-eliminar" 
-              th:onclick="'eliminarInmueble(' + ${inmueble.id} + ')'">Eliminar 
+              th:onclick="|eliminarInmueble(${inmueble.id})|">Eliminar 
               </button>
               <form th:action="@{/disponibilidades/crear/{id}(id=${inmueble.id})}" method="get">
                 <button type="submit" class="btn-reservar">Añadir disponibilidades</button>
@@ -125,16 +127,17 @@
         </div>
     </section>
   </main>
-    <div id="ventana-confirmacion" class="ventana-confirmacion">
-      <div class="ventana-contenido">
-          <p id="vc-texto">¿Estás seguro de eliminar el inmueble?</p>
-          <div class="vc-botones">
-              <button id="vc-cancelar">Cancelar</button>
-              <button id="vc-aceptar">Eliminar</button>
-          </div>
-      </div>
+    <!-- POPUP CONFIRMACIÓN GENERAL -->
+    <div id="popupConfirmacion" class="popup-overlay" style="display:none;">
+        <div class="popup popup-confirmacion">
+            <p id="mensajeConfirmacion"></p>
+            <div class="popup-botones">
+                <button id="btnConfirmar" class="btn-confirmar">Aceptar</button>
+                <button id="btnCancelar" class="btn-cancelar">Cancelar</button>
+            </div>
+        </div>
     </div>
-
+  <script src="/js/popup.js"></script>
   <script src="/js/inmuebles.js"></script>
 </body>
 </html>
