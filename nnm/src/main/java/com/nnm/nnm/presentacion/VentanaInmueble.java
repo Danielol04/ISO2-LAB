@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -113,5 +116,18 @@ public class VentanaInmueble{
     public String listar(Model model) {
         model.addAttribute("inmuebles", gestorInmuebles.listarInmuebles());
         return "listarInmuebles";
+    }
+    
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<Map<String, Object>> eliminarInmueble(@PathVariable Long id, HttpSession session) {
+        String usernamePropietario = (String) session.getAttribute("username");
+        boolean eliminado = gestorInmuebles.eliminarInmueble(id, usernamePropietario);
+        Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("exito", eliminado);
+        respuesta.put("id", id);
+
+        log.info("Eliminación de inmueble con id {}: {}", id, eliminado ? "éxito" : "fallo");
+
+        return ResponseEntity.ok(respuesta);
     }
 }

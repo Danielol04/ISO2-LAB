@@ -5,6 +5,8 @@
   <title>Inicio Propietario</title>
   <link rel="stylesheet" href="/css/home.css">
   <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/popup.css">
+
 </head>
 <body>
     <!-- NAVBAR -->
@@ -80,7 +82,8 @@
         </div>
 
         <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
-          <div th:each="inmueble : ${propiedades}" class="tarjeta-propiedad">
+
+          <div th:each="inmueble : ${propiedades}" class="tarjeta-propiedad" th:id="'inmueble-' + ${inmueble.id}">
             <div class="imagen-contenedor">
               <img th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}" alt="Imagen del inmueble">
             </div>
@@ -113,6 +116,9 @@
                 <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
               </p>
 
+              <button type="button" class="btn-eliminar" 
+              th:onclick="|eliminarInmueble(${inmueble.id})|">Eliminar 
+              </button>
               <form th:action="@{/disponibilidades/crear/{id}(id=${inmueble.id})}" method="get">
                 <button type="submit" class="btn-reservar">Añadir disponibilidades</button>
               </form>
@@ -121,5 +127,17 @@
         </div>
     </section>
   </main>
+    <!-- POPUP CONFIRMACIÓN GENERAL -->
+    <div id="popupConfirmacion" class="popup-overlay" style="display:none;">
+        <div class="popup popup-confirmacion">
+            <p id="mensajeConfirmacion"></p>
+            <div class="popup-botones">
+                <button id="btnConfirmar" class="btn-confirmar">Aceptar</button>
+                <button id="btnCancelar" class="btn-cancelar">Cancelar</button>
+            </div>
+        </div>
+    </div>
+  <script src="/js/popup.js"></script>
+  <script src="/js/inmuebles.js"></script>
 </body>
 </html>

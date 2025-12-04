@@ -148,8 +148,28 @@ body {
   color: #FF8C42;
   font-weight: bold;
 }
+/* Boton de eliminar*/
+.btn-eliminar {
+    background-color: #e74c3c; 
+    color: #fff;               
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s, transform 0.1s;
+}
 
-/* Botón de disponibilidad */
+.btn-eliminar:hover {
+    background-color: #c0392b; 
+    transform: scale(1.05);   
+}
+.btn-eliminar:active {
+    background-color: #a93226; 
+    transform: scale(0.98);    
+}
+
+/* Botón de reservar y crear disponibilidades */
 .btn-reservar {
   background-color: #FF8C42;
   color: white;
@@ -165,6 +185,24 @@ body {
 .btn-reservar:hover {
   background-color: #e6762f;
 }
+/* Mensaje de cuando se elimina un inmueble*/
+.mensaje-eliminar {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #27ae60; 
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    display: none;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+    font-weight: bold;
+}
+
+.mensaje-eliminar.error {
+    background-color: #e74c3c;
+}
 
 /* Mensaje si no hay propiedades */
 .mensaje-vacio {
@@ -174,4 +212,55 @@ body {
   color: #888;
   border-radius: 6px;
   border: 1px dashed #ccc;
+}
+/* Ventana confirmación */
+.ventana-confirmacion {
+    position: fixed;
+    top: -120px;       
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    padding: 15px 20px;
+
+    display: flex;
+    justify-content: center;
+
+    transition: top 0.3s ease;  
+    z-index: 99999;
+}
+
+.ventana-confirmacion.activa {
+    top: 0;
+}
+
+.ventana-contenido {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vc-botones {
+    display: flex;
+    gap: 10px;
+}
+
+#vc-aceptar {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    cursor: pointer;
+}
+
+#vc-cancelar {
+    background-color: #aaa;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    cursor: pointer;
 }
