@@ -60,7 +60,6 @@
     </div>
 
     <hr>
-
     <!-- DISPONIBILIDADES CREADAS -->
     <div class="section">
       <h2>Disponibilidades creadas</h2>
@@ -134,24 +133,21 @@
       return div;
     }
 
-    // === NUEVA FUNCIÓN corregida ===
+   
     function seleccionarDia(ano, mes, dia) {
       const seleccion = new Date(ano, mes, dia);
       seleccion.setHours(0, 0, 0, 0);
 
-      // Si no hay fechas o ya había un rango completo → reiniciamos
       if (!fechaInicio || fechaFin) {
         fechaInicio = seleccion;
         fechaFin = null;
       } else {
-        // Si seleccionas antes de la fecha de inicio → invierte
         if (seleccion < fechaInicio) {
           fechaFin = fechaInicio;
           fechaInicio = seleccion;
         } else if (seleccion > fechaInicio) {
           fechaFin = seleccion;
         } else {
-          // Si clicas el mismo día → reinicia
           fechaInicio = seleccion;
           fechaFin = null;
         }
@@ -159,7 +155,6 @@
 
       actualizarVisuales();
 
-      // Actualiza los inputs ocultos
       document.getElementById('inputLlegada').value = fechaInicio ? formatear(fechaInicio) : '';
       document.getElementById('inputSalida').value = fechaFin ? formatear(fechaFin) : '';
     }
@@ -168,7 +163,6 @@
       return `${f.getFullYear()}-${String(f.getMonth() + 1).padStart(2, '0')}-${String(f.getDate()).padStart(2, '0')}`;
     }
 
-    // === FUNCIÓN VISUAL mejorada ===
     function actualizarVisuales() {
       const celdas = document.querySelectorAll('.calendario td');
       celdas.forEach(td => td.classList.remove('dia-seleccionado', 'rango'));

@@ -203,11 +203,18 @@ body {
 }
 
 /* Días seleccionados */
+
+td:hover:not(.dia-no-disponible):not(.dia-seleccionado) {
+  background-color: #dcdcdc;
+}
+
 .dia-seleccionado {
-  background: #000;
-  color: #fff !important;
+  background-color: #FF8C42;
+  color: #fff;
   border-radius: 50%;
-  font-weight: bold;
+  border: 2px solid #fff;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
 
 /* Rango de fechas */
@@ -215,6 +222,11 @@ body {
   background: #e0e0e0;
   color: #000;
   border-radius: 8px;
+}
+
+.dia-no-disponible {
+  color: #ccc;
+  cursor: default;
 }
 
 /* Días no disponibles */

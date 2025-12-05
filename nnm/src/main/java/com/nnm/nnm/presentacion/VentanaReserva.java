@@ -61,7 +61,6 @@ public class VentanaReserva {
         model.addAttribute("inmueble", inmueble);
         model.addAttribute("idInmueble", idInmueble);
         model.addAttribute("fechasDisponibles", fechasDisponibles);
-
         return "reserva";
     }
 
@@ -85,9 +84,13 @@ public class VentanaReserva {
             double precioTotal = noches * reserva.getInmueble().getPrecio_noche();
             model.addAttribute("precioTotal", precioTotal);
             model.addAttribute("idReserva", reserva.getId());
+            model.addAttribute("Inquilino", reserva.getInquilino());
+            if(reserva.getId()==null){
+                log.error("Error al crear la reserva, ID nulo");
+                return "redirect:/reserva/crear/"+idInmueble;
+            }
             log.info("Reserva creada con ID: " + reserva.getId());
             return "redirect:/pago/confirmarPago/"+reserva.getId();
         }
     }
-
 }

@@ -9,14 +9,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "reserva")
 public class Reserva {
     @Id // Clave primaria
@@ -26,7 +23,7 @@ public class Reserva {
 
     @ManyToOne // Relacion de muchas reservas a un inmueble
     @JoinColumn(name = "id_inmueble", referencedColumnName = "id")
-    private Inmueble Inmueble;
+    private Inmueble inmueble;
 
     @ManyToOne // Relacion de muchas reservas a un usuario
     @JoinColumn(name = "inquilino", referencedColumnName = "username")
@@ -39,20 +36,21 @@ public class Reserva {
     @Enumerated(EnumType.STRING)
     @Column(name = "politica_cancelacion", nullable = false)
     private PoliticaCancelacion politicaCancelacion;
-
     @Column(name = "aceptada", nullable = false)
     private boolean aceptada = false;
+    /*@Column(name = "estado", nullable = false)
+    private EstadoReserva estado= EstadoReserva.NOPAGADA;*/
 
-    @Column(name = "pagada", nullable = false)
+    @Column(name ="pagada", nullable = false)
     private boolean pagada = false;
 
     public Reserva() {
     }
 
-    public Reserva(Long idReserva, Inmueble Inmueble, Inquilino inquilino, LocalDate fechaInicio,
+    public Reserva(Long id, Inmueble inmueble, Inquilino inquilino, LocalDate fechaInicio,
             LocalDate fechaFin, PoliticaCancelacion politicaCancelacion) {
-        this.id = idReserva;
-        this.Inmueble = Inmueble;
+        this.id = id;
+        this.inmueble = inmueble;
         this.inquilino = inquilino;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -68,11 +66,11 @@ public class Reserva {
     }
 
     public Inmueble getInmueble() {
-        return Inmueble;
+        return inmueble;
     }
 
-    public void setInmueble(Inmueble Inmueble) {
-        this.Inmueble = Inmueble;
+    public void setInmueble(Inmueble inmueble) {
+        this.inmueble = inmueble;
     }
 
     public Inquilino getInquilino() {
@@ -107,17 +105,17 @@ public class Reserva {
         this.politicaCancelacion = politicaCancelacion;
     }
 
-    public boolean getPagado() {
-        return pagada;
+    /*public EstadoReserva getEstado() {
+        return estado;
     }
 
-    public void setPagado(boolean pagada) {
-        this.pagada = pagada;
+    public void setEstado(EstadoReserva estado) {
+        this.estado = estado;
     }
 
-    public boolean isActiva() {
-        return false;
-    }
+    public void setExpirada() {
+        this.estado = EstadoReserva.EXPIRADA;
+    }*/
 
     public boolean getAceptada() {
         return aceptada;
@@ -125,5 +123,12 @@ public class Reserva {
 
     public void setAceptada(boolean aceptada) {
         this.aceptada = aceptada;
+    }
+
+    public boolean getPagado() {
+        return pagada;
+    }
+    public void setPagado(boolean pagada) {
+        this.pagada = pagada;
     }
 }

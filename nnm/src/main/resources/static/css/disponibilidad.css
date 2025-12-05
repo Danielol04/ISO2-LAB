@@ -12,7 +12,7 @@ body {
     padding: 1.5rem 2rem
 }
 
-h1,
+h1, 
 h2 {
     font-weight: 600;
     margin: 0.5rem 0 1rem 0;
@@ -89,9 +89,9 @@ td:hover:not(.dia-no-disponible):not(.dia-seleccionado) {
 }
 
 .rango {
-    background-color: #e6e6e6;
-    color: #111;
-    border-radius: 0;
+    background: #e0e0e0;
+    color: #000;
+    border-radius: 8px;
 }
 
 

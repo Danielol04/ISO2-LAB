@@ -49,7 +49,8 @@ public class GestorReservas {
     }
 
     public void generarSolicitudReserva(Reserva reserva) {
-        SolicitudReserva solicitud = new SolicitudReserva(reserva);
+        SolicitudReserva solicitud = new SolicitudReserva();
+        solicitud.setIdReserva(reserva.getId());
         solicitudReservaDAO.save(solicitud);
     }
 

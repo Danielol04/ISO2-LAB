@@ -13,7 +13,7 @@
     <p>Precio: <span th:text="${precioTotal}"></span></p>
 
     <!-- Formulario para confirmar pago -->
-    <form th:action="@{/confirmarPago/{reserva.id}}" method="post">
+    <form th:action="@{/pago/confirmarPago/{idReserva}(idReserva=${reserva.id})}" method="post">
         <!-- Pasamos los mismos datos de la reserva -->
         <input type="hidden" name="idInmueble" th:value="${reserva.inmueble.id}" />
         <input type="hidden" name="fechaInicio" th:value="${reserva.fechaInicio}" />

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nnm.nnm.negocio.controller.GestorDisponibilidad;
@@ -43,25 +42,29 @@ public class VentanaPago {
     }
 
     @PostMapping("/confirmarPago/{idReserva}")
-    public String confirmarPago(@RequestParam("idReserva") Long idReserva , Model model, RedirectAttributes redirectAttrs) {
+    public String confirmarPago(@PathVariable("idReserva") Long idReserva , Model model, RedirectAttributes redirectAttrs) {
+        log.info("Confirmando pago para la reserva ID: " + idReserva);
         Reserva reserva = gestorReservas.obtenerReservaPorId(idReserva);
-        Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(reserva.getInmueble().getId());
+        Long idInmueble= reserva.getInmueble().getId();
+        Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(idInmueble);
         reserva.setInmueble(inmueble);
-        reserva.setPagado(true);
-        Boolean reservaDirecta = gestorDisponibilidad.obtenerTipoReserva(reserva.getInmueble().getId(),reserva.getFechaInicio(), reserva.getFechaFin());
+        Boolean reservaDirecta = gestorDisponibilidad.obtenerTipoReserva(idInmueble,reserva.getFechaInicio(), reserva.getFechaFin());
         if (reservaDirecta) {
+            log.info("Reserva directa para la reserva ID: " + idReserva);
             gestorDisponibilidad.actualizarDisponibilidadPorReserva(
                     reserva.getInmueble().getId(),
                     reserva.getFechaInicio(),
                     reserva.getFechaFin());
             redirectAttrs.addFlashAttribute("mensajePopup", "Reserva realizada con éxito");
         } else {
+            log.info("Solicitud de reserva para la reserva ID: " + idReserva);
             gestorReservas.generarSolicitudReserva(reserva);
-            redirectAttrs.addFlashAttribute("mensajePopup",
-                    "Solicitud de reserva enviada, espere la respuesta por parte del propietario");
+            redirectAttrs.addFlashAttribute("mensajePopup","Solicitud de reserva enviada, espere la respuesta por parte del propietario");
         }
+        log.info("Marcando la reserva como pagada para la reserva ID: " + idReserva);
+        reserva.setPagado(true);
         gestorReservas.actualizarReserva(reserva);
-        model.addAttribute("idInmueble", reserva.getInmueble().getId());
-        return "redirect:/reserva/crear/" + reserva.getInmueble().getId();
+        model.addAttribute("idInmueble", idInmueble);
+        return "redirect:/reserva/crear/"+idInmueble;
     }
 }

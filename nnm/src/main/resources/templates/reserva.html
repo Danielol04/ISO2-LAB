@@ -39,8 +39,7 @@
         </div>
 
         <div class="box foto-inmueble">
-          <img th:if="${inmueble.foto != null}"
-               th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}">
+          <img th:if="${inmueble.foto != null}" th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}">
           <div th:if="${inmueble.foto == null}" class="placeholder">Sin imagen</div>
         </div>
 
@@ -91,21 +90,22 @@
 
   <!-- FECHAS DISPONIBLES DESDE BACKEND -->
   <script th:inline="javascript">
-    const fechasDisponibles = [];
+    const fechasDisponibles = /*[[${fechasDisponibles}]]*/[];
+    console.log("Fechas desde backend:", fechasDisponibles);
   </script>
 
   <!-- LÓGICA CALENDARIO -->
   <script>
     const hoy = new Date();
-    hoy.setHours(0,0,0,0);
+    hoy.setHours(0, 0, 0, 0);
 
     let fechaInicio = null;
     let fechaFin = null;
     let mesActual = new Date().getMonth();
     let anoActual = new Date().getFullYear();
 
-    const nombresMeses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio",
-      "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+    const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
     const inputLlegada = document.getElementById('inputLlegada');
     const inputSalida = document.getElementById('inputSalida');
@@ -120,8 +120,8 @@
 
     document.addEventListener('click', e => {
       if (!e.target.closest('.calendario') &&
-          !e.target.closest('#inputLlegada') &&
-          !e.target.closest('#inputSalida')) {
+        !e.target.closest('#inputLlegada') &&
+        !e.target.closest('#inputSalida')) {
         calendario.style.display = 'none';
       }
     });
@@ -143,21 +143,29 @@
     }
 
     function crearCalendario(ano, mes) {
+      const div = document.createElement('div');
+      div.classList.add('mes');
+
+      const titulo = document.createElement('h3');
+      titulo.textContent = `${nombresMeses[mes]} ${ano}`;
+      div.appendChild(titulo);
+
       const tabla = document.createElement('table');
-      const diasSemana = ["L","M","X","J","V","S","D"];
-      let html = `<thead><tr>${diasSemana.map(d=>`<th>${d}</th>`).join('')}</tr></thead><tbody><tr>`;
+      const diasSemana = ["L", "M", "X", "J", "V", "S", "D"];
+      let html = `<thead><tr>${diasSemana.map(d => `<th>${d}</th>`).join('')}</tr></thead><tbody><tr>`;
 
       const primerDia = new Date(ano, mes, 1);
       const offset = (primerDia.getDay() + 6) % 7;
-      for (let i=0;i<offset;i++) html += '<td></td>';
+      for (let i = 0; i < offset; i++) html += '<td></td>';
 
       let fecha = new Date(ano, mes, 1);
       while (fecha.getMonth() === mes) {
         const dia = fecha.getDate();
         const fechaCelda = new Date(ano, mes, dia);
-        fechaCelda.setHours(0,0,0,0);
+        fechaCelda.setHours(0, 0, 0, 0);
 
-        const str = `${ano}-${String(mes+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
+        const str = `${ano}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+
         const disponible = fechasDisponibles.includes(str);
         const esPasado = fechaCelda < hoy;
 
@@ -173,7 +181,9 @@
 
       html += '</tr></tbody>';
       tabla.innerHTML = html;
-      return tabla;
+      div.appendChild(tabla);
+
+      return div;
     }
 
     function seleccionarDia(ano, mes, dia) {
@@ -197,28 +207,46 @@
     }
 
     function formatear(f) {
-      return `${f.getFullYear()}-${String(f.getMonth()+1).padStart(2,'0')}-${String(f.getDate()).padStart(2,'0')}`;
+      return `${f.getFullYear()}-${String(f.getMonth() + 1).padStart(2, '0')}-${String(f.getDate()).padStart(2, '0')}`;
     }
 
     function actualizarVisuales() {
-      document.querySelectorAll('.calendario td')
-        .forEach(td => td.classList.remove('dia-seleccionado','rango'));
+      // Limpiar todas las clases previas
+      const celdas = document.querySelectorAll('.calendario td');
+      celdas.forEach(td => td.classList.remove('dia-seleccionado', 'rango'));
 
       if (!fechaInicio) return;
 
-      let current = new Date(fechaInicio);
-      const end = fechaFin || fechaInicio;
+      // Recorrer todas las celdas válidas
+      const tds = document.querySelectorAll('.calendario td:not(.dia-no-disponible)');
+      tds.forEach(td => {
+        const dia = parseInt(td.textContent);
+        if (isNaN(dia)) return;
 
-      while (current <= end) {
-        const td = [...document.querySelectorAll('.calendario td')]
-          .find(t => t.textContent == current.getDate());
-        if (td && !td.classList.contains('dia-no-disponible')) {
-          td.classList.add(current.getTime()===fechaInicio.getTime() ||
-                           current.getTime()===fechaFin?.getTime()
-                           ? 'dia-seleccionado' : 'rango');
+
+        const bloqueMes = td.closest('.mes');
+        if (!bloqueMes) return;
+
+        const tituloMes = td.closest('.mes').querySelector('h3').textContent.split(' ');
+        const mesNombre = tituloMes[0];
+        const ano = parseInt(tituloMes[1]);
+        const mesIndex = nombresMeses.indexOf(mesNombre);
+
+        const fechaCelda = new Date(ano, mesIndex, dia);
+        fechaCelda.setHours(0, 0, 0, 0);
+
+        if (fechaFin) {
+          if (fechaCelda >= fechaInicio && fechaCelda <= fechaFin) {
+            if (fechaCelda.getTime() === fechaInicio.getTime() || fechaCelda.getTime() === fechaFin.getTime()) {
+              td.classList.add('dia-seleccionado');
+            } else {
+              td.classList.add('rango');
+            }
+          }
+        } else if (fechaCelda.getTime() === fechaInicio.getTime()) {
+          td.classList.add('dia-seleccionado');
         }
-        current.setDate(current.getDate() + 1);
-      }
+      });
     }
 
     document.getElementById('btnPrev').onclick = () => {
@@ -235,4 +263,5 @@
   </script>
 
 </body>
+
 </html>

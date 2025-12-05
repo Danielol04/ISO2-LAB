@@ -101,7 +101,6 @@ public class VentanaDisponibilidad {
             mensajeError = "Las fechas se solapan con una disponibilidad existente.";
             errorDisponibilidad(model, mensajeError, id);
             return "redirect:/disponibilidades/crear/" + id;
-
         }
 
         log.info("Creando disponibilidad para el inmueble: {}", id);
