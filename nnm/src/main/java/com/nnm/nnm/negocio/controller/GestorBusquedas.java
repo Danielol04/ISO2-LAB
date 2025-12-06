@@ -1,44 +1,32 @@
 package com.nnm.nnm.negocio.controller;
 
-import java.time.LocalDate;
+import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
+import com.nnm.nnm.persistencia.BusquedaDAO;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
-import com.nnm.nnm.negocio.dominio.entidades.PoliticaCancelacion;
-import com.nnm.nnm.persistencia.InmuebleDAO;
-
-@Service
 public class GestorBusquedas {
 
-    @Autowired
-    private InmuebleDAO inmuebleDAO;
+    private final EntityManagerFactory emf;
+    private final EntityManager em;
+    private final BusquedaDAO dao;
 
-    public List<Inmueble> buscar(
-            String localidad,
-            String provincia,
-            String titulo,
-            LocalDate fechaInicio,
-            LocalDate fechaFin,
-            String tipo,
-            Integer habitaciones,
-            Integer banos,
-            Boolean reservaDirecta,
-            PoliticaCancelacion politica
-    ) {
-        return inmuebleDAO.buscarFiltrado(
-                localidad,
-                provincia,
-                titulo,
-                fechaInicio,
-                fechaFin,
-                tipo,
-                habitaciones,
-                banos,
-                reservaDirecta,
-                politica
-        );
+    public GestorBusquedas() {
+        emf = Persistence.createEntityManagerFactory("nombreUnidadPersistencia"); // Cambiar por tu PU
+        em = emf.createEntityManager();
+        dao = new BusquedaDAO(em);
+    }
+
+    public List<Inmueble> buscar(String destino, int huespedes, int banos, int habitaciones,
+                                 double precioMin, double precioMax) {
+        return dao.buscarInmuebles(destino, huespedes, banos, habitaciones, precioMin, precioMax);
+    }
+
+    public void cerrar() {
+        em.close();
+        emf.close();
     }
 }
