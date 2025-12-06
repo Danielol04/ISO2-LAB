@@ -1,0 +1,76 @@
+package com.nnm.nnm.presentacion;
+
+import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.nnm.nnm.negocio.controller.GestorListaDeseos;
+import com.nnm.nnm.negocio.controller.GestorUsuarios;
+import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
+import com.nnm.nnm.negocio.dominio.entidades.Inquilino;
+
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class VentanaListaDeseos{
+
+    @Autowired
+    private GestorListaDeseos gestorLista;
+    @Autowired
+    private GestorUsuarios gestorUsuarios;
+
+    @PostMapping("/favoritos/toggle")
+    @ResponseBody
+    public ResponseEntity<?> toggleFavorito(@RequestParam Long idInmueble, HttpSession session) {
+
+        String username = (String) session.getAttribute("username");
+
+        // Usuario no logueado lanzar 401 Unauthorized
+        if (username == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // true = añadido, false = eliminado
+        boolean nuevoEstado = gestorLista.toggleInmueble(idInmueble, username);
+
+        return ResponseEntity.ok(nuevoEstado);
+    }
+   
+    @GetMapping("/favoritos/lista")
+    @ResponseBody
+    public ResponseEntity<Set<Long>> obtenerFavoritos(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+
+        // Usuario no logueado -> 401 Unauthorized
+        if (username == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Inquilino inquilino = gestorUsuarios.obtenerInquilinoPorUsername(username);
+
+        // Si el usuario no tiene lista de deseos -> devolver Set vacío
+        if (inquilino.getListaDeseos() == null) {
+            return ResponseEntity.ok(Collections.emptySet());
+        }
+
+        // Obtener IDs de los inmuebles en la lista de deseos
+        Set<Long> idsFavoritos = inquilino.getListaDeseos().getInmuebles()
+                                        .stream()
+                                        .map(Inmueble::getId)
+                                        .collect(Collectors.toSet());
+
+        return ResponseEntity.ok(idsFavoritos);
+    }
+
+
+    
+}

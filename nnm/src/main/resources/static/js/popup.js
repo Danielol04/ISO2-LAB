@@ -45,7 +45,7 @@ window.mostrarMensaje = function (texto, tipo = "info") {
         msg.style.opacity = '0';
         msg.style.transform = 'translateY(-10px)';
         setTimeout(() => msg.remove(), 300);
-    }, 2800);
+    }, 2000);
 };
 
 
