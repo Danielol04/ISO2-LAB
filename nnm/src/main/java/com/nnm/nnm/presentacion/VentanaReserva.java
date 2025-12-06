@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nnm.nnm.negocio.controller.GestorDisponibilidad;
 import com.nnm.nnm.negocio.controller.GestorInmuebles;
@@ -65,9 +66,8 @@ public class VentanaReserva {
     }
 
     @PostMapping("/crear/{idInmueble}")
-    public String crearReserva(@RequestParam long idInmueble, @ModelAttribute Reserva reserva, Model model,
-            HttpSession session) {
-            String usernamePropietario = (String) session.getAttribute("username");
+    public String crearReserva(@RequestParam long idInmueble, @ModelAttribute Reserva reserva, Model model, HttpSession session, RedirectAttributes redirectAttrs) {
+        String usernamePropietario = (String) session.getAttribute("username");
 
         if (gestorUsuarios.esPropietario(usernamePropietario)) {
             log.warn("No se encontró el username del inquilino en la sesión");
@@ -82,15 +82,15 @@ public class VentanaReserva {
             gestorReservas.registrarReserva(reserva);
             long noches = ChronoUnit.DAYS.between(reserva.getFechaInicio(), reserva.getFechaFin());
             double precioTotal = noches * reserva.getInmueble().getPrecio_noche();
-            model.addAttribute("precioTotal", precioTotal);
+            redirectAttrs.addFlashAttribute("precioTotal", precioTotal);
             model.addAttribute("idReserva", reserva.getId());
-            model.addAttribute("Inquilino", reserva.getInquilino());
-            if(reserva.getId()==null){
+            // model.addAttribute("Inquilino", reserva.getInquilino());
+            if (reserva.getId() == null) {
                 log.error("Error al crear la reserva, ID nulo");
-                return "redirect:/reserva/crear/"+idInmueble;
+                return "redirect:/reserva/crear/" + idInmueble;
             }
             log.info("Reserva creada con ID: " + reserva.getId());
-            return "redirect:/pago/confirmarPago/"+reserva.getId();
+            return "redirect:/pago/confirmarPago/" + reserva.getId();
         }
     }
 }

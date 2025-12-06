@@ -16,7 +16,8 @@
       <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
     </a>
     <div class="navbar-right">
-      <a th:href="@{/lista-deseos}" class="btn-deseos">Lista de deseos</a>
+      <a th:href="@{/solicitudes/confirmacionReserva/{username}(username=${username})}" class="btn-deseos">Solicitudes</a>
+      <a th:href="@{/inmuebles/alta}" class="btn-deseos">Registrar Inmuebles</a>
       <div class="dropdown">
         <button class="btn-circular">☰</button>
         <div class="dropdown-content">

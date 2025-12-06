@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Solicitudes</title>
+    <link rel="stylesheet" href="/css/solicitudes.css">
+</head>
+<body>
+<div class="contenedor-principal">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="usuario-info">
+            <div class="usuario-nombre">
+                &#128100; <span th:text="${username}">Nombre Usuario</span>
+            </div>
+            <p class="rol">Propietario</p>
+        </div>
+
+        <nav class="menu">
+            <a th:href="@{/home}" class="menu-item">Mis Propiedades</a>
+            <a th:href="@{/calendario}" class="menu-item">Calendario</a>
+            <a th:href="@{/confirmacionReserva/{username}(username=${username})}" class="menu-item activo">Solicitudes</a>
+        </nav>
+    </aside>
+
+    <!-- Zona central -->
+    <main class="zona-solicitudes">
+
+        <!-- Lista de solicitudes -->
+        <section class="lista-solicitudes">
+            <h2>Solicitudes (<span th:text="${solicitudes.size()}">0</span>)</h2>
+
+            <!-- Si no hay solicitudes -->
+            <div th:if="${#lists.isEmpty(solicitudes)}" class="sin-solicitudes">
+                <p>No tienes solicitudes pendientes por el momento.</p>
+            </div>
+
+            <!-- Si hay solicitudes -->
+            <ul class="solicitudes" th:unless="${#lists.isEmpty(solicitudes)}">
+                <li th:each="solicitud : ${solicitudes}"
+                    th:classappend="${solicitud.id == solicitudSeleccionada?.id} ? ' seleccionada' : ''">
+                    <a th:href="@{/confirmacionReserva/{username}/ver/{id}(username=${username}, id=${solicitud.id})}">
+                        <div class="solicitud-item">
+                            <div class="solicitud-texto">
+                                <p class="titulo" th:text="${solicitud.reserva.inmueble.titulo}">Casa Ejemplo</p>
+                                <p class="inquilino" th:text="${solicitud.reserva.inquilino.username}">Juan Pérez</p>
+                                <p class="fechas">
+                                    <span th:text="${#temporals.format(solicitud.reserva.fechaInicio, 'dd/MM/yyyy')}"></span> -
+                                    <span th:text="${#temporals.format(solicitud.reserva.fechaFin, 'dd/MM/yyyy')}"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Detalle de la solicitud -->
+        <section class="detalle-solicitud" th:if="${solicitudSeleccionada != null}">
+            <div class="detalle-contenido">
+                <h2 th:text="${solicitudSeleccionada.reserva.inmueble.titulo}">Casa de playa</h2>
+                <img th:src="@{/inmuebles/{id}/foto(id=${solicitudSeleccionada.reserva.inmueble.id})}" alt="Imagen inmueble">
+
+                <h3>Detalles de la reserva</h3>
+                <p><strong>Entrada:</strong> <span th:text="${#temporals.format(solicitudSeleccionada.reserva.fechaInicio, 'dd MMM yyyy')}"></span></p>
+                <p><strong>Salida:</strong> <span th:text="${#temporals.format(solicitudSeleccionada.reserva.fechaFin, 'dd MMM yyyy')}"></span></p>
+                <p><strong>Noches:</strong> <span th:text="${solicitudSeleccionada.noches}"></span></p>
+
+                <h3>Inquilino</h3>
+                <p th:text="${solicitudSeleccionada.reserva.inquilino.username}">Nombre</p>
+
+                <h3>Desglose del pago</h3>
+                <ul class="pago">
+                    <li>Precio por noche: <span th:text="${solicitudSeleccionada.reserva.inmueble.precio_noche}"></span></li>
+                    <li>Total: <strong th:text="${solicitudSeleccionada.precioTotal}"></strong></li>
+                </ul>
+
+                <div class="acciones">
+                    <form th:action="@{/solicitud/{id}/aceptar(id=${solicitudSeleccionada.id})}" method="post"
+                          onsubmit="return confirmar('¿Aceptar esta solicitud?')">
+                        <button type="submit" class="btn-aceptar">Aceptar</button>
+                    </form>
+
+                    <form th:action="@{/solicitud/{id}/rechazar(id=${solicitudSeleccionada.id})}" method="post"
+                          onsubmit="return confirmar('¿Rechazar esta solicitud?')">
+                        <button type="submit" class="btn-rechazar">Rechazar</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Placeholder cuando no hay solicitud seleccionada -->
+        <section class="detalle-solicitud" th:if="${solicitudSeleccionada == null}">
+            <p class="mensaje-placeholder">Selecciona una solicitud para ver los detalles.</p>
+        </section>
+    </main>
+</div>
+
+<script>
+    function confirmar(mensaje) {
+        return confirm(mensaje);
+    }
+</script>
+</body>
+</html>

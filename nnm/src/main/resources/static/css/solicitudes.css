@@ -1,0 +1,267 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f7f6f4;
+    color: #333;
+}
+
+.contenedor-principal {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 220px;
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.usuario-info {
+    text-align: center;
+}
+
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #ccc;
+    margin: 0 auto 10px;
+}
+
+.usuario-nombre {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.menu {
+    margin-top: 20px;
+}
+
+.menu-item {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    transition: background 0.2s;
+}
+
+.menu-item:hover, .menu-item.activo {
+    background-color: #f27f0d;
+    color: white;
+}
+
+.boton-inferior {
+    text-align: center;
+}
+
+.btn-nueva {
+    display: inline-block;
+    padding: 10px 15px;
+    background: #f27f0d;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+/* Zona central */
+.zona-solicitudes {
+    display: flex;
+    flex: 1;
+}
+
+/* Lista */
+.lista-solicitudes {
+    width: 40%;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+    background-color: #fff;
+    overflow-y: auto;
+}
+
+.solicitudes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.avatar-pequeño {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Detalle */
+.detalle-solicitud {
+    flex: 1;
+    padding: 30px;
+    background-color: #faf9f7;
+}
+
+.detalle-contenido img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.acciones {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-aceptar, .btn-rechazar {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-aceptar {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-rechazar {
+    background-color: #dc3545;
+    color: white;
+}
+
+.mensaje-placeholder {
+    text-align: center;
+    color: #777;
+    margin-top: 100px;
+}
+
+.sin-solicitudes {
+    text-align: center;
+    color: #777;
+    padding: 3rem 1rem;
+    font-size: 1.1rem;
+    font-style: italic;
+    background-color: #fafafa;
+    border-radius: 8px;
+}
+
+/* --- NUEVO ESTILO DE TARJETAS DE SOLICITUDES --- */
+.solicitudes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Contenedor de cada solicitud */
+.solicitud-item {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 18px;
+    border-radius: 10px;
+    background-color: #fcfaf8;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.solicitud-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+    background-color: #fff;
+}
+
+/* Cuando está seleccionada */
+li.seleccionada .solicitud-item {
+    border: 2px solid #f27f0d;
+    background-color: #fff6ee;
+}
+
+/* Texto interno */
+.solicitud-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.solicitud-texto .titulo {
+    color: #f27f0d;
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.solicitud-texto .inquilino {
+    font-weight: 600;
+    color: #1c140d;
+}
+
+.solicitud-texto .fechas {
+    color: #9c7349;
+    font-size: 0.9rem;
+}
+
+/* Scroll*/
+.lista-solicitudes {
+    scrollbar-width: thin;
+    scrollbar-color: #f27f0d #faf9f7;
+}
+.lista-solicitudes::-webkit-scrollbar {
+    width: 6px;
+}
+.lista-solicitudes::-webkit-scrollbar-thumb {
+    background-color: #f27f0d;
+    border-radius: 3px;
+}
+.lista-solicitudes::-webkit-scrollbar-track {
+    background-color: #faf9f7;
+}
+.detalle-solicitud {
+    background-color: #fcfaf8;
+    border-left: 1px solid #ddd;
+    padding: 40px;
+}
+
+.detalle-contenido h2 {
+    font-size: 1.8rem;
+    color: #1c140d;
+    margin-bottom: 10px;
+}
+
+.detalle-contenido h3 {
+    color: #f27f0d;
+    margin-top: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.detalle-contenido p, 
+.detalle-contenido li {
+    color: #333;
+    line-height: 1.5;
+}
+
+.acciones {
+    display: flex;
+    gap: 10px;
+    margin-top: 2rem;
+}
+
+.btn-aceptar,
+.btn-rechazar {
+    flex: 1;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+.btn-aceptar:hover {
+    background-color: #218838;
+}
+
+.btn-rechazar:hover {
+    background-color: #c82333;
+}

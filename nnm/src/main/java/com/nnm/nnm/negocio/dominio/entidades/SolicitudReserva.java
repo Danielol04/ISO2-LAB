@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,37 +18,41 @@ public class SolicitudReserva {
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
-    @Column(name = "id_reserva", nullable = false)
-    private Long idReserva;
+    @OneToOne(optional = true)
+    @JoinColumn(name = "reserva", referencedColumnName = "id")
+    private Reserva reserva;
 
     @Column(name = "confirmada", nullable = false)
-    private Boolean confirmada=false;
+    private Boolean confirmada = false;
+
+    @Column(name = "precioTotal", nullable = false)
+    private Double precioTotal;
+
+    @Column(name = "noches", nullable = false)
+    private long noches;
 
     public SolicitudReserva() {
     }
 
-    public SolicitudReserva(Long id,Long idReserva) {
+    public SolicitudReserva(Long id, Reserva reserva, Double precioTotal, long noches) {
         this.id = id;
-        this.idReserva = idReserva;
+        this.reserva = reserva;
+        this.precioTotal = precioTotal;
+        this.noches = noches;
     }
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public Long getIdReserva() {
-        return idReserva;
-    }
-    public void setIdReserva(Long idReserva) {
-        this.idReserva = idReserva;
-    }
-    public Boolean getConfirmada() {
-        return confirmada;
-    }
+    public Long getId() {return id;}	
+    public void setId(Long id) {this.id = id;}
 
-    public void setConfirmada(Boolean confirmada) {
-        this.confirmada = confirmada;
-    }
+    public Reserva getReserva() {return reserva;}
+    public void setReserva(Reserva reserva) {this.reserva = reserva;}
+
+    public Boolean getConfirmada() {return confirmada;}
+    public void setConfirmada(Boolean confirmada) {this.confirmada = confirmada;}
+
+    public Double getPrecioTotal() {return precioTotal;}
+    public void setPrecioTotal(Double precioTotal) {this.precioTotal = precioTotal;}
+
+    public long getNoches() {return noches;}
+    public void setNoches(long noches) {this.noches = noches;}
 }

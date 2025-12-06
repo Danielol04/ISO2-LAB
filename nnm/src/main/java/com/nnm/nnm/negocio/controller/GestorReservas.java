@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nnm.nnm.negocio.dominio.entidades.Reserva;
-import com.nnm.nnm.negocio.dominio.entidades.SolicitudReserva;
 import com.nnm.nnm.persistencia.ReservaDAO;
 import com.nnm.nnm.persistencia.SolicitudReservaDAO;
 
@@ -19,6 +18,9 @@ public class GestorReservas {
 
     @Autowired
     private SolicitudReservaDAO solicitudReservaDAO;
+
+    @Autowired
+    private GestorInmuebles gestorInmuebles;
 
     public boolean existeReserva(long id) {
         return reservaDAO.findById(id) != null;
@@ -48,35 +50,8 @@ public class GestorReservas {
         return false;
     }
 
-    public void generarSolicitudReserva(Reserva reserva) {
-        SolicitudReserva solicitud = new SolicitudReserva();
-        solicitud.setIdReserva(reserva.getId());
-        solicitudReservaDAO.save(solicitud);
-    }
-
     public Reserva obtenerReservaPorId(long idReserva) {
         return reservaDAO.findById(idReserva);
     }
 
-    public void aceptarSolicitudReserva(long idSolicitud) {
-        SolicitudReserva solicitud = solicitudReservaDAO.findById(idSolicitud);
-        if (solicitud != null) {
-            Reserva reserva = obtenerReservaPorId(idSolicitud);
-            reserva.setAceptada(true);
-            gestorDisponibilidad.actualizarDisponibilidadPorReserva(
-                reserva.getInmueble().getId(),
-                reserva.getFechaInicio(),
-                reserva.getFechaFin()
-            );
-            reservaDAO.save(reserva);
-            solicitudReservaDAO.delete(solicitud);
-        }
-    }
-
-    public void rechazarSolicitudReserva(long idSolicitud) {
-        SolicitudReserva solicitud = solicitudReservaDAO.findById(idSolicitud);
-        if (solicitud != null) {
-            solicitudReservaDAO.delete(solicitud);
-        }
-    }
 }
