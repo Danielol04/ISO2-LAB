@@ -1,26 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <title>Inicio Inquilino</title>
-  <link rel="stylesheet" th:href="@{/css/navbar.css}">
-  <link rel="stylesheet" th:href="@{/css/home.css}">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/home.css">
 </head>
 <body>
 
   <!-- NAVBAR -->
   <nav class="navbar">
-    <a th:href="@{/home}" class="logo-link">
-      <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
+    <a href="/home" class="logo-link">
+      <img src="/images/logo.png" alt="Logo" class="logo-img">
     </a>
 
     <div class="navbar-right">
-      <a th:href="@{/lista-deseos}" class="btn-deseos">Lista de deseos</a>
+      <a href="/lista-deseos" class="btn-deseos">Lista de deseos</a>
       <div class="dropdown">
         <button class="btn-circular">☰</button>
         <div class="dropdown-content">
-          <a th:href="@{/datos-personales}">Datos personales</a>
-          <a th:href="@{/logout}">Cerrar sesión</a>
+          <a href="/datos-personales">Datos personales</a>
+          <a href="/logout">Cerrar sesión</a>
         </div>
       </div>
     </div>
@@ -32,31 +32,30 @@
     <!-- BÚSQUEDA -->
     <section class="busqueda-box">
       <h1 class="titulo-seccion">Buscar Propiedades</h1>
-      <form th:action="@{/buscar}" method="get" class="search-form">
+      <form action="/buscar" method="get" class="search-form">
         <div class="form-group">
           <label for="destino">Destino:</label>
           <input type="text" id="destino" name="destino" placeholder="Ciudad o provincia">
         </div>
 
         <div class="form-group">
+          <label for="banos">Baños (mínimo):</label>
+          <input type="number" id="banos" name="banos" min="1" value="1">
+        </div>
+
+        <div class="form-group">
           <label for="habitaciones">Nº de habitaciones:</label>
-          <select id="habitaciones" name="habitaciones">
-            <option value="">Seleccionar</option>
-            <option value="1">1 habitación</option>
-            <option value="2">2 habitaciones</option>
-            <option value="3">3 habitaciones</option>
-            <option value="4">4 o más</option>
-          </select>
+          <input type="number" id="habitaciones" name="habitaciones" min="1" value="1">
         </div>
 
         <div class="form-group">
-          <label for="precioMin">Precio mínimo:</label>
-          <input type="number" id="precioMin" name="precioMin" placeholder="0">
+          <label for="precioMin">Precio mínimo (€):</label>
+          <input type="number" id="precioMin" name="precioMin" min="0" value="0">
         </div>
 
         <div class="form-group">
-          <label for="precioMax">Precio máximo:</label>
-          <input type="number" id="precioMax" name="precioMax" placeholder="1000">
+          <label for="precioMax">Precio máximo (€):</label>
+          <input type="number" id="precioMax" name="precioMax" min="0" value="1000">
         </div>
 
         <button type="submit" class="btn-buscar">Buscar</button>
@@ -67,56 +66,25 @@
     <section class="propiedades-box">
       <h2 class="titulo-seccion">Propiedades Disponibles</h2>
 
-      <div th:if="${#lists.isEmpty(propiedades)}" class="mensaje-vacio">
+      <div id="mensaje-vacio" class="mensaje-vacio" style="display:none;">
         <p>No hay propiedades disponibles</p>
       </div>
 
-      <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
-        <div th:each="inmueble : ${propiedades}" class="tarjeta-propiedad">
-          <div class="imagen-contenedor">
-            <img th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}" alt="Imagen del inmueble">
-          </div>
-
-          <div class="contenido-propiedad">
-            <h3 class="titulo-propiedad" th:text="${inmueble.titulo}">Título</h3>
-
-            <p class="ubicacion">
-              <img src="/images/ubicacion.png" alt="Ubicación" class="icono">
-              <span th:text="${inmueble.localidad}"></span>,
-              <span th:text="${inmueble.provincia}"></span>,
-              <span th:text="${inmueble.codigo_postal}"></span>
-            </p>
-
-            <p><strong>Dirección:</strong> <span th:text="${inmueble.direccion}"></span></p>
-
-            <p class="caracteristicas">
-              <img src="/images/habitacion.png" alt="Habitaciones" class="icono">
-              <span th:text="${inmueble.habitaciones}"></span>
-            </p>
-            <p>
-              <img src="/images/baños.png" alt="Baños" class="icono">
-              <span th:text="${inmueble.numero_banos}"></span>
-            </p>
-
-            <p class="precio">
-              <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
-            </p>
-
-            <div class="botones-propiedad">
-              <form th:action="@{/favoritos/agregar}" method="post">
-                <input type="hidden" name="idInmueble" th:value="${inmueble.id}">
-                <button type="submit" class="btn-favorito">Guardar</button>
-              </form>
-
-              <form th:action="@{'/reserva/crear/' + ${inmueble.id}}" method="get">
-                <input type="hidden" name="idInmueble" th:value="${inmueble.id}">
-                <button type="submit" class="btn-reservar">Reservar</button>
-              </form>
-            </div>
-          </div>
-        </div>
+      <div id="propiedades-grid" class="propiedades-grid">
+      
       </div>
     </section>
   </main>
+
+  <script>
+    //  control simple para mostrar mensaje si no hay propiedades
+    const propiedadesGrid = document.getElementById("propiedades-grid");
+    const mensajeVacio = document.getElementById("mensaje-vacio");
+
+    if (!propiedadesGrid.hasChildNodes()) {
+      mensajeVacio.style.display = "block";
+    }
+  </script>
+
 </body>
 </html>

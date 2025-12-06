@@ -6,15 +6,12 @@ import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.util.List;
-import javax.imageio.ImageIO;
 
 public class VentanaBusqueda extends JFrame {
 
     private JTextField tfDestino, tfBanos, tfHabitaciones, tfPrecioMin, tfPrecioMax;
-    private JPanel panelResultados;
+    private JTextArea taResultados;
     private GestorBusquedas gestor;
 
     public VentanaBusqueda() {
@@ -52,13 +49,12 @@ public class VentanaBusqueda extends JFrame {
 
         add(panelFormulario, BorderLayout.NORTH);
 
-        panelResultados = new JPanel();
-        panelResultados.setLayout(new BoxLayout(panelResultados, BoxLayout.Y_AXIS));
-        JScrollPane scroll = new JScrollPane(panelResultados);
-        add(scroll, BorderLayout.CENTER);
+        taResultados = new JTextArea(15, 50);
+        taResultados.setEditable(false);
+        add(new JScrollPane(taResultados), BorderLayout.CENTER);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
+        pack();
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -73,54 +69,16 @@ public class VentanaBusqueda extends JFrame {
 
             List<Inmueble> resultados = gestor.buscar(destino, 0, banos, habitaciones, precioMin, precioMax);
 
-            panelResultados.removeAll();
-
-            if (resultados.isEmpty()) {
-                JLabel lblNoResultados = new JLabel("No se encontraron inmuebles con esos filtros.");
-                lblNoResultados.setAlignmentX(Component.CENTER_ALIGNMENT);
-                panelResultados.add(lblNoResultados);
-            } else {
-                for (Inmueble i : resultados) {
-                    JPanel panelInmueble = new JPanel();
-                    panelInmueble.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-                    panelInmueble.setLayout(new BorderLayout(10, 10));
-
-                    // Foto
-                    if (i.getFoto() != null) {
-                        try {
-                            ByteArrayInputStream bais = new ByteArrayInputStream(i.getFoto());
-                            BufferedImage img = ImageIO.read(bais);
-                            if (img != null) {
-                                ImageIcon icon = new ImageIcon(img.getScaledInstance(150, 100, Image.SCALE_SMOOTH));
-                                JLabel lblFoto = new JLabel(icon);
-                                panelInmueble.add(lblFoto, BorderLayout.WEST);
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-
-                    // Información
-                    JTextArea taInfo = new JTextArea(
-                            i.getTitulo() + "\n" +
-                            i.getLocalidad() + ", " + i.getProvincia() + "\n" +
-                            i.getTipo_inmueble() + "\n" +
-                            i.getHabitaciones() + " hab | " +
-                            i.getNumero_banos() + " baños | " +
-                            i.getPrecio_noche() + " €/noche\n" +
-                            i.getDireccion()
-                    );
-                    taInfo.setEditable(false);
-                    taInfo.setBackground(null);
-                    panelInmueble.add(taInfo, BorderLayout.CENTER);
-
-                    panelResultados.add(panelInmueble);
-                }
+            taResultados.setText("");
+            for (Inmueble i : resultados) {
+                taResultados.append(i.getTitulo() + " - " + i.getLocalidad() + ", " + i.getProvincia()
+                        + " | " + i.getHabitaciones() + " hab | " + i.getNumero_banos() + " baños | "
+                        + i.getPrecio_noche() + "€/noche\n");
             }
 
-            panelResultados.revalidate();
-            panelResultados.repaint();
-
+            if (resultados.isEmpty()) {
+                taResultados.setText("No se encontraron inmuebles con esos filtros.");
+            }
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Introduce valores numéricos correctos para baños, habitaciones y precios.",
                     "Error de entrada", JOptionPane.ERROR_MESSAGE);

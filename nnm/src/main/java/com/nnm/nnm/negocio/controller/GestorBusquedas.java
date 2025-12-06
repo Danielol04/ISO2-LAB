@@ -1,32 +1,33 @@
 package com.nnm.nnm.negocio.controller;
 
 import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
-import com.nnm.nnm.persistencia.BusquedaDAO;
+import com.nnm.nnm.persistencia.GestorBD;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import java.util.List;
 
 public class GestorBusquedas {
 
-    private final EntityManagerFactory emf;
-    private final EntityManager em;
-    private final BusquedaDAO dao;
+    private final GestorBD gestorBD;
 
     public GestorBusquedas() {
-        emf = Persistence.createEntityManagerFactory("nombreUnidadPersistencia"); // Cambiar por tu PU
-        em = emf.createEntityManager();
-        dao = new BusquedaDAO(em);
+        this.gestorBD = new GestorBD();
     }
 
+    /**
+     * Busca inmuebles usando GestorBD directamente
+     */
     public List<Inmueble> buscar(String destino, int huespedes, int banos, int habitaciones,
                                  double precioMin, double precioMax) {
-        return dao.buscarInmuebles(destino, huespedes, banos, habitaciones, precioMin, precioMax);
-    }
 
-    public void cerrar() {
-        em.close();
-        emf.close();
+        String jpql = "SELECT i FROM Inmueble i " +
+                      "WHERE (i.localidad LIKE :destino OR i.provincia LIKE :destino) " +
+                      "AND i.numero_banos >= :banos " +
+                      "AND i.habitaciones >= :habitaciones " +
+                      "AND i.precio_noche BETWEEN :precioMin AND :precioMax";
+
+        // Usamos GestorBD con parámetros múltiples
+        return gestorBD.selectListConParametros(jpql, Inmueble.class,
+                new String[]{"destino","banos","habitaciones","precioMin","precioMax"},
+                new Object[]{"%" + destino + "%", banos, habitaciones, precioMin, precioMax});
     }
 }

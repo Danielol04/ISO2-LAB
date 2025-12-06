@@ -67,4 +67,17 @@ public class GestorBD {
     public <T> void delete(T entity) {
         entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
     }
+    // Busqueda con varios parametros
+public <T> List<T> selectListConParametros(String jpql, Class<T> entityClass, String[] paramNames, Object[] values) {
+    try {
+        var query = entityManager.createQuery(jpql, entityClass);
+        for (int i = 0; i < paramNames.length; i++) {
+            query.setParameter(paramNames[i], values[i]);
+        }
+        return query.getResultList();
+    } catch (NoResultException e) {
+        return List.of();
+    }
+}
+
 }
