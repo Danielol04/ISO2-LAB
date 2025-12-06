@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.nnm.nnm.negocio.controller.GestorReservas;
 import com.nnm.nnm.negocio.dominio.entidades.Reserva;
-import com.nnm.nnm.persistencia.InquilinoDAO;
+
 
 @Controller
 @RequestMapping("/reserva")
@@ -17,8 +17,7 @@ public class VentanaReserva {
     @Autowired
     private GestorReservas gestorReservas;
 
-    @Autowired
-    private InquilinoDAO inquilinoDAO;
+    
 
     @GetMapping("/crearReserva")
     public String mostrarFormularioReserva(Model model) {
