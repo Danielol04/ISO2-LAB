@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,6 +70,22 @@ public class VentanaListaDeseos{
                                         .collect(Collectors.toSet());
 
         return ResponseEntity.ok(idsFavoritos);
+    }
+
+    @GetMapping("/lista-deseos")
+    public String mostrarListaDeseos(Model model, HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) return "redirect:/login";
+
+        Inquilino inquilino = gestorUsuarios.obtenerInquilinoPorUsername(username);
+
+        if (inquilino.getListaDeseos() == null) {
+            model.addAttribute("propiedades", Collections.emptyList());
+        } else {
+            model.addAttribute("propiedades", inquilino.getListaDeseos().getInmuebles());
+        }
+
+        return "lista-deseos";
     }
 
 
