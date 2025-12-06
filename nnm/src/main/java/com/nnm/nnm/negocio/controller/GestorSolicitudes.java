@@ -1,5 +1,7 @@
 package com.nnm.nnm.negocio.controller;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,10 @@ public class GestorSolicitudes {
     public void generarSolicitudReserva(Reserva reserva, Double precioTotal) {
         SolicitudReserva solicitud = new SolicitudReserva();
         solicitud.setReserva(reserva);
+        solicitud.setFechaCreacion(LocalDateTime.now());
         solicitud.setPrecioTotal(precioTotal);
+        long noches = ChronoUnit.DAYS.between(reserva.getFechaInicio(), reserva.getFechaFin());
+        solicitud.setNoches(noches);
         solicitudReservaDAO.save(solicitud);
     }
 

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.nnm.nnm.negocio.controller.GestorSolicitudes;
 import com.nnm.nnm.negocio.dominio.entidades.SolicitudReserva;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/solicitudes")
 public class VentanaSolicitudes {
@@ -19,7 +21,11 @@ public class VentanaSolicitudes {
     private GestorSolicitudes gestorSolicitudes;
 
     @GetMapping("/confirmacionReserva/{username}")
-    public String verSolicitudes(@PathVariable String username, Model model) {
+    public String verSolicitudes(Model model, HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        if(username == null) {
+            return "redirect:/login";
+        }
         List<SolicitudReserva> solicitudes = gestorSolicitudes.obtenerSolicitudesPorPropietario(username);
         model.addAttribute("username", username);
         model.addAttribute("solicitudes", solicitudes);

@@ -1,5 +1,7 @@
 package com.nnm.nnm.negocio.dominio.entidades;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,14 +33,18 @@ public class SolicitudReserva {
     @Column(name = "noches", nullable = false)
     private long noches;
 
+    @Column(name = "hora", nullable = false)
+    private LocalDateTime fechaCreacion; 
+
     public SolicitudReserva() {
     }
 
-    public SolicitudReserva(Long id, Reserva reserva, Double precioTotal, long noches) {
+    public SolicitudReserva(Long id, Reserva reserva, Double precioTotal, long noches, LocalDateTime fechaCreacion) {
         this.id = id;
         this.reserva = reserva;
         this.precioTotal = precioTotal;
         this.noches = noches;
+        this.fechaCreacion = fechaCreacion;
     }
 
     public Long getId() {return id;}	
@@ -55,4 +61,7 @@ public class SolicitudReserva {
 
     public long getNoches() {return noches;}
     public void setNoches(long noches) {this.noches = noches;}
+
+    public LocalDateTime getFechaCreacion() {return fechaCreacion;}
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {this.fechaCreacion = fechaCreacion;}
 }

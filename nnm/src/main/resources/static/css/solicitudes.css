@@ -1,8 +1,20 @@
+:root {
+    --color-primario: #f27f0d;
+    --color-fondo: #f7f6f4;
+    --color-texto: #333;
+    --color-borde: #ddd;
+    --color-tarjeta: #fcfaf8;
+    --color-hover: #fff6ee;
+    --color-verde: #28a745;
+    --color-rojo: #dc3545;
+}
+
+/* Base */
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f7f6f4;
-    color: #333;
+    font-family: system-ui, Arial, sans-serif;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
 }
 
 .contenedor-principal {
@@ -12,256 +24,175 @@ body {
 
 /* Sidebar */
 .sidebar {
-    width: 220px;
+    width: 240px;
     background-color: #fff;
-    border-right: 1px solid #ddd;
+    border-right: 1px solid var(--color-borde);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 20px;
+    padding: 2rem 1.5rem;
 }
 
-.usuario-info {
-    text-align: center;
-}
-
+.usuario-info { text-align: center; }
 .avatar {
-    width: 60px;
-    height: 60px;
+    width: 60px; height: 60px;
     border-radius: 50%;
     background: #ccc;
     margin: 0 auto 10px;
 }
-
-.usuario-nombre {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.menu {
-    margin-top: 20px;
-}
-
+.usuario-nombre { font-weight: bold; margin-bottom: 5px; }
+.menu { margin-top: 2rem; }
 .menu-item {
     display: block;
     text-decoration: none;
-    color: #333;
+    color: var(--color-texto);
     padding: 10px;
     border-radius: 6px;
     margin-bottom: 5px;
-    transition: background 0.2s;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
 }
-
-.menu-item:hover, .menu-item.activo {
-    background-color: #f27f0d;
+.menu-item:hover,
+.menu-item.activo {
+    background-color: var(--color-primario);
     color: white;
+    transform: translateX(4px);
 }
-
-.boton-inferior {
-    text-align: center;
-}
-
+.boton-inferior { text-align: center; }
 .btn-nueva {
     display: inline-block;
     padding: 10px 15px;
-    background: #f27f0d;
+    background: var(--color-primario);
     color: white;
     border-radius: 5px;
     text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+.btn-nueva:hover {
+    background-color: #d66f0c;
+    transform: translateY(-2px);
 }
 
 /* Zona central */
-.zona-solicitudes {
-    display: flex;
-    flex: 1;
-}
+.zona-solicitudes { display: flex; flex: 1; background-color: var(--color-fondo); }
 
-/* Lista */
+/* Lista de solicitudes */
 .lista-solicitudes {
     width: 40%;
-    border-right: 1px solid #ddd;
-    padding: 20px;
+    border-right: 1px solid var(--color-borde);
+    padding: 2rem;
     background-color: #fff;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primario) var(--color-tarjeta);
 }
+.lista-solicitudes::-webkit-scrollbar { width: 6px; }
+.lista-solicitudes::-webkit-scrollbar-thumb { background-color: var(--color-primario); border-radius: 3px; }
+.lista-solicitudes::-webkit-scrollbar-track { background-color: var(--color-tarjeta); }
 
-.solicitudes {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.avatar-pequeño {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-size: cover;
-    background-position: center;
-}
-
-/* Detalle */
-.detalle-solicitud {
-    flex: 1;
-    padding: 30px;
-    background-color: #faf9f7;
-}
-
-.detalle-contenido img {
-    width: 100%;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.acciones {
-    margin-top: 20px;
-    display: flex;
-    gap: 10px;
-}
-
-.btn-aceptar, .btn-rechazar {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.btn-aceptar {
-    background-color: #28a745;
-    color: white;
-}
-
-.btn-rechazar {
-    background-color: #dc3545;
-    color: white;
-}
-
-.mensaje-placeholder {
-    text-align: center;
-    color: #777;
-    margin-top: 100px;
-}
-
-.sin-solicitudes {
-    text-align: center;
-    color: #777;
-    padding: 3rem 1rem;
-    font-size: 1.1rem;
-    font-style: italic;
-    background-color: #fafafa;
-    border-radius: 8px;
-}
-
-/* --- NUEVO ESTILO DE TARJETAS DE SOLICITUDES --- */
-.solicitudes {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-/* Contenedor de cada solicitud */
+.solicitudes { display: flex; flex-direction: column; gap: 12px; list-style: none; padding: 0; margin: 0; }
 .solicitud-item {
     display: flex;
     flex-direction: column;
     padding: 16px 18px;
     border-radius: 10px;
-    background-color: #fcfaf8;
+    background-color: var(--color-tarjeta);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     transition: all 0.2s ease;
     cursor: pointer;
 }
-
 .solicitud-item:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px);
     background-color: #fff;
 }
-
-/* Cuando está seleccionada */
-li.seleccionada .solicitud-item {
-    border: 2px solid #f27f0d;
-    background-color: #fff6ee;
+li.seleccionada {
+    border: 2px solid var(--color-primario);
+    background-color: var(--color-hover);
 }
 
 /* Texto interno */
-.solicitud-texto {
+.solicitud-texto { display: flex; flex-direction: column; gap: 4px; }
+.solicitud-texto .titulo { color: var(--color-primario); font-weight: 700; font-size: 1.05rem; }
+.solicitud-texto .inquilino { font-weight: 600; color: #1c140d; }
+.solicitud-texto .fechas { color: #9c7349; font-size: 0.9rem; }
+
+/* Detalle de la solicitud */
+.detalle-solicitud {
+    flex: 1;
+    background-color: var(--color-tarjeta);
+    border-left: 1px solid var(--color-borde);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 0; /* eliminamos padding para ocupar todo el ancho */
+    min-height: 300px;
+}
+
+/* Placeholder centrado */
+.mensaje-placeholder {
+    text-align: center;
+    color: #777;
+    font-size: 1.2rem;
+    font-style: italic;
+    margin: auto;
+}
+
+/* Imagen con ratio 16:9 */
+.img-container {
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 */
+    position: relative;
+    margin-bottom: 20px;
+}
+.img-container img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+/* Contenido del detalle */
+.detalle-contenido {
+    width: 90%;
+    max-width: 600px;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
-    gap: 4px;
 }
 
-.solicitud-texto .titulo {
-    color: #f27f0d;
-    font-weight: 700;
-    font-size: 1.05rem;
-}
+.detalle-contenido h2 { font-size: 1.8rem; color: #1c140d; margin-bottom: 10px; }
+.detalle-contenido h3 { color: var(--color-primario); margin-top: 1.8rem; margin-bottom: 0.5rem; }
+.detalle-contenido p, .detalle-contenido li { color: var(--color-texto); line-height: 1.5; }
 
-.solicitud-texto .inquilino {
-    font-weight: 600;
-    color: #1c140d;
-}
-
-.solicitud-texto .fechas {
-    color: #9c7349;
-    font-size: 0.9rem;
-}
-
-/* Scroll*/
-.lista-solicitudes {
-    scrollbar-width: thin;
-    scrollbar-color: #f27f0d #faf9f7;
-}
-.lista-solicitudes::-webkit-scrollbar {
-    width: 6px;
-}
-.lista-solicitudes::-webkit-scrollbar-thumb {
-    background-color: #f27f0d;
-    border-radius: 3px;
-}
-.lista-solicitudes::-webkit-scrollbar-track {
-    background-color: #faf9f7;
-}
-.detalle-solicitud {
-    background-color: #fcfaf8;
-    border-left: 1px solid #ddd;
-    padding: 40px;
-}
-
-.detalle-contenido h2 {
-    font-size: 1.8rem;
-    color: #1c140d;
-    margin-bottom: 10px;
-}
-
-.detalle-contenido h3 {
-    color: #f27f0d;
-    margin-top: 1.8rem;
-    margin-bottom: 0.5rem;
-}
-
-.detalle-contenido p, 
-.detalle-contenido li {
-    color: #333;
-    line-height: 1.5;
-}
-
-.acciones {
-    display: flex;
-    gap: 10px;
-    margin-top: 2rem;
-}
-
-.btn-aceptar,
-.btn-rechazar {
+/* Botones acciones */
+.acciones { display: flex; gap: 10px; margin-top: 2rem; }
+.btn-aceptar, .btn-rechazar {
     flex: 1;
     font-weight: bold;
     font-size: 1rem;
-    transition: background 0.2s;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
 }
+.btn-aceptar { background-color: var(--color-verde); }
+.btn-aceptar:hover { background-color: #218838; transform: translateY(-2px); }
+.btn-rechazar { background-color: var(--color-rojo); }
+.btn-rechazar:hover { background-color: #c82333; transform: translateY(-2px); }
 
-.btn-aceptar:hover {
-    background-color: #218838;
+/* Responsive */
+@media (max-width: 900px) {
+    .zona-solicitudes { flex-direction: column; }
+    .lista-solicitudes { width: 100%; border-right: none; border-bottom: 1px solid var(--color-borde); }
+    .detalle-solicitud { padding: 0 1rem; }
 }
-
-.btn-rechazar:hover {
-    background-color: #c82333;
-}
+.hidden {
+    display: none !important;
+  }

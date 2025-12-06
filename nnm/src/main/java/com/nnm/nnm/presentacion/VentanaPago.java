@@ -47,7 +47,7 @@ public class VentanaPago {
     }
 
     @PostMapping("/confirmarPago/{idReserva}")
-    public String confirmarPago(@PathVariable("idReserva") Long idReserva, @RequestParam Double precioTotal , Model model, RedirectAttributes redirectAttrs) {
+    public String confirmarPago(@PathVariable("idReserva") Long idReserva, @RequestParam Double precioTotal, Model model, RedirectAttributes redirectAttrs) {
         log.info("Confirmando pago para la reserva ID: " + idReserva);
         Reserva reserva = gestorReservas.obtenerReservaPorId(idReserva);
         Long idInmueble= reserva.getInmueble().getId();

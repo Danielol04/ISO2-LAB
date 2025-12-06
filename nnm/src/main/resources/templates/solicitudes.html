@@ -1,107 +1,122 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Solicitudes</title>
     <link rel="stylesheet" href="/css/solicitudes.css">
 </head>
+
 <body>
-<div class="contenedor-principal">
+    <div class="contenedor-principal">
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="usuario-info">
-            <div class="usuario-nombre">
-                &#128100; <span th:text="${username}">Nombre Usuario</span>
-            </div>
-            <p class="rol">Propietario</p>
-        </div>
-
-        <nav class="menu">
-            <a th:href="@{/home}" class="menu-item">Mis Propiedades</a>
-            <a th:href="@{/calendario}" class="menu-item">Calendario</a>
-            <a th:href="@{/confirmacionReserva/{username}(username=${username})}" class="menu-item activo">Solicitudes</a>
-        </nav>
-    </aside>
-
-    <!-- Zona central -->
-    <main class="zona-solicitudes">
-
-        <!-- Lista de solicitudes -->
-        <section class="lista-solicitudes">
-            <h2>Solicitudes (<span th:text="${solicitudes.size()}">0</span>)</h2>
-
-            <!-- Si no hay solicitudes -->
-            <div th:if="${#lists.isEmpty(solicitudes)}" class="sin-solicitudes">
-                <p>No tienes solicitudes pendientes por el momento.</p>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="usuario-info">
+                <div class="avatar">👤</div>
+                <div class="usuario-nombre"><span th:text="${username}">Nombre Usuario</span></div>
+                <p class="rol">Propietario</p>
             </div>
 
-            <!-- Si hay solicitudes -->
-            <ul class="solicitudes" th:unless="${#lists.isEmpty(solicitudes)}">
-                <li th:each="solicitud : ${solicitudes}"
-                    th:classappend="${solicitud.id == solicitudSeleccionada?.id} ? ' seleccionada' : ''">
-                    <a th:href="@{/confirmacionReserva/{username}/ver/{id}(username=${username}, id=${solicitud.id})}">
-                        <div class="solicitud-item">
-                            <div class="solicitud-texto">
-                                <p class="titulo" th:text="${solicitud.reserva.inmueble.titulo}">Casa Ejemplo</p>
-                                <p class="inquilino" th:text="${solicitud.reserva.inquilino.username}">Juan Pérez</p>
-                                <p class="fechas">
-                                    <span th:text="${#temporals.format(solicitud.reserva.fechaInicio, 'dd/MM/yyyy')}"></span> -
-                                    <span th:text="${#temporals.format(solicitud.reserva.fechaFin, 'dd/MM/yyyy')}"></span>
-                                </p>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-        </section>
+            <nav class="menu">
+                <a th:href="@{/home}" class="menu-item">Mis Propiedades</a>
+                <a th:href="@{/calendario}" class="menu-item">Calendario</a>
+                <a th:href="@{/confirmacionReserva/{username}(username=${username})}"
+                    class="menu-item activo">Solicitudes</a>
+            </nav>
 
-        <!-- Detalle de la solicitud -->
-        <section class="detalle-solicitud" th:if="${solicitudSeleccionada != null}">
-            <div class="detalle-contenido">
-                <h2 th:text="${solicitudSeleccionada.reserva.inmueble.titulo}">Casa de playa</h2>
-                <img th:src="@{/inmuebles/{id}/foto(id=${solicitudSeleccionada.reserva.inmueble.id})}" alt="Imagen inmueble">
+            <div class="boton-inferior">
+                <a th:href="@{/logout}" class="btn-nueva">Cerrar sesión</a>
+            </div>
+        </aside>
 
-                <h3>Detalles de la reserva</h3>
-                <p><strong>Entrada:</strong> <span th:text="${#temporals.format(solicitudSeleccionada.reserva.fechaInicio, 'dd MMM yyyy')}"></span></p>
-                <p><strong>Salida:</strong> <span th:text="${#temporals.format(solicitudSeleccionada.reserva.fechaFin, 'dd MMM yyyy')}"></span></p>
-                <p><strong>Noches:</strong> <span th:text="${solicitudSeleccionada.noches}"></span></p>
+        <!-- Zona central -->
+        <main class="zona-solicitudes">
 
-                <h3>Inquilino</h3>
-                <p th:text="${solicitudSeleccionada.reserva.inquilino.username}">Nombre</p>
+            <!-- Lista -->
+            <section class="lista-solicitudes">
+                <h2>Solicitudes (<span th:text="${solicitudes.size()}">0</span>)</h2>
 
-                <h3>Desglose del pago</h3>
-                <ul class="pago">
-                    <li>Precio por noche: <span th:text="${solicitudSeleccionada.reserva.inmueble.precio_noche}"></span></li>
-                    <li>Total: <strong th:text="${solicitudSeleccionada.precioTotal}"></strong></li>
-                </ul>
-
-                <div class="acciones">
-                    <form th:action="@{/solicitud/{id}/aceptar(id=${solicitudSeleccionada.id})}" method="post"
-                          onsubmit="return confirmar('¿Aceptar esta solicitud?')">
-                        <button type="submit" class="btn-aceptar">Aceptar</button>
-                    </form>
-
-                    <form th:action="@{/solicitud/{id}/rechazar(id=${solicitudSeleccionada.id})}" method="post"
-                          onsubmit="return confirmar('¿Rechazar esta solicitud?')">
-                        <button type="submit" class="btn-rechazar">Rechazar</button>
-                    </form>
+                <!-- Sin solicitudes -->
+                <div th:if="${#lists.isEmpty(solicitudes)}" class="sin-solicitudes">
+                    <p>No tienes solicitudes pendientes por el momento.</p>
                 </div>
-            </div>
-        </section>
+                <!-- Con solicitudes -->
+                <div th:unless="${#lists.isEmpty(solicitudes)}">
+                    <ul class="solicitudes">
+                        <li class="solicitud-item" th:each="solicitud : ${solicitudes}" th:data-id="${solicitud.id}"
+                            th:data-titulo="${solicitud.reserva.inmueble.titulo}"
+                            th:data-nombre="${solicitud.reserva.inquilino.username}"
+                            th:data-fechainicio="${#temporals.format(solicitud.reserva.fechaInicio, 'dd MMM yyyy')}"
+                            th:data-fechafin="${#temporals.format(solicitud.reserva.fechaFin, 'dd MMM yyyy')}"
+                            th:data-noches="${solicitud.noches}"
+                            th:data-precionoche="${solicitud.reserva.inmueble.precio_noche}"
+                            th:data-preciototal="${solicitud.precioTotal}"
+                            th:data-img="@{/inmuebles/{id}/foto(id=${solicitud.reserva.inmueble.id})}">
 
-        <!-- Placeholder cuando no hay solicitud seleccionada -->
-        <section class="detalle-solicitud" th:if="${solicitudSeleccionada == null}">
-            <p class="mensaje-placeholder">Selecciona una solicitud para ver los detalles.</p>
-        </section>
-    </main>
-</div>
+                            <div class="contenido-solicitud">
+                                <strong th:text="${solicitud.reserva.inmueble.titulo}">Título</strong><br>
+                                <span th:text="${solicitud.reserva.inquilino.username}">Inquilino</span><br>
+                                <small th:text="${#temporals.format(solicitud.reserva.fechaInicio, 'dd MMM')}"></small>
+                                -
+                                <small th:text="${#temporals.format(solicitud.reserva.fechaFin, 'dd MMM')}"></small>
+                            </div>
 
-<script>
-    function confirmar(mensaje) {
-        return confirm(mensaje);
-    }
-</script>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Panel de detalle fijo -->
+            <section class="detalle-solicitud">
+                <div id="detalleContenido" class="detalle-contenido">
+
+                    <!-- Placeholder -->
+                    <p id="mensaje-placeholder" class="mensaje-placeholder">Selecciona una solicitud para ver los detalles.</p>
+
+                    <!-- Detalle de la solicitud -->
+                    <div id="detalleInfo" class="hidden">
+                        <h2 id="mdTitulo"></h2>
+
+                        <div class="img-container">
+                            <img id="mdImg" alt="Imagen inmueble">
+                        </div>
+
+                        <h3>Detalles de la reserva</h3>
+                        <p><strong>Entrada:</strong> <span id="mdFechaInicio"></span></p>
+                        <p><strong>Salida:</strong> <span id="mdFechaFin"></span></p>
+                        <p><strong>Noches:</strong> <span id="mdNoches"></span></p>
+
+                        <h3>Inquilino</h3>
+                        <p id="mdNombre"></p>
+
+                        <h3>Desglose del pago</h3>
+                        <ul>
+                            <li>Precio/noche: <span id="mdPrecioNoche"></span></li>
+                            <li>Total: <strong id="mdPrecioTotal"></strong></li>
+                        </ul>
+
+                        <div class="acciones">
+                            <form id="formAceptar" method="post">
+                                <button type="submit" class="btn-aceptar">Aceptar</button>
+                            </form>
+
+                            <form id="formRechazar" method="post">
+                                <button type="submit" class="btn-rechazar">Rechazar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function confirmar(mensaje) {
+            return confirm(mensaje);
+        }
+    </script>
+    <script src="/js/detallesSolicitudes.js"></script>
 </body>
+
 </html>
