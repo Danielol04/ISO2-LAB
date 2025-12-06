@@ -47,6 +47,20 @@ document.addEventListener("DOMContentLoaded", () => {
             // Mostrar detalle y ocultar placeholder
             if (placeholder) placeholder.style.display = "none";
             if (detalleInfo) detalleInfo.classList.remove("hidden");
+
+            const formAceptar = detalle.querySelector("#formAceptar");
+            const formRechazar = detalle.querySelector("#formRechazar");
+
+            if (formAceptar) {
+                formAceptar.style.display = "block";
+                formAceptar.action = `/solicitudes/solicitud/${item.dataset.id}/aceptar`;
+            }
+
+            if (formRechazar) {
+                formRechazar.style.display = "block";
+                formRechazar.action = `/solicitudes/solicitud/${item.dataset.id}/rechazar`;
+            }
+
         });
     });
 });

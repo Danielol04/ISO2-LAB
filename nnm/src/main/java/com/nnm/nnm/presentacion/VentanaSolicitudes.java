@@ -1,4 +1,5 @@
 package com.nnm.nnm.presentacion;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,17 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/solicitudes")
 public class VentanaSolicitudes {
+
     @Autowired
     private GestorSolicitudes gestorSolicitudes;
 
     @GetMapping("/confirmacionReserva/{username}")
-    public String verSolicitudes(Model model, HttpSession session) {
-        String username = (String) session.getAttribute("username");
-        if(username == null) {
+    public String verSolicitudes(@PathVariable String username, Model model, HttpSession session) {
+        String sessionUsername = (String) session.getAttribute("username");
+        if (sessionUsername == null || !sessionUsername.equals(username)) {
             return "redirect:/login";
         }
+
         List<SolicitudReserva> solicitudes = gestorSolicitudes.obtenerSolicitudesPorPropietario(username);
         model.addAttribute("username", username);
         model.addAttribute("solicitudes", solicitudes);
@@ -33,29 +36,17 @@ public class VentanaSolicitudes {
         return "solicitudes";
     }
 
-    @GetMapping("/confirmacionReserva/{username}/ver/{id}")
-    public String verDetalleSolicitud(@PathVariable String username,
-                                      @PathVariable Long id,
-                                      Model model) {
-        List<SolicitudReserva> solicitudes = gestorSolicitudes.obtenerSolicitudesPorPropietario(username);
-        SolicitudReserva solicitudSeleccionada = gestorSolicitudes.obtenerSolicitudPorId(id);
-
-        model.addAttribute("username", username);
-        model.addAttribute("solicitudes", solicitudes);
-        model.addAttribute("solicitudSeleccionada", solicitudSeleccionada);
-
-        return "solicitudes";
-    }
-
     @PostMapping("/solicitud/{id}/aceptar")
-    public String aceptarSolicitud(@PathVariable Long id) {
+    public String aceptarSolicitud(@PathVariable Long id, HttpSession session) {
         gestorSolicitudes.aceptarSolicitudReserva(id);
-        return "redirect:/confirmacionReserva";
+        String username = (String) session.getAttribute("username");
+        return "redirect:/solicitudes/confirmacionReserva/" + username;
     }
 
     @PostMapping("/solicitud/{id}/rechazar")
-    public String rechazarSolicitud(@PathVariable Long id) {
+    public String rechazarSolicitud(@PathVariable Long id, HttpSession session) {
         gestorSolicitudes.rechazarSolicitudReserva(id);
-        return "redirect:/confirmacionReserva";
+        String username = (String) session.getAttribute("username");
+        return "redirect:/solicitudes/confirmacionReserva/" + username;
     }
 }

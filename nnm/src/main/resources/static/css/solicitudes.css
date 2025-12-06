@@ -35,10 +35,16 @@ body {
 
 .usuario-info { text-align: center; }
 .avatar {
-    width: 60px; height: 60px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background: #ccc;
     margin: 0 auto 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
 }
 .usuario-nombre { font-weight: bold; margin-bottom: 5px; }
 .menu { margin-top: 2rem; }
@@ -196,3 +202,15 @@ li.seleccionada {
 .hidden {
     display: none !important;
   }
+
+  .contenido-solicitud {
+    display: flex;
+    justify-content: space-between; /* separa los extremos */
+    align-items: center;
+}
+
+.info-principal {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}

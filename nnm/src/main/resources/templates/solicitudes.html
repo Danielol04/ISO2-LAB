@@ -24,10 +24,6 @@
                 <a th:href="@{/confirmacionReserva/{username}(username=${username})}"
                     class="menu-item activo">Solicitudes</a>
             </nav>
-
-            <div class="boton-inferior">
-                <a th:href="@{/logout}" class="btn-nueva">Cerrar sesión</a>
-            </div>
         </aside>
 
         <!-- Zona central -->
@@ -41,6 +37,7 @@
                 <div th:if="${#lists.isEmpty(solicitudes)}" class="sin-solicitudes">
                     <p>No tienes solicitudes pendientes por el momento.</p>
                 </div>
+
                 <!-- Con solicitudes -->
                 <div th:unless="${#lists.isEmpty(solicitudes)}">
                     <ul class="solicitudes">
@@ -55,13 +52,22 @@
                             th:data-img="@{/inmuebles/{id}/foto(id=${solicitud.reserva.inmueble.id})}">
 
                             <div class="contenido-solicitud">
-                                <strong th:text="${solicitud.reserva.inmueble.titulo}">Título</strong><br>
-                                <span th:text="${solicitud.reserva.inquilino.username}">Inquilino</span><br>
-                                <small th:text="${#temporals.format(solicitud.reserva.fechaInicio, 'dd MMM')}"></small>
-                                -
-                                <small th:text="${#temporals.format(solicitud.reserva.fechaFin, 'dd MMM')}"></small>
+                                <div class="info-principal">
+                                    <strong class="titulo"
+                                        th:text="${solicitud.reserva.inmueble.titulo}">Título</strong><br>
+                                    <span class="inquilino"
+                                        th:text="${solicitud.reserva.inquilino.username}">Inquilino</span><br>
+                                    <div class="fechas">
+                                        <small
+                                            th:text="${#temporals.format(solicitud.reserva.fechaInicio, 'dd MMM')}"></small>
+                                        -
+                                        <small
+                                            th:text="${#temporals.format(solicitud.reserva.fechaFin, 'dd MMM')}"></small>
+                                    </div>
+                                </div>
+                                <small class="fecha-creacion"
+                                    th:text="${#temporals.format(solicitud.fechaCreacion, 'dd MMM HH:mm')}"></small>
                             </div>
-
                         </li>
                     </ul>
                 </div>
@@ -72,7 +78,8 @@
                 <div id="detalleContenido" class="detalle-contenido">
 
                     <!-- Placeholder -->
-                    <p id="mensaje-placeholder" class="mensaje-placeholder">Selecciona una solicitud para ver los detalles.</p>
+                    <p id="mensaje-placeholder" class="mensaje-placeholder">Selecciona una solicitud para ver los
+                        detalles.</p>
 
                     <!-- Detalle de la solicitud -->
                     <div id="detalleInfo" class="hidden">
@@ -97,13 +104,11 @@
                         </ul>
 
                         <div class="acciones">
-                            <form id="formAceptar" method="post">
-                                <button type="submit" class="btn-aceptar">Aceptar</button>
-                            </form>
+                            <form id="formAceptar" method="post" style="display:none;"></form>
+                            <button type="submit" form="formAceptar" class="btn-aceptar">Aceptar</button>
 
-                            <form id="formRechazar" method="post">
-                                <button type="submit" class="btn-rechazar">Rechazar</button>
-                            </form>
+                            <form id="formRechazar" method="post" style="display:none;"></form>
+                            <button type="submit" form="formRechazar" class="btn-rechazar">Rechazar</button>
                         </div>
                     </div>
                 </div>
@@ -111,11 +116,6 @@
         </main>
     </div>
 
-    <script>
-        function confirmar(mensaje) {
-            return confirm(mensaje);
-        }
-    </script>
     <script src="/js/detallesSolicitudes.js"></script>
 </body>
 
