@@ -22,5 +22,4 @@ public class InmuebleDAO extends EntidadDAO<Inmueble, Long> {
         String jpql = "FROM Inmueble i WHERE i.id = :id";
         return gestorBD.selectSingle(jpql, Inmueble.class, "id", id);
     }
-
 }

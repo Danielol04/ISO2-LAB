@@ -57,78 +57,44 @@ public class Reserva {
         this.politicaCancelacion = politicaCancelacion;
     }
 
-    public void setId(Long idReserva) {
-        this.id = idReserva;
-    }
+    public void setId(Long idReserva) {this.id = idReserva;}
+    public Long getId() {return id;}
 
-    public Long getId() {
-        return id;
-    }
+    public Inmueble getInmueble() {return inmueble;}
+    public void setInmueble(Inmueble inmueble) {this.inmueble = inmueble;}
 
-    public Inmueble getInmueble() {
-        return inmueble;
-    }
+    public Inquilino getInquilino() {return inquilino;}
+    public void setInquilino(Inquilino inquilino) {this.inquilino = inquilino;}
 
-    public void setInmueble(Inmueble inmueble) {
-        this.inmueble = inmueble;
-    }
+    public LocalDate getFechaInicio() {return fechaInicio;}
+    public void setFechaInicio(LocalDate fechaInicio) {this.fechaInicio = fechaInicio;}
 
-    public Inquilino getInquilino() {
-        return inquilino;
-    }
+    public LocalDate getFechaFin() {return fechaFin;}
+    public void setFechaFin(LocalDate fechaFin) {this.fechaFin = fechaFin;}
 
-    public void setInquilino(Inquilino inquilino) {
-        this.inquilino = inquilino;
-    }
-
-    public LocalDate getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public void setFechaInicio(LocalDate fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
-
-    public LocalDate getFechaFin() {
-        return fechaFin;
-    }
-
-    public void setFechaFin(LocalDate fechaFin) {
-        this.fechaFin = fechaFin;
-    }
-
-    public PoliticaCancelacion getPoliticaCancelacion() {
-        return politicaCancelacion;
-    }
-
-    public void setPoliticaCancelacion(PoliticaCancelacion politicaCancelacion) {
-        this.politicaCancelacion = politicaCancelacion;
-    }
+    public PoliticaCancelacion getPoliticaCancelacion() {return politicaCancelacion;}
+    public void setPoliticaCancelacion(PoliticaCancelacion politicaCancelacion) {this.politicaCancelacion = politicaCancelacion;}
 
     /*public EstadoReserva getEstado() {
+        if (reserva.fechaFin.isBefore(LocalDate.now()) {
+            this.estado = EstadoReserva.EXPIRADA;
+        }
         return estado;
     }
+    public void setEstado(EstadoReserva estado) { this.estado = estado;}*/
 
-    public void setEstado(EstadoReserva estado) {
-        this.estado = estado;
+    public boolean getAceptada() {return aceptada;}
+    public void setAceptada(boolean aceptada) {this.aceptada = aceptada;}
+
+    public boolean getPagado() {return pagada;}
+    public void setPagado(boolean pagada) {this.pagada = pagada;}
+
+    public double getPrecioTotal() {
+        long noches = getNoches();
+        return noches * inmueble.getPrecio_noche();
     }
 
-    public void setExpirada() {
-        this.estado = EstadoReserva.EXPIRADA;
-    }*/
-
-    public boolean getAceptada() {
-        return aceptada;
-    }
-
-    public void setAceptada(boolean aceptada) {
-        this.aceptada = aceptada;
-    }
-
-    public boolean getPagado() {
-        return pagada;
-    }
-    public void setPagado(boolean pagada) {
-        this.pagada = pagada;
+    public long getNoches() {
+        return java.time.temporal.ChronoUnit.DAYS.between(fechaInicio, fechaFin);
     }
 }

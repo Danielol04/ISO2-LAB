@@ -93,4 +93,33 @@ public class VentanaReserva {
             return "redirect:/pago/confirmarPago/" + reserva.getId();
         }
     }
+
+    @GetMapping("/misReservas/{username}")
+    public String verMisReservas(@PathVariable String username, Model model, HttpSession session) {
+        String usernameSesion = (String) session.getAttribute("username");
+        if (usernameSesion == null || !usernameSesion.equals(username)|| gestorUsuarios.esPropietario(username)) {
+            return "redirect:/login";
+        }
+        List<Reserva> reservas = gestorReservas.obtenerReservasPorInquilino(username);
+        model.addAttribute("reservas", reservas);
+        model.addAttribute("username", username);
+        return "misReservas";
+    }
+
+    @PostMapping("/cancelar/{idReserva}")
+    public String cancelarReserva(@PathVariable Long idReserva, HttpSession session, RedirectAttributes redirectAttrs) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return "redirect:/login";
+        }
+        boolean exito = gestorReservas.cancelarReserva(idReserva, username);
+        if (exito) {
+            log.info("Reserva con ID {} cancelada por el usuario {}", idReserva, username);
+            redirectAttrs.addFlashAttribute("mensajeExito", "Reserva cancelada correctamente.");
+        } else {
+            log.warn("El usuario {} no pudo cancelar la reserva con ID {}", username, idReserva);
+            redirectAttrs.addFlashAttribute("mensajeError", "No se pudo cancelar la reserva.");
+        }
+        return "redirect:/reserva/misReservas/" + username;
+    }
 }

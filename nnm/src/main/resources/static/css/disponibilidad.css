@@ -79,6 +79,12 @@ td:hover:not(.dia-no-disponible):not(.dia-seleccionado) {
     cursor: default;
 }
 
+.dia-reservada {
+    background-color: #ffb3b3; /* rojo clarito */
+    color: #fff;
+    cursor: not-allowed;
+}
+
 .dia-seleccionado {
     background-color: #FF8C42;
     color: #fff;

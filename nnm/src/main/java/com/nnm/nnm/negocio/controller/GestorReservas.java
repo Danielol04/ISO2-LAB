@@ -1,26 +1,18 @@
 package com.nnm.nnm.negocio.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nnm.nnm.negocio.dominio.entidades.Reserva;
 import com.nnm.nnm.persistencia.ReservaDAO;
-import com.nnm.nnm.persistencia.SolicitudReservaDAO;
 
 @Service
 public class GestorReservas {
 
     @Autowired
     private ReservaDAO reservaDAO;
-
-    @Autowired
-    private GestorDisponibilidad gestorDisponibilidad;
-
-    @Autowired
-    private SolicitudReservaDAO solicitudReservaDAO;
-
-    @Autowired
-    private GestorInmuebles gestorInmuebles;
 
     public boolean existeReserva(long id) {
         return reservaDAO.findById(id) != null;
@@ -52,6 +44,14 @@ public class GestorReservas {
 
     public Reserva obtenerReservaPorId(long idReserva) {
         return reservaDAO.findById(idReserva);
+    }
+
+    public List<Reserva> obtenerReservasPorInmueble(long idInmueble) {
+        return reservaDAO.findReservasByInmuebleId(idInmueble);
+    }
+
+    public List<Reserva> obtenerReservasPorInquilino(String usernameInquilino) {
+        return reservaDAO.findReservasByInquilinoUsername(usernameInquilino);
     }
 
 }

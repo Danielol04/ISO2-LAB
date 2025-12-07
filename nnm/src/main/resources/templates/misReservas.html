@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Reservas</title>
+    <link rel="stylesheet" href="/css/solicitudes.css">
+</head>
+
+<body>
+<div class="contenedor-principal">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="usuario-info">
+            <div class="avatar">👤</div>
+            <div class="usuario-nombre">
+                <span th:text="${username}">Nombre Usuario</span>
+            </div>
+            <p class="rol">Inquilino</p>
+        </div>
+
+        <nav class="menu">
+            <a th:href="@{/home}" class="menu-item">Inicio</a>
+            <a th:href="@{/reservas/{username}(username=${username})}"
+               class="menu-item activo">Mis Reservas</a>
+        </nav>
+    </aside>
+
+    <!-- Zona central -->
+    <main class="zona-solicitudes">
+
+        <!-- Lista -->
+        <section class="lista-solicitudes">
+            <h2>Reservas (<span th:text="${reservas.size()}">0</span>)</h2>
+
+            <!-- Sin reservas -->
+            <div th:if="${#lists.isEmpty(reservas)}" class="sin-solicitudes">
+                <p>No tienes reservas actualmente.</p>
+            </div>
+
+            <!-- Con reservas -->
+            <div th:unless="${#lists.isEmpty(reservas)}">
+                <ul class="reservas">
+                    <li class="solicitud-item"
+                        th:each="reserva : ${reservas}"
+                        th:data-id="${reserva.id}"
+                        th:data-titulo="${reserva.inmueble.titulo}"
+                        th:data-propietario="${reserva.inmueble.propietario.username}"
+                        th:data-fechainicio="${#temporals.format(reserva.fechaInicio, 'dd MMM yyyy')}"
+                        th:data-fechafin="${#temporals.format(reserva.fechaFin, 'dd MMM yyyy')}"
+                        th:data-precionoche="${reserva.inmueble.precio_noche}"
+                        th:data-noches="${reserva.noches}"
+                        th:data-preciototal="${reserva.precioTotal}"
+                        th:data-img="@{/inmuebles/{id}/foto(id=${reserva.inmueble.id})}">
+
+                        <div class="contenido-solicitud">
+                            <div class="info-principal">
+                                <strong class="titulo"
+                                        th:text="${reserva.inmueble.titulo}">Título</strong><br>
+                                <span class="inquilino">
+                                    Propietario:
+                                    <span th:text="${reserva.inmueble.propietario.username}"></span>
+                                </span><br>
+                                <div class="fechas">
+                                    <small th:text="${#temporals.format(reserva.fechaInicio, 'dd MMM')}"></small>
+                                    -
+                                    <small th:text="${#temporals.format(reserva.fechaFin, 'dd MMM')}"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Detalle -->
+        <section class="detalle-solicitud">
+            <div class="detalle-contenido">
+
+                <p class="mensaje-placeholder">
+                    Selecciona una reserva para ver los detalles.
+                </p>
+
+                <div id="detalleInfo" class="hidden">
+                    <h2 id="mdTitulo"></h2>
+
+                    <div class="img-container">
+                        <img id="mdImg" alt="Imagen inmueble">
+                    </div>
+
+                    <h3>Detalles de la reserva</h3>
+                    <p><strong>Entrada:</strong> <span id="mdFechaInicio"></span></p>
+                    <p><strong>Salida:</strong> <span id="mdFechaFin"></span></p>
+                    <p><strong>Noches:</strong> <span id="mdNoches"></span></p>
+
+                    <h3>Propietario</h3>
+                    <p id="mdPropietario"></p>
+
+                    <h3>Pago</h3>
+                    <ul>
+                        <li>Precio/noche: <span id="mdPrecioNoche"></span></li>
+                        <li>Total: <strong id="mdPrecioTotal"></strong></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script src="/js/detallesReservas.js"></script>
+</body>
+</html>

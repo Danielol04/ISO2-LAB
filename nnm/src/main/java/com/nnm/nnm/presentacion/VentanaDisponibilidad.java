@@ -19,9 +19,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.nnm.nnm.negocio.controller.GestorDisponibilidad;
 import com.nnm.nnm.negocio.controller.GestorInmuebles;
+import com.nnm.nnm.negocio.controller.GestorReservas;
 import com.nnm.nnm.negocio.dominio.entidades.Disponibilidad;
 import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
 import com.nnm.nnm.negocio.dominio.entidades.PoliticaCancelacion;
+import com.nnm.nnm.negocio.dominio.entidades.Reserva;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -34,6 +36,8 @@ public class VentanaDisponibilidad {
     private GestorDisponibilidad gestorDisponibilidad;
     @Autowired
     private GestorInmuebles gestorInmuebles;
+    @Autowired
+    private GestorReservas gestorReservas;
 
     @GetMapping("/crear/{id}")
     public String mostrarFormulario(@PathVariable long id, Model model, HttpSession session) {
@@ -43,6 +47,7 @@ public class VentanaDisponibilidad {
         }
         Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(id);
         List<Disponibilidad> disponibilidades = gestorDisponibilidad.obtenerDisponibilidadPorInmueble(id);
+        List <Reserva> reservas = gestorReservas.obtenerReservasPorInmueble(id);
         model.addAttribute("disponibilidad", new Disponibilidad());
         model.addAttribute("politicas", PoliticaCancelacion.values());
         model.addAttribute("idInmueble", id);
@@ -57,8 +62,17 @@ public class VentanaDisponibilidad {
                 fecha = fecha.plusDays(1);
             }
         }
-
+        List<String> fechasReservadas = new ArrayList<>();
+        for(Reserva r: reservas){
+            LocalDate fecha = r.getFechaInicio();
+            while (!fecha.isAfter(r.getFechaFin())) {
+                fechasReservadas.add(fecha.toString());
+                fecha = fecha.plusDays(1);
+            }
+        }
+        model.addAttribute("fechasReservadas", fechasReservadas);
         model.addAttribute("fechasDisponibles", fechasDisponibles);
+        model.addAttribute("username", username);
 
         log.info("Mostrando formulario de Disponibilidad para el inmueble: {}", id);
         return "disponibilidad";
