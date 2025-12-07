@@ -1,26 +1,26 @@
 <!DOCTYPE html>
-<html lang="es">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
   <meta charset="UTF-8">
   <title>Inicio Inquilino</title>
-  <link rel="stylesheet" href="/css/navbar.css">
-  <link rel="stylesheet" href="/css/home.css">
+  <link rel="stylesheet" th:href="@{/css/navbar.css}">
+  <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
 <body>
 
   <!-- NAVBAR -->
   <nav class="navbar">
-    <a href="/home" class="logo-link">
-      <img src="/images/logo.png" alt="Logo" class="logo-img">
+    <a th:href="@{/home}" class="logo-link">
+      <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
     </a>
 
     <div class="navbar-right">
-      <a href="/lista-deseos" class="btn-deseos">Lista de deseos</a>
+      <a th:href="@{/lista-deseos}" class="btn-deseos">Lista de deseos</a>
       <div class="dropdown">
         <button class="btn-circular">☰</button>
         <div class="dropdown-content">
-          <a href="/datos-personales">Datos personales</a>
-          <a href="/logout">Cerrar sesión</a>
+          <a th:href="@{/datos-personales}">Datos personales</a>
+          <a th:href="@{/logout}">Cerrar sesión</a>
         </div>
       </div>
     </div>
@@ -32,7 +32,7 @@
     <!-- BÚSQUEDA -->
     <section class="busqueda-box">
       <h1 class="titulo-seccion">Buscar Propiedades</h1>
-      <form action="/buscar" method="get" class="search-form">
+      <form th:action="@{/buscar}" method="get" class="search-form">
         <div class="form-group">
           <label for="destino">Destino:</label>
           <input type="text" id="destino" name="destino" placeholder="Ciudad o provincia">
@@ -66,25 +66,60 @@
     <section class="propiedades-box">
       <h2 class="titulo-seccion">Propiedades Disponibles</h2>
 
-      <div id="mensaje-vacio" class="mensaje-vacio" style="display:none;">
-        <p>No hay propiedades disponibles</p>
+      <div th:if="${#lists.isEmpty(propiedades)}" class="mensaje-vacio">
+        <p>No hay propiedades que coincidan con la búsqueda</p>
       </div>
 
-      <div id="propiedades-grid" class="propiedades-grid">
-      
+      <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
+        <div th:each="inmueble : ${propiedades}" class="tarjeta-propiedad">
+          <div class="imagen-contenedor">
+            <img th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}" alt="Imagen del inmueble">
+          </div>
+
+          <div class="contenido-propiedad">
+            <h3 class="titulo-propiedad" th:text="${inmueble.titulo}">Título</h3>
+
+            <p class="ubicacion">
+              <img src="/images/ubicacion.png" alt="Ubicación" class="icono">
+              <span th:text="${inmueble.localidad}"></span>,
+              <span th:text="${inmueble.provincia}"></span>,
+              <span th:text="${inmueble.codigo_postal}"></span>
+            </p>
+
+            <p>
+              <strong>Dirección:</strong>
+              <span th:text="${inmueble.direccion}">Dirección</span>
+            </p>
+
+            <p class="caracteristicas">
+              <img src="/images/habitacion.png" alt="Habitaciones" class="icono">
+              <span th:text="${inmueble.habitaciones}">habitaciones</span>
+            </p>
+            <p> 
+              <img src="/images/baños.png" alt="Baños" class="icono">
+              <span th:text="${inmueble.numero_banos}">baños</span> 
+            </p>
+
+            <p class="precio">
+              <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
+            </p>
+
+            <div class="botones-propiedad">
+              <form th:action="@{/favoritos/agregar}" method="post">
+                <input type="hidden" th:name="id" th:value="${inmueble.id}">
+                <button type="submit" class="btn-favorito">Guardar</button>
+              </form>
+
+              <form th:action="@{/reservar}" method="get">
+                <input type="hidden" th:name="id" th:value="${inmueble.id}">
+                <button type="submit" class="btn-reservar">Reservar</button>
+              </form>
+            </div>
+
+          </div>
+        </div>
       </div>
     </section>
   </main>
-
-  <script>
-    //  control simple para mostrar mensaje si no hay propiedades
-    const propiedadesGrid = document.getElementById("propiedades-grid");
-    const mensajeVacio = document.getElementById("mensaje-vacio");
-
-    if (!propiedadesGrid.hasChildNodes()) {
-      mensajeVacio.style.display = "block";
-    }
-  </script>
-
 </body>
 </html>
