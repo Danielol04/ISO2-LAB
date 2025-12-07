@@ -53,7 +53,7 @@ public class VentanaListaDeseos{
 
         // Usuario no logueado -> 401 Unauthorized
         if (username == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.ok(Collections.emptySet());
         }
 
         Inquilino inquilino = gestorUsuarios.obtenerInquilinoPorUsername(username);
