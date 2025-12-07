@@ -68,6 +68,9 @@
         <div th:each="inmueble : ${propiedades}" class="tarjeta-propiedad">
           <div class="imagen-contenedor">
             <img th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}" alt="Imagen del inmueble">
+
+            <!-- Botón del corazón -->
+              <button class="fav-btn" th:data-id="${inmueble.id}">♡</button>
           </div>
 
           <div class="contenido-propiedad">
@@ -113,5 +116,6 @@
       </div>
     </section>
   </main>
+    <script src="/js/favoritos.js"></script>
 </body>
 </html>
