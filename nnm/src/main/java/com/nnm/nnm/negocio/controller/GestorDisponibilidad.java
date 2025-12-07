@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.nnm.nnm.negocio.dominio.entidades.Disponibilidad;
 import com.nnm.nnm.negocio.dominio.entidades.PoliticaCancelacion;
+import com.nnm.nnm.negocio.dominio.entidades.Reserva;
 import com.nnm.nnm.persistencia.DisponibilidadDAO;
 
 @Service
@@ -118,5 +119,15 @@ public class GestorDisponibilidad {
             }
         }
         return null;
+    }
+
+    public void restaurarDisponibilidadPorReserva(Reserva reserva) {
+        Disponibilidad disponibilidad = new Disponibilidad();
+        disponibilidad.setInmueble(reserva.getInmueble());
+        disponibilidad.setFechaInicio(reserva.getFechaInicio());
+        disponibilidad.setFechaFin(reserva.getFechaFin());
+        disponibilidad.setPoliticaCancelacion(reserva.getPoliticaCancelacion());
+        disponibilidad.setReservaDirecta(reserva.getReservaDirecta());
+        registrarDisponibilidad(disponibilidad);
     }
 }

@@ -44,6 +44,9 @@ public class Reserva {
     @Column(name ="pagada", nullable = false)
     private boolean pagada = false;
 
+    @Column(name= "reserva_directa", nullable =  false)
+    private boolean reservaDirecta;
+
     public Reserva() {
     }
 
@@ -88,6 +91,9 @@ public class Reserva {
 
     public boolean getPagado() {return pagada;}
     public void setPagado(boolean pagada) {this.pagada = pagada;}
+
+    public boolean getReservaDirecta() {return reservaDirecta;}
+    public void setReservaDirecta(boolean reservaDirecta) {this.reservaDirecta = reservaDirecta;}
 
     public double getPrecioTotal() {
         long noches = getNoches();

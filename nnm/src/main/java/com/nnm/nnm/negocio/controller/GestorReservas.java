@@ -13,12 +13,13 @@ public class GestorReservas {
 
     @Autowired
     private ReservaDAO reservaDAO;
+    @Autowired
+    private GestorDisponibilidad gestorDisponibilidad;
 
     public boolean existeReserva(long id) {
         return reservaDAO.findById(id) != null;
     }
 
-    // Registra una nueva reserva y actualiza la disponibilidad correspondiente
     public void registrarReserva(Reserva reserva) {
         reservaDAO.save(reserva);
     }
@@ -33,13 +34,10 @@ public class GestorReservas {
         return reserva != null && reserva.getInquilino().getUsername().equals(usernameUsuario);
     }
 
-    public boolean cancelarReserva(long idReserva, String usernameUsuario) {
+    public void cancelarReserva(long idReserva) {
         Reserva reserva = reservaDAO.findById(idReserva);
-        if(reserva != null && reserva.getInquilino().getUsername().equals(usernameUsuario)){
-            reservaDAO.delete(reserva);
-            return true;
-        }
-        return false;
+        gestorDisponibilidad.restaurarDisponibilidadPorReserva(reserva);
+        reservaDAO.delete(reserva);
     }
 
     public Reserva obtenerReservaPorId(long idReserva) {

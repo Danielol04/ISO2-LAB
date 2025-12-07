@@ -70,7 +70,7 @@ td {
     font-size: 0.95rem;
 }
 
-td:hover:not(.dia-no-disponible):not(.dia-seleccionado) {
+td:hover:not(.dia-no-disponible):not(.dia-seleccionado):not(.dia-reservado) {
     background-color: #dcdcdc;
 }
 
@@ -79,10 +79,9 @@ td:hover:not(.dia-no-disponible):not(.dia-seleccionado) {
     cursor: default;
 }
 
-.dia-reservada {
-    background-color: #ffb3b3; /* rojo clarito */
-    color: #fff;
-    cursor: not-allowed;
+.dia-reservado{
+    color: #f86c6c;
+    cursor: default;
 }
 
 .dia-seleccionado {

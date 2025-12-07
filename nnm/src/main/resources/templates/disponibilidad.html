@@ -16,8 +16,7 @@
       <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
     </a>
     <div class="navbar-right">
-      <a th:href="@{/solicitudes/confirmacionReserva/{username}(username=${username})}"
-        class="btn-deseos">Solicitudes</a>
+      <a th:href="@{/solicitudes/confirmacionReserva/{username}(username=${username})}" class="btn-deseos">Solicitudes</a>
       <a th:href="@{/inmuebles/alta}" class="btn-deseos">Registrar Inmuebles</a>
       <div class="dropdown">
         <button class="btn-circular">☰</button>
@@ -80,8 +79,8 @@
 
   <!-- BACKEND VAR -->
   <script th:inline="javascript">
-    window.fechasDisponibles = /*[[${fechasDisponibles}]]*/[];
-    window.fechasReservadas = /*[[${fechasReservadas}]]*/[];
+    const fechasDisponibles = /*[[${fechasDisponibles}]]*/[];
+    const fechasReservadas = /*[[${fechasReservadas}]]*/[];
   </script>
 
   <!-- JS CALENDARIO -->
@@ -123,12 +122,12 @@
         const disponible = !fechasDisponibles.includes(str);
         const reservado = fechasReservadas.includes(str);
         const esPasado = fechaCelda < hoy;
-        if(reservado){
-          html += `<td class="dia-reservado" title="Reservado">${dia}</td>`;
-        } else if (!disponible || esPasado) {
-          html += `<td class="dia-no-disponible" title="No disponible">${dia}</td>`;
+        if(reservado) {
+          html += `<td class='dia-reservado'>${dia}</td>`;
+        } else if (!esPasado && disponible) {
+          html += `<td onclick="seleccionarDia(${ano},${mes},${dia})">${dia}</td>`;
         } else {
-          html += `<td class="dia-disponible" onclick="seleccionarDia(${ano}, ${mes}, ${dia})">${dia}</td>`;
+          html += `<td class='dia-no-disponible'>${dia}</td>`;
         }
         if (fecha.getDay() === 0) html += '</tr><tr>';
         fecha.setDate(dia + 1);
@@ -139,7 +138,7 @@
       return div;
     }
 
-
+   
     function seleccionarDia(ano, mes, dia) {
       const seleccion = new Date(ano, mes, dia);
       seleccion.setHours(0, 0, 0, 0);
@@ -291,5 +290,4 @@
     });
   </script>
 </body>
-
 </html>

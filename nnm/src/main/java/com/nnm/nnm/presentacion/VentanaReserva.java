@@ -48,7 +48,8 @@ public class VentanaReserva {
     private GestorUsuarios gestorUsuarios;
 
     @GetMapping("/crear/{idInmueble}")
-    public String mostrarFormularioReserva(@PathVariable Long idInmueble, Model model) {
+    public String mostrarFormularioReserva(@PathVariable Long idInmueble, Model model, HttpSession session) {
+        String username = (String) session.getAttribute("username");
         List<Disponibilidad> disponibilidades = gestorDisponibilidad.obtenerDisponibilidadPorInmueble(idInmueble);
         List<String> fechasDisponibles = new ArrayList<>();
         for (Disponibilidad d : disponibilidades) {
@@ -62,19 +63,22 @@ public class VentanaReserva {
         model.addAttribute("inmueble", inmueble);
         model.addAttribute("idInmueble", idInmueble);
         model.addAttribute("fechasDisponibles", fechasDisponibles);
+        model.addAttribute("username", username);
+
         return "reserva";
     }
 
     @PostMapping("/crear/{idInmueble}")
-    public String crearReserva(@RequestParam long idInmueble, @ModelAttribute Reserva reserva, Model model, HttpSession session, RedirectAttributes redirectAttrs) {
-        String usernamePropietario = (String) session.getAttribute("username");
+    public String crearReserva(@RequestParam long idInmueble, @ModelAttribute Reserva reserva, Model model,
+            HttpSession session, RedirectAttributes redirectAttrs) {
+        String username = (String) session.getAttribute("username");
 
-        if (gestorUsuarios.esPropietario(usernamePropietario)) {
+        if (gestorUsuarios.esPropietario(username) || username == null) {
             log.warn("No se encontró el username del inquilino en la sesión");
             return "redirect:/login";
         } else {
             Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(idInmueble);
-            reserva.setInquilino(gestorUsuarios.obtenerInquilinoPorUsername(usernamePropietario));
+            reserva.setInquilino(gestorUsuarios.obtenerInquilinoPorUsername(username));
             reserva.setInmueble(inmueble);
             PoliticaCancelacion politica = gestorDisponibilidad.obtenerPoliticaCancelacion(
                     reserva.getInmueble().getId(), reserva.getFechaInicio(), reserva.getFechaFin());
@@ -94,10 +98,15 @@ public class VentanaReserva {
         }
     }
 
+    @GetMapping("/misReservas/")//Caso no haya sesión activa
+    public String misReservasSinUser() {
+        return "redirect:/login";
+    }
+
     @GetMapping("/misReservas/{username}")
     public String verMisReservas(@PathVariable String username, Model model, HttpSession session) {
-        String usernameSesion = (String) session.getAttribute("username");
-        if (usernameSesion == null || !usernameSesion.equals(username)|| gestorUsuarios.esPropietario(username)) {
+        String usernameSession = (String) session.getAttribute("username");
+        if (usernameSession == null || !usernameSession.equals(username) || gestorUsuarios.esPropietario(username)) {
             return "redirect:/login";
         }
         List<Reserva> reservas = gestorReservas.obtenerReservasPorInquilino(username);
@@ -112,14 +121,7 @@ public class VentanaReserva {
         if (username == null) {
             return "redirect:/login";
         }
-        boolean exito = gestorReservas.cancelarReserva(idReserva, username);
-        if (exito) {
-            log.info("Reserva con ID {} cancelada por el usuario {}", idReserva, username);
-            redirectAttrs.addFlashAttribute("mensajeExito", "Reserva cancelada correctamente.");
-        } else {
-            log.warn("El usuario {} no pudo cancelar la reserva con ID {}", username, idReserva);
-            redirectAttrs.addFlashAttribute("mensajeError", "No se pudo cancelar la reserva.");
-        }
+        gestorReservas.cancelarReserva(idReserva);
         return "redirect:/reserva/misReservas/" + username;
     }
 }
