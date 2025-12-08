@@ -1,8 +1,10 @@
 package com.nnm.nnm.negocio.dominio.entidades;
-import java.sql.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,33 +21,32 @@ public class Reserva {
 
     @ManyToOne//Relacion de muchas reservas a un inmueble
     @JoinColumn(name="id_inmueble", referencedColumnName = "id")
-    private Inmueble id_inmueble;
+    private Inmueble Inmueble;
 
     @ManyToOne//Relacion de muchas reservas a un usuario
     @JoinColumn(name="inquilino", referencedColumnName = "username")
     private Inquilino inquilino;
 
     @Column(name="fecha_inicio", nullable = false, unique = false)
-    private Date fecha_inicio;
+    private LocalDate fechaInicio;
     @Column(name="fecha_fin", nullable = false, unique = false)
-    private Date fecha_fin;
-    @Column(name="politica_cancelacion", nullable = false, unique = false)
-    private String politica_cancelacion;
+    private LocalDate fechaFin;
+    @Enumerated(EnumType.STRING)
+    @Column(name= "politica_cancelacion", nullable = false)
+    private PoliticaCancelacion politicaCancelacion;
 
-    
 
     public Reserva() {
     }
     
-    public Reserva(Long idReserva, Inmueble id_inmueble, Inquilino inquilino, Date fecha_inicio,
-        Date fecha_fin, String politica_cancelacion) {
+    public Reserva(Long idReserva, Inmueble Inmueble, Inquilino inquilino, LocalDate fechaInicio,
+        LocalDate fechaFin, PoliticaCancelacion politicaCancelacion) {
         this.id = idReserva;
-        this.id_inmueble = id_inmueble;
+        this.Inmueble = Inmueble;
         this.inquilino = inquilino;
-        this.fecha_inicio = fecha_inicio;
-        this.fecha_fin = fecha_fin;
-        this.politica_cancelacion = politica_cancelacion;
-
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.politicaCancelacion = politicaCancelacion;
     }
 
     public void setId(Long idReserva) {
@@ -54,11 +55,11 @@ public class Reserva {
     public Long getId() {
         return id;
     }
-    public Inmueble getId_inmueble() {
-        return id_inmueble;
+    public Inmueble getInmueble() {
+        return Inmueble;
     }
-    public void setId_inmueble(Inmueble id_inmueble) {
-        this.id_inmueble = id_inmueble;
+    public void setIdInmueble(Inmueble Inmueble) {
+        this.Inmueble = Inmueble;
     }
     public Inquilino getInquilino() {
         return inquilino;
@@ -66,23 +67,33 @@ public class Reserva {
     public void setInquilino(Inquilino inquilino) {
         this.inquilino = inquilino;
     }
-    public Date getFecha_inicio() {
-        return fecha_inicio;
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
     }
-    public void setFecha_inicio(Date fecha_inicio) {
-        this.fecha_inicio = fecha_inicio;
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
-    public Date getFecha_fin() {
-        return fecha_fin;
+    public LocalDate getFechaFin() {
+        return fechaFin;
     }
 
-    public void setFecha_fin(Date fecha_fin) {
-        this.fecha_fin = fecha_fin;
+    public void setFechaFin(LocalDate fechaFin) {
+        this.fechaFin = fechaFin;
     }
-    public String getPolitica_cancelacion() {
-        return politica_cancelacion;
+    public PoliticaCancelacion getPoliticaCancelacion() {
+        return politicaCancelacion;
     }
-    public void setPolitica_cancelacion(String politica_cancelacion) {
-        this.politica_cancelacion = politica_cancelacion;
+    public void setPoliticaCancelacion(PoliticaCancelacion politicaCancelacion) {
+        this.politicaCancelacion = politicaCancelacion;
+    }
+
+    public boolean isPagado(){
+        // Lógica para determinar si la reserva ha sido pagada
+        return false; // Valor por defecto, implementar según la lógica de negocio
+    }
+
+    public boolean isActiva(){
+        // Lógica para determinar si la reserva está activa
+        return false; // Valor por defecto, implementar según la lógica de negocio
     }
 }
