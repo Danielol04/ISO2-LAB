@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nnm.nnm.negocio.dominio.entidades.EstadoReserva;
 import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
 import com.nnm.nnm.negocio.dominio.entidades.Reserva;
 import com.nnm.nnm.negocio.dominio.entidades.SolicitudReserva;
@@ -22,7 +23,7 @@ public class GestorSolicitudes {
     @Autowired
     private GestorInmuebles gestorInmuebles;
     @Autowired
-    private GestorDisponibilidad gestorDisponibilidad;
+    private GestorReservas gestorReservas;
 
     public SolicitudReserva obtenerSolicitudPorId(long idSolicitud) {
         return solicitudReservaDAO.findById(idSolicitud);
@@ -42,12 +43,7 @@ public class GestorSolicitudes {
         SolicitudReserva solicitud = solicitudReservaDAO.findById(idSolicitud);
         if (solicitud != null) {
             Reserva reserva = solicitud.getReserva();
-            reserva.setAceptada(true);
-            gestorDisponibilidad.actualizarDisponibilidadPorReserva(
-                reserva.getInmueble().getId(),
-                reserva.getFechaInicio(),
-                reserva.getFechaFin()
-            );
+            reserva.setEstado(EstadoReserva.ACEPTADA);
             reservaDAO.save(reserva);
             solicitudReservaDAO.delete(solicitud);
         }
@@ -57,6 +53,8 @@ public class GestorSolicitudes {
         SolicitudReserva solicitud = solicitudReservaDAO.findById(idSolicitud);
         if (solicitud != null) {
             solicitudReservaDAO.delete(solicitud);
+            Reserva reserva = solicitud.getReserva();
+            gestorReservas.cancelarReserva(reserva.getId());
         }
     }
 

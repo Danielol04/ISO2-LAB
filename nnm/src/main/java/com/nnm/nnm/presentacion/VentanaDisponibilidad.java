@@ -21,6 +21,7 @@ import com.nnm.nnm.negocio.controller.GestorDisponibilidad;
 import com.nnm.nnm.negocio.controller.GestorInmuebles;
 import com.nnm.nnm.negocio.controller.GestorReservas;
 import com.nnm.nnm.negocio.dominio.entidades.Disponibilidad;
+import com.nnm.nnm.negocio.dominio.entidades.EstadoReserva;
 import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
 import com.nnm.nnm.negocio.dominio.entidades.PoliticaCancelacion;
 import com.nnm.nnm.negocio.dominio.entidades.Reserva;
@@ -63,9 +64,14 @@ public class VentanaDisponibilidad {
             }
         }
         List<String> fechasReservadas = new ArrayList<>();
-        for(Reserva r: reservas){
-            LocalDate fecha = r.getFechaInicio();
-            while (!fecha.isAfter(r.getFechaFin())) {
+        for(Reserva reserva: reservas){
+            reserva.getEstado(); // Actualiza el estado de la reserva
+            if (reserva.getEstado().equals(EstadoReserva.EXPIRADA) || !reserva.getPagado()) {
+                gestorReservas.cancelarReserva(reserva.getId());
+                continue;
+            }
+            LocalDate fecha = reserva.getFechaInicio();
+            while (!fecha.isAfter(reserva.getFechaFin())) {
                 fechasReservadas.add(fecha.toString());
                 fecha = fecha.plusDays(1);
             }

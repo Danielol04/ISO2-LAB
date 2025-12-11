@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const precioNocheElem = detalle.querySelector("#mdPrecioNoche");
     const totalElem = detalle.querySelector("#mdPrecioTotal");
     const btnCancelar = detalle.querySelector("#btnCancelarReserva");
+    const estadoElem = detalle.querySelector("#mdEstado");
+    const politicaElem = detalle.querySelector("#mdPolitica");
 
     items.forEach(item => {
         item.addEventListener("click", () => {
@@ -45,6 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
             propietarioElem.textContent = item.dataset.propietario;
             precioNocheElem.textContent = item.dataset.precionoche;
             totalElem.textContent = item.dataset.preciototal;
+            estadoElem.textContent = item.dataset.estado;
+            politicaElem.textContent = item.dataset.politica;
 
             placeholder.style.display = "none";
             detalleInfo.classList.remove("hidden");

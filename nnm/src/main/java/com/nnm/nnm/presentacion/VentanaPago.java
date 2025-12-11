@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.nnm.nnm.negocio.controller.GestorDisponibilidad;
 import com.nnm.nnm.negocio.controller.GestorInmuebles;
 import com.nnm.nnm.negocio.controller.GestorReservas;
 import com.nnm.nnm.negocio.controller.GestorSolicitudes;
+import com.nnm.nnm.negocio.dominio.entidades.EstadoReserva;
 import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
 import com.nnm.nnm.negocio.dominio.entidades.Reserva;
 
@@ -29,9 +29,6 @@ public class VentanaPago {
 
     @Autowired
     private GestorSolicitudes gestorSolicitudes;
-
-    @Autowired
-    private GestorDisponibilidad gestorDisponibilidad;
 
     @Autowired
     private GestorInmuebles gestorInmuebles;
@@ -53,18 +50,14 @@ public class VentanaPago {
         Long idInmueble= reserva.getInmueble().getId();
         Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(idInmueble);
         reserva.setInmueble(inmueble);
-        Boolean reservaDirecta = gestorDisponibilidad.obtenerTipoReserva(idInmueble,reserva.getFechaInicio(), reserva.getFechaFin());
+        Boolean reservaDirecta = reserva.getReservaDirecta();
         if (reservaDirecta) {
+            reserva.setEstado(EstadoReserva.ACEPTADA);
             log.info("Reserva directa para la reserva ID: " + idReserva);
-            gestorDisponibilidad.actualizarDisponibilidadPorReserva(
-                    reserva.getInmueble().getId(),
-                    reserva.getFechaInicio(),
-                    reserva.getFechaFin());
-            redirectAttrs.addFlashAttribute("mensajePopup", "Reserva realizada con éxito");
         } else {
+            reserva.setEstado(EstadoReserva.PAGADA);
             log.info("Solicitud de reserva para la reserva ID: " + idReserva);
             gestorSolicitudes.generarSolicitudReserva(reserva,precioTotal);
-            redirectAttrs.addFlashAttribute("mensajePopup","Solicitud de reserva enviada, espere la respuesta por parte del propietario");
         }
         log.info("Marcando la reserva como pagada para la reserva ID: " + idReserva);
         reserva.setPagado(true);

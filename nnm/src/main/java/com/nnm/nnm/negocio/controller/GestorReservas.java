@@ -13,8 +13,6 @@ public class GestorReservas {
 
     @Autowired
     private ReservaDAO reservaDAO;
-    @Autowired
-    private GestorDisponibilidad gestorDisponibilidad;
 
     public boolean existeReserva(long id) {
         return reservaDAO.findById(id) != null;
@@ -36,7 +34,6 @@ public class GestorReservas {
 
     public void cancelarReserva(long idReserva) {
         Reserva reserva = reservaDAO.findById(idReserva);
-        gestorDisponibilidad.restaurarDisponibilidadPorReserva(reserva);
         reservaDAO.delete(reserva);
     }
 
@@ -52,4 +49,7 @@ public class GestorReservas {
         return reservaDAO.findReservasByInquilinoUsername(usernameInquilino);
     }
 
+    public List<Reserva> obtenerReservasPorPropietario(String usernameInquilino) {
+        return reservaDAO.findReservasByPropietarioUsername(usernameInquilino);
+    }
 }

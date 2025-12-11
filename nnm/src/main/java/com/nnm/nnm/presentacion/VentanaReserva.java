@@ -23,6 +23,7 @@ import com.nnm.nnm.negocio.controller.GestorInmuebles;
 import com.nnm.nnm.negocio.controller.GestorReservas;
 import com.nnm.nnm.negocio.controller.GestorUsuarios;
 import com.nnm.nnm.negocio.dominio.entidades.Disponibilidad;
+import com.nnm.nnm.negocio.dominio.entidades.EstadoReserva;
 import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
 import com.nnm.nnm.negocio.dominio.entidades.PoliticaCancelacion;
 import com.nnm.nnm.negocio.dominio.entidades.Reserva;
@@ -51,6 +52,7 @@ public class VentanaReserva {
     public String mostrarFormularioReserva(@PathVariable Long idInmueble, Model model, HttpSession session) {
         String username = (String) session.getAttribute("username");
         List<Disponibilidad> disponibilidades = gestorDisponibilidad.obtenerDisponibilidadPorInmueble(idInmueble);
+        List<Reserva> reservas = gestorReservas.obtenerReservasPorInmueble(idInmueble);
         List<String> fechasDisponibles = new ArrayList<>();
         for (Disponibilidad d : disponibilidades) {
             LocalDate fecha = d.getFechaInicio();
@@ -59,10 +61,24 @@ public class VentanaReserva {
                 fecha = fecha.plusDays(1);
             }
         }
+        List<String> fechasReservadas = new ArrayList<>();
+        for (Reserva reserva : reservas) {
+            reserva.getEstado(); // Actualiza el estado de la reserva
+            if (reserva.getEstado().equals(EstadoReserva.EXPIRADA) || !reserva.getPagado()) {
+                gestorReservas.cancelarReserva(reserva.getId());
+                continue;
+            }
+            LocalDate fecha = reserva.getFechaInicio();
+            while (!fecha.isAfter(reserva.getFechaFin())) {
+                fechasReservadas.add(fecha.toString());
+                fecha = fecha.plusDays(1);
+            }
+        }
         Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(idInmueble);
         model.addAttribute("inmueble", inmueble);
         model.addAttribute("idInmueble", idInmueble);
         model.addAttribute("fechasDisponibles", fechasDisponibles);
+        model.addAttribute("fechasReservadas", fechasReservadas);
         model.addAttribute("username", username);
 
         return "reserva";
@@ -80,15 +96,30 @@ public class VentanaReserva {
             Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(idInmueble);
             reserva.setInquilino(gestorUsuarios.obtenerInquilinoPorUsername(username));
             reserva.setInmueble(inmueble);
-            PoliticaCancelacion politica = gestorDisponibilidad.obtenerPoliticaCancelacion(
-                    reserva.getInmueble().getId(), reserva.getFechaInicio(), reserva.getFechaFin());
+            List<Disponibilidad> afectadas = gestorDisponibilidad.obtenerDisponibilidadParaReserva(idInmueble,
+                    reserva.getFechaInicio(), reserva.getFechaFin());
+            PoliticaCancelacion politica;
+            boolean reservaDirecta;
+            log.info("Disponibilidades afectadas:");
+            for (Disponibilidad d : afectadas) {
+                log.info(" - " + d.getFechaInicio() + " a " + d.getFechaFin() + " | Politica: "+ d.getPoliticaCancelacion());
+            }
+            log.info("Total afectadas = " + afectadas.size());
+            if (afectadas.size() == 1) {
+                politica = afectadas.get(0).getPoliticaCancelacion();
+                reserva.setPoliticaCancelacion(politica);
+                reservaDirecta = afectadas.get(0).getReservaDirecta();
+            } else {
+                politica = gestorDisponibilidad.calcularPoliticaCancelacion(afectadas);
+                reservaDirecta = gestorDisponibilidad.calcularTipoReserva(afectadas);
+            }
             reserva.setPoliticaCancelacion(politica);
+            reserva.setReservaDirecta(reservaDirecta);
             gestorReservas.registrarReserva(reserva);
             long noches = ChronoUnit.DAYS.between(reserva.getFechaInicio(), reserva.getFechaFin());
             double precioTotal = noches * reserva.getInmueble().getPrecio_noche();
             redirectAttrs.addFlashAttribute("precioTotal", precioTotal);
             model.addAttribute("idReserva", reserva.getId());
-            // model.addAttribute("Inquilino", reserva.getInquilino());
             if (reserva.getId() == null) {
                 log.error("Error al crear la reserva, ID nulo");
                 return "redirect:/reserva/crear/" + idInmueble;
@@ -98,18 +129,33 @@ public class VentanaReserva {
         }
     }
 
-    @GetMapping("/misReservas/")//Caso no haya sesión activa
-    public String misReservasSinUser() {
-        return "redirect:/login";
-    }
-
     @GetMapping("/misReservas/{username}")
     public String verMisReservas(@PathVariable String username, Model model, HttpSession session) {
         String usernameSession = (String) session.getAttribute("username");
-        if (usernameSession == null || !usernameSession.equals(username) || gestorUsuarios.esPropietario(username)) {
+        if (usernameSession == null || !usernameSession.equals(username)) {
             return "redirect:/login";
         }
-        List<Reserva> reservas = gestorReservas.obtenerReservasPorInquilino(username);
+        List<Reserva> reservas = new ArrayList<>();
+        boolean cancelacionesRealizadas = false;
+        if (gestorUsuarios.esInquilino(username)) {
+            reservas = gestorReservas.obtenerReservasPorInquilino(username);
+        } else {
+            reservas = gestorReservas.obtenerReservasPorPropietario(username);
+        }
+        for (Reserva reserva : reservas) {
+            reserva.getEstado(); // Actualiza el estado de la reserva
+            if (reserva.getEstado().equals(EstadoReserva.EXPIRADA) || !reserva.getPagado()) {
+                gestorReservas.cancelarReserva(reserva.getId());
+                cancelacionesRealizadas = true;
+            }
+        }
+        if (cancelacionesRealizadas) {
+            if (gestorUsuarios.esInquilino(username)) {
+                reservas = gestorReservas.obtenerReservasPorInquilino(username);
+            } else {
+                reservas = gestorReservas.obtenerReservasPorPropietario(username);
+            }
+        }
         model.addAttribute("reservas", reservas);
         model.addAttribute("username", username);
         return "misReservas";

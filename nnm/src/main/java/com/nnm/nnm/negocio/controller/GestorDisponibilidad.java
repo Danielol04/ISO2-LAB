@@ -1,6 +1,7 @@
 package com.nnm.nnm.negocio.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.nnm.nnm.negocio.dominio.entidades.Disponibilidad;
 import com.nnm.nnm.negocio.dominio.entidades.PoliticaCancelacion;
-import com.nnm.nnm.negocio.dominio.entidades.Reserva;
 import com.nnm.nnm.persistencia.DisponibilidadDAO;
 
 @Service
@@ -56,35 +56,6 @@ public class GestorDisponibilidad {
 
     }
 
-    public void actualizarDisponibilidadPorReserva(long idInmueble, LocalDate reservaInicio, LocalDate reservaFin) {
-        // Buscar disponibilidades que se solapen con la reserva
-        Disponibilidad d = disponibilidadDAO.findDisponibilidadparaReserva(idInmueble, reservaInicio, reservaFin);
-        // Borrar la disponibilidad original
-        disponibilidadDAO.delete(d);
-
-        // Crear disponibilidad antes de la reserva
-        if (reservaInicio.isAfter(d.getFechaInicio())) {
-            Disponibilidad antes = new Disponibilidad();
-            antes.setInmueble(d.getInmueble());
-            antes.setFechaInicio(d.getFechaInicio());
-            antes.setFechaFin(reservaInicio.minusDays(1));
-            antes.setReservaDirecta(d.getReservaDirecta());
-            antes.setPoliticaCancelacion(d.getPoliticaCancelacion());
-            disponibilidadDAO.save(antes);
-        }
-
-        // Crear disponibilidad después de la reserva
-        if (reservaFin.isBefore(d.getFechaFin())) {
-            Disponibilidad despues = new Disponibilidad();
-            despues.setInmueble(d.getInmueble());
-            despues.setFechaInicio(reservaFin.plusDays(1));
-            despues.setFechaFin(d.getFechaFin());
-            despues.setReservaDirecta(d.getReservaDirecta());
-            despues.setPoliticaCancelacion(d.getPoliticaCancelacion());
-            disponibilidadDAO.save(despues);
-        }
-    }
-
     public List<Disponibilidad> obtenerDisponibilidadPorInmueble(long id_inmueble) {
         return disponibilidadDAO.findByInmueble(id_inmueble);
     }
@@ -109,25 +80,47 @@ public class GestorDisponibilidad {
         return null;
     }
 
-    public PoliticaCancelacion obtenerPoliticaCancelacion(long idInmueble, LocalDate fechaInicio, LocalDate fechaFin) {
+    public List<Disponibilidad> obtenerDisponibilidadParaReserva(long idInmueble, LocalDate fechaInicio,
+            LocalDate fechaFin) {
         List<Disponibilidad> disponibles = obtenerDisponibilidadPorInmueble(idInmueble);
+        List<Disponibilidad> afectadas = new ArrayList<>();
 
         for (Disponibilidad d : disponibles) {
             // Comprobamos si la disponibilidad cubre todo el rango solicitado
-            if (!fechaInicio.isBefore(d.getFechaInicio()) && !fechaFin.isAfter(d.getFechaFin())) {
-                return d.getPoliticaCancelacion();
+            if (!fechaFin.isBefore(d.getFechaInicio()) && !fechaInicio.isAfter(d.getFechaFin())) {
+                afectadas.add(d);
             }
         }
-        return null;
+        return afectadas;
     }
 
-    public void restaurarDisponibilidadPorReserva(Reserva reserva) {
-        Disponibilidad disponibilidad = new Disponibilidad();
-        disponibilidad.setInmueble(reserva.getInmueble());
-        disponibilidad.setFechaInicio(reserva.getFechaInicio());
-        disponibilidad.setFechaFin(reserva.getFechaFin());
-        disponibilidad.setPoliticaCancelacion(reserva.getPoliticaCancelacion());
-        disponibilidad.setReservaDirecta(reserva.getReservaDirecta());
-        registrarDisponibilidad(disponibilidad);
+    public Boolean calcularTipoReserva(List<Disponibilidad> afectadas) {
+        for (Disponibilidad d : afectadas) {
+            if (!d.getReservaDirecta()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public PoliticaCancelacion calcularPoliticaCancelacion(List<Disponibilidad> afectadas) {
+        PoliticaCancelacion politicaMasRestrictiva = PoliticaCancelacion.REEMBOLSABLE;
+        int peorPolitica=1;
+        for (Disponibilidad d : afectadas) {
+            int prioridad= prioridadPolitica(d.getPoliticaCancelacion());
+            if(prioridad>peorPolitica){
+                peorPolitica=prioridad;
+                politicaMasRestrictiva=d.getPoliticaCancelacion();
+            }
+        }
+        return politicaMasRestrictiva;
+    }
+
+    private int prioridadPolitica(PoliticaCancelacion p) {
+        return switch (p) {
+            case REEMBOLSABLE -> 1;
+            case REEMBOLSABLE_50_PER -> 2;
+            case NO_REEMBOLSABLE -> 3; // peor
+        };
     }
 }

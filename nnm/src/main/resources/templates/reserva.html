@@ -94,7 +94,7 @@
   <!-- FECHAS DISPONIBLES DESDE BACKEND -->
   <script th:inline="javascript">
     const fechasDisponibles = /*[[${fechasDisponibles}]]*/[];
-    console.log("Fechas desde backend:", fechasDisponibles);
+    const fechasReservadas =/*[[${fechasReservadas}]]*/[];
   </script>
 
   <!-- LÓGICA CALENDARIO -->
@@ -171,10 +171,15 @@
 
         const disponible = fechasDisponibles.includes(str);
         const esPasado = fechaCelda < hoy;
+        const reservado = fechasReservadas.includes(str);
 
-        if (!esPasado && disponible) {
+        if (reservado) {
+          html += `<td class="dia-no-disponible">${dia}</td>`;
+        }
+        else if (!esPasado && disponible) {
           html += `<td onclick="seleccionarDia(${ano},${mes},${dia})">${dia}</td>`;
-        } else {
+        }
+        else {
           html += `<td class="dia-no-disponible">${dia}</td>`;
         }
 

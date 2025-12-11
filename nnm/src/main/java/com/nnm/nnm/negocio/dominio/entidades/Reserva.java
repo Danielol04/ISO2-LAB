@@ -1,6 +1,7 @@
 package com.nnm.nnm.negocio.dominio.entidades;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,10 +37,8 @@ public class Reserva {
     @Enumerated(EnumType.STRING)
     @Column(name = "politica_cancelacion", nullable = false)
     private PoliticaCancelacion politicaCancelacion;
-    @Column(name = "aceptada", nullable = false)
-    private boolean aceptada = false;
-    /*@Column(name = "estado", nullable = false)
-    private EstadoReserva estado= EstadoReserva.NOPAGADA;*/
+    @Column(name = "estado", nullable = false)
+    private EstadoReserva estado= EstadoReserva.NOPAGADA;
 
     @Column(name ="pagada", nullable = false)
     private boolean pagada = false;
@@ -78,16 +77,11 @@ public class Reserva {
     public PoliticaCancelacion getPoliticaCancelacion() {return politicaCancelacion;}
     public void setPoliticaCancelacion(PoliticaCancelacion politicaCancelacion) {this.politicaCancelacion = politicaCancelacion;}
 
-    /*public EstadoReserva getEstado() {
-        if (reserva.fechaFin.isBefore(LocalDate.now()) {
-            this.estado = EstadoReserva.EXPIRADA;
-        }
+    public EstadoReserva getEstado() {
+        if (fechaFin.isBefore(LocalDate.now())) {setEstado(EstadoReserva.EXPIRADA);}
         return estado;
     }
-    public void setEstado(EstadoReserva estado) { this.estado = estado;}*/
-
-    public boolean getAceptada() {return aceptada;}
-    public void setAceptada(boolean aceptada) {this.aceptada = aceptada;}
+    public void setEstado(EstadoReserva estado) { this.estado = estado;}
 
     public boolean getPagado() {return pagada;}
     public void setPagado(boolean pagada) {this.pagada = pagada;}
@@ -100,7 +94,5 @@ public class Reserva {
         return noches * inmueble.getPrecio_noche();
     }
 
-    public long getNoches() {
-        return java.time.temporal.ChronoUnit.DAYS.between(fechaInicio, fechaFin);
-    }
+    public long getNoches() {return ChronoUnit.DAYS.between(fechaInicio, fechaFin);}
 }

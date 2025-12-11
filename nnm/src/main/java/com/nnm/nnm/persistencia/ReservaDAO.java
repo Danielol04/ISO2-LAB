@@ -22,4 +22,9 @@ public class ReservaDAO extends EntidadDAO<Reserva, Long> {
         String jpql = "SELECT r FROM Reserva r WHERE r.inquilino.username = :username";
         return gestorBD.selectList(jpql, Reserva.class, "username", username);
     }
+
+    public List<Reserva> findReservasByPropietarioUsername(String username) {
+        String jpql = "SELECT r FROM Reserva r WHERE r.inmueble.propietario.username = :username";
+        return gestorBD.selectList(jpql, Reserva.class, "username", username);
+    }
 }

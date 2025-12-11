@@ -23,7 +23,7 @@
 
             <nav class="menu">
                 <a th:href="@{/home}" class="menu-item">Inicio</a>
-                <a th:href="@{/reservas/{username}(username=${username})}" class="menu-item activo">Mis Reservas</a>
+                <a th:href="@{/reserva/misReservas/{username}(username=${username})}" class="menu-item activo">Mis Reservas</a>
             </nav>
         </aside>
 
@@ -49,9 +49,11 @@
                             th:data-fechafin="${#temporals.format(reserva.fechaFin, 'yyyy-MM-dd')}"
                             th:data-precionoche="${reserva.inmueble.precio_noche}" th:data-noches="${reserva.noches}"
                             th:data-preciototal="${reserva.precioTotal}"
+                            th:data-estado="${reserva.estado}"
+                            th:data-politica="${reserva.politicaCancelacion}"
                             th:data-img="@{/inmuebles/{id}/foto(id=${reserva.inmueble.id})}">
 
-                            <div class="contenido-solicitud">
+                            <div class="contenido-reserva">
                                 <div class="info-principal">
                                     <strong class="titulo" th:text="${reserva.inmueble.titulo}">Título</strong><br>
                                     <span class="inquilino">
@@ -86,9 +88,10 @@
                         </div>
 
                         <h3>Detalles de la reserva</h3>
-                        <p><strong>Entrada:</strong> <span id="mdFechaInicio"></span></p>
-                        <p><strong>Salida:</strong> <span id="mdFechaFin"></span></p>
-                        <p><strong>Noches:</strong> <span id="mdNoches"></span></p>
+                        <p><strong>Entrada: </strong> <span id="mdFechaInicio"></span></p>
+                        <p><strong>Salida: </strong> <span id="mdFechaFin"></span></p>
+                        <p><strong>Noches: </strong> <span id="mdNoches"></span></p>
+                        <p><strong>Politica de cancelacion: </strong><span id="mdPolitica"></span></p>
 
                         <h3>Propietario</h3>
                         <p id="mdPropietario"></p>
@@ -100,6 +103,8 @@
                         </ul>
                         <!-- Botón de cancelar -->
                         <button id="btnCancelarReserva" style="display:none;">Cancelar Reserva</button>
+
+                        <h3 id="mdEstado"></h3>
                     </div>
                 </div>
             </section>
