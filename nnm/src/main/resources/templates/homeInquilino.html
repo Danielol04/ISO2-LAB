@@ -17,13 +17,12 @@
 
     <!-- Botones a la derecha -->
     <div class="navbar-right">
-        <a href="/lista-deseos" class="btn-deseos">Lista de deseos</a>
-
+        <a th:href="@{/lista-deseos}" class="btn-deseos">Lista de deseos</a>
         <div class="dropdown">
         <button class="btn-circular">☰</button>
         <div class="dropdown-content">
-            <a href="/datos-personales">Datos personales</a>
-            <a href="/logout">Cerrar sesión</a>
+            <a th:href="@{/datos-personales}">Datos personales</a>
+            <a th:href="@{/logout}">Cerrar sesión</a>
         </div>
         </div>
     </div>
@@ -75,45 +74,48 @@
       <h2 class="titulo-seccion">Propiedades Disponibles</h2>
 
       <div th:if="${#lists.isEmpty(propiedades)}" class="mensaje-vacio">
-        <p>No hay propiedades disponibles</p>
+        <p>No tienes propiedades registradas</p>
       </div>
 
       <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
-        <div th:each="inmueble : ${propiedades}" class="propiedad">
-          <img th:src="@{${inmueble.imagen}}" alt="Imagen del inmueble">
-          <h3 th:text="${inmueble.titulo}">Título</h3>
+        <div th:each="inmueble : ${propiedades}" class="tarjeta-propiedad">
+          
+          <div class="imagen-contenedor">
+            <img th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}" alt="Imagen del inmueble">
 
-          <p>
-            <img src="/images/ubicacion.png" alt="Ubicación" class="icono">
-            <span th:text="${inmueble.localidad}">Localidad</span>,
-            <span th:text="${inmueble.provincia}">Provincia</span>
-          </p>
+            <!-- Botón del corazón -->
+              <button class="fav-btn" th:data-id="${inmueble.id}">♡</button>
+          </div>
 
-          <p>
-            <strong>Dirección:</strong>
-            <span th:text="${inmueble.direccion}">Dirección</span>
-          </p>
+          <div class="contenido-propiedad">
+            <h3 class="titulo-propiedad" th:text="${inmueble.titulo}">Título</h3>
 
-          <p>
-            <img src="/images/habiitacion.png" alt="Habitaciones" class="icono">
-            <span th:text="${inmueble.numero_habitaciones}"></span> habitaciones
-          </p>
-          <p>
-            <img src="/images/baños.png" alt="Baños" class="icono">
-            <span th:text="${inmueble.numero_baños}"></span> baños
-          </p>
+            <p class="ubicacion">
+              <img src="/images/ubicacion.png" alt="Ubicación" class="icono">
+              <span th:text="${inmueble.localidad}"></span>,
+              <span th:text="${inmueble.provincia}"></span>,
+              <span th:text="${inmueble.codigo_postal}"></span>
+            </p>
 
-          <p>
-            <strong>Precio:</strong>
-            <span class="precio-noche" th:text="${#numbers.formatDecimal(inmueble.precio_noche, 2, 'POINT')}"></span>€/noche
-          </p>
+            <p>
+              <strong>Dirección:</strong>
+              <span th:text="${inmueble.direccion}">Dirección</span>
+            </p>
+
+            <p class="caracteristicas">
+              <img src="/images/habitacion.png" alt="Habitaciones" class="icono">
+              <span th:text="${inmueble.habitaciones}">habitaciones</span>
+            </p>
+            <p> 
+              <img src="/images/baños.png" alt="Baños" class="icono">
+              <span th:text="${inmueble.numero_banos}">baños</span> 
+            </p>
+
+            <p class="precio">
+              <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
+            </p>
 
           <div class="botones-propiedad">
-            <form th:action="@{/favoritos/agregar}" method="post">
-              <input type="hidden" th:name="id" th:value="${inmueble}">
-              <button type="submit" class="btn-favorito">Guardar</button>
-            </form>
-
             <form th:action="@{/reservar}" method="get">
               <input type="hidden" th:name="id" th:value="${inmueble}">
               <button type="submit" class="btn-reservar">Reservar</button>
@@ -123,5 +125,6 @@
       </div>
     </section>
   </main>
+  <script src="/js/favoritos.js"></script>
 </body>
 </html>

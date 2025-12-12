@@ -12,13 +12,16 @@ public class GestorReservas {
     @Autowired
     private ReservaDAO reservaDAO;
 
-    // Verifica si una reserva existe en la base de datos por su ID
+    @Autowired
+    private GestorDisponibilidad gestorDisponibilidad;
+
     public boolean existeReserva(long id) {
         return reservaDAO.findById(id) != null;
     }
 
-    // Registra una nueva reserva
+    // Registra una nueva reserva y actualiza la disponibilidad correspondiente
     public void registrarReserva(Reserva reserva) {
+        gestorDisponibilidad.actualizarDisponibilidadPorReserva(reserva.getInmueble().getId(), reserva.getFechaInicio(), reserva.getFechaFin());
         reservaDAO.save(reserva);
     }
 
@@ -28,7 +31,6 @@ public class GestorReservas {
         return reserva != null && reserva.getInquilino().getUsername().equals(usernameUsuario);
     }
 
-    // método para cancelar una reserva
     public boolean cancelarReserva(long idReserva, String usernameUsuario) {
         Reserva reserva = reservaDAO.findById(idReserva);
         if(reserva != null && reserva.getInquilino().getUsername().equals(usernameUsuario)){

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reservar Inmueble</title>
+  <link rel="stylesheet" th:href="@{/css/navbar.css}">
+  <link rel="stylesheet" th:href="@{/css/home.css}">
+  <link rel="stylesheet" th:href="@{/css/reserva.css}">
+  <script th:src="@{/js/calendario.js}"></script>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a th:href="@{/home}" class="logo-link">
+      <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
+    </a>
+    <div class="navbar-right">
+        <a th:href="@{/lista-deseos}" class="btn-deseos">Lista de deseos</a>
+        <div class="dropdown">
+          <button class="btn-circular">☰</button>
+          <div class="dropdown-content">
+            <a th:href="@{/datos-personales}">Datos personales</a>
+            <a th:href="@{/logout}">Cerrar sesión</a>
+          </div>
+        </div>
+    </div>
+  </nav>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="main-content reserva-page">
+    <div class="reserva-container">
+      
+      <!-- IZQUIERDA: Datos del inmueble -->
+      <div class="tarjeta-propiedad">
+        <div class="imagen-contenedor">
+          <img th:src="@{/inmuebles/{id}/foto(id=${reserva.Inmueble.id})}" alt="Foto inmueble">
+        </div>
+        <div class="contenido-propiedad">
+          <h3 th:text="${reserva.Inmueble.titulo}">Título</h3>
+          <p th:text="${reserva.Inmueble.direccion}">Dirección</p>
+          <p>Habitaciones: <span th:text="${reserva.Inmueble.habitaciones}"></span></p>
+          <p>Baños: <span th:text="${reserva.Inmueble.numero_banos}"></span></p>
+          <p>Precio/noche: <span th:text="${#numbers.formatCurrency(reserva.Inmueble.precio_noche)}"></span></p>
+        </div>
+      </div>
+
+      <!-- DERECHA: Formulario reserva -->
+      <div class="reserva-form">
+        <form th:action="@{/reserva/crearReserva}" th:object="${reserva}" method="post">
+          <input type="hidden" th:field="*{Inmueble.id}" />
+
+          <!-- Calendario -->
+          <div id="calendar"></div>
+          <input type="hidden" th:field="*{fechaInicio}" id="fechaInicio">
+          <input type="hidden" th:field="*{fechaFin}" id="fechaFin">
+
+          <!-- Política de cancelación -->
+          <label for="politicaCancelacion">Política de cancelación:</label>
+          <select th:field="*{politicaCancelacion}" id="politicaCancelacion">
+            <option th:each="p : ${T(com.nnm.nnm.negocio.dominio.entidades.PoliticaCancelacion).values()}"
+                    th:value="${p}" th:text="${p}">
+            </option>
+          </select>
+
+          <!-- Recuadro coste total -->
+          <div class="coste-total">
+            <p>Total: <span id="totalCoste">0 €</span></p>
+          </div>
+
+          <button type="submit" class="btn-reservar">Continuar al pago</button>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // Ejemplo con Flatpickr o cualquier librería de rango de fechas
+    document.addEventListener("DOMContentLoaded", function(){
+      const fechaInicioInput = document.getElementById('fechaInicio');
+      const fechaFinInput = document.getElementById('fechaFin');
+      const totalCoste = document.getElementById('totalCoste');
+      const precioNoche = /*[[${reserva.Inmueble.precio_noche}]]*/ 100; // placeholder, Thymeleaf lo reemplaza
+
+      // Inicializar librería de calendario con selección de rango
+      flatpickr("#calendar", {
+        mode: "range",
+        onChange: function(selectedDates) {
+          if (selectedDates.length === 2) {
+            const inicio = selectedDates[0];
+            const fin = selectedDates[1];
+            fechaInicioInput.value = inicio.toISOString().slice(0,10);
+            fechaFinInput.value = fin.toISOString().slice(0,10);
+            // Calcular coste total
+            const dias = Math.round((fin - inicio)/(1000*60*60*24)) + 1;
+            totalCoste.textContent = dias * precioNoche + " €";
+          }
+        }
+      });
+    });
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</body>
+</html>

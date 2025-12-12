@@ -65,7 +65,7 @@ public class Inmueble {
 
     public Inmueble(long id, Propietario username_propietario,String titulo, String tipo_inmueble,
                     String direccion, String localidad, String provincia,
-                    String codigo_postal, double precio_noche, int numero_banos, int habitaciones/* ,byte[] foto*/) {
+                    String codigo_postal, double precio_noche, int numero_banos, int habitaciones ,byte[] foto) {
         this.id = id;
         this.propietario = username_propietario;
         this.titulo = titulo;
@@ -91,7 +91,7 @@ public class Inmueble {
     public double getPrecio_noche() { return precio_noche; }
     public int getNumero_banos() { return numero_banos; }
     public int getHabitaciones() { return habitaciones; }
-    //public byte[] getFoto() { return foto; }
+    public byte[] getFoto() { return foto; }
     public List<Disponibilidad> getDisponibilidades() { return disponibilidades; }
 
     public void setUsername_propietario(Propietario username_propietario) { this.propietario = username_propietario; }
