@@ -1,6 +1,7 @@
 package com.nnm.nnm.presentacion;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,7 +11,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.nnm.nnm.negocio.controller.GestorPagos;
+import com.nnm.nnm.negocio.controller.GestorReservas;
 import com.nnm.nnm.negocio.controller.GestorSolicitudes;
+import com.nnm.nnm.negocio.dominio.entidades.Pago;
+import com.nnm.nnm.negocio.dominio.entidades.Reserva;
 import com.nnm.nnm.negocio.dominio.entidades.SolicitudReserva;
 
 import jakarta.servlet.http.HttpSession;
@@ -18,9 +23,13 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/solicitudes")
 public class VentanaSolicitudes {
-
+    Logger log = Logger.getLogger(VentanaSolicitudes.class.getName());
     @Autowired
     private GestorSolicitudes gestorSolicitudes;
+    @Autowired
+    private GestorPagos gestorPagos;
+    @Autowired
+    private GestorReservas gestorReservas;
 
     @GetMapping("/confirmacionReserva/{username}")
     public String verSolicitudes(@PathVariable String username, Model model, HttpSession session) {
@@ -45,7 +54,16 @@ public class VentanaSolicitudes {
 
     @PostMapping("/solicitud/{id}/rechazar")
     public String rechazarSolicitud(@PathVariable Long id, HttpSession session) {
-        gestorSolicitudes.rechazarSolicitudReserva(id);
+        SolicitudReserva solicitud = gestorSolicitudes.obtenerSolicitudPorId(id);
+        log.info("Rechazando solicitud con ID: " + id);
+        gestorSolicitudes.borrarSolicitudReserva(solicitud);
+        Reserva reserva = solicitud.getReserva();
+        Pago pago = gestorPagos.obtenerPagoPorReserva(reserva.getId());
+        log.info("Borrando pago asociado con ID: " + pago.getId());
+        gestorPagos.borrarPago(pago);
+        log.info("Cancelando reserva asociada con ID: " + reserva.getId());
+        gestorReservas.cancelarReserva(reserva.getId());
+
         String username = (String) session.getAttribute("username");
         return "redirect:/solicitudes/confirmacionReserva/" + username;
     }

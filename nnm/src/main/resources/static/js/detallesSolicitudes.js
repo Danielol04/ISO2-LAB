@@ -1,12 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const items = document.querySelectorAll(".solicitud-item");
-    const detalle = document.querySelector(".detalle-solicitud");
+    // CAMBIO IMPORTANTE: Buscamos .bandeja-item y .detalle-bandeja
+    const items = document.querySelectorAll(".bandeja-item");
+    const detalle = document.querySelector(".detalle-bandeja");
 
     if (!detalle) return;
 
-    // Elementos dentro del detalle
     const placeholder = detalle.querySelector(".mensaje-placeholder");
     const detalleInfo = detalle.querySelector("#detalleInfo");
+    
+    // Selectores internos (estos siguen igual porque usan ID)
     const tituloElem = detalle.querySelector("#mdTitulo");
     const imgElem = detalle.querySelector("#mdImg");
     const fechaInicioElem = detalle.querySelector("#mdFechaInicio");
@@ -18,17 +20,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     items.forEach(item => {
         item.addEventListener("click", () => {
-            // Quitar clase seleccionada de otros items
             items.forEach(i => i.classList.remove("seleccionada"));
             item.classList.add("seleccionada");
 
-            // Actualizar contenido del detalle
             if (tituloElem) tituloElem.textContent = item.dataset.titulo;
-
+            
             if (imgElem) {
                 imgElem.src = item.dataset.img;
-
-                // Aseguramos que la imagen esté dentro de un contenedor con ratio
                 if (!imgElem.parentElement.classList.contains("img-container")) {
                     const wrapper = document.createElement("div");
                     wrapper.classList.add("img-container");
@@ -44,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (precioNocheElem) precioNocheElem.textContent = item.dataset.precionoche;
             if (totalElem) totalElem.textContent = item.dataset.preciototal;
 
-            // Mostrar detalle y ocultar placeholder
             if (placeholder) placeholder.style.display = "none";
             if (detalleInfo) detalleInfo.classList.remove("hidden");
 
@@ -60,7 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 formRechazar.style.display = "block";
                 formRechazar.action = `/solicitudes/solicitud/${item.dataset.id}/rechazar`;
             }
-
         });
     });
 });

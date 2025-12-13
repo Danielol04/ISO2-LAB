@@ -110,11 +110,6 @@ public class VentanaReserva {
                     reserva.getFechaInicio(), reserva.getFechaFin());
             PoliticaCancelacion politica;
             boolean reservaDirecta;
-            log.info("Disponibilidades afectadas:");
-            for (Disponibilidad d : afectadas) {
-                log.info(" - " + d.getFechaInicio() + " a " + d.getFechaFin() + " | Politica: "+ d.getPoliticaCancelacion());
-            }
-            log.info("Total afectadas = " + afectadas.size());
             if (afectadas.size() == 1) {
                 politica = afectadas.get(0).getPoliticaCancelacion();
                 reserva.setPoliticaCancelacion(politica);
@@ -180,10 +175,12 @@ public class VentanaReserva {
             return "redirect:/login";
         }
         Pago pago = gestorPago.obtenerPagoPorReserva(idReserva);
+        log.info("Cancelando pago asociado a la reserva ID: " + idReserva);
         gestorPago.borrarPago(pago);
         SolicitudReserva solicitud = gestorSolicitudes.obtenerSolicitudporIDreserva(idReserva);
         if(solicitud != null){
-            gestorSolicitudes.rechazarSolicitudReserva(solicitud.getId());
+            log.info("Cancelando solicitud asociada a la reserva ID: " + idReserva);
+            gestorSolicitudes.borrarSolicitudReserva(solicitud);
         }
         gestorReservas.cancelarReserva(idReserva);
         return "redirect:/reserva/misReservas/" + username;

@@ -13,8 +13,9 @@ function cerrarPopupCancelar() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const items = document.querySelectorAll(".solicitud-item");
-    const detalle = document.querySelector(".detalle-solicitud");
+    // CAMBIO IMPORTANTE: Buscamos .bandeja-item y .detalle-bandeja
+    const items = document.querySelectorAll(".bandeja-item");
+    const detalle = document.querySelector(".detalle-bandeja");
 
     if (!detalle) return;
 
@@ -30,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const precioNocheElem = detalle.querySelector("#mdPrecioNoche");
     const totalElem = detalle.querySelector("#mdPrecioTotal");
     const btnCancelar = detalle.querySelector("#btnCancelarReserva");
-    const estadoElem = detalle.querySelector("#mdEstado");
     const politicaElem = detalle.querySelector("#mdPolitica");
 
     items.forEach(item => {
@@ -38,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
             items.forEach(i => i.classList.remove("seleccionada"));
             item.classList.add("seleccionada");
 
-            // Actualizar detalle
             tituloElem.textContent = item.dataset.titulo;
             imgElem.src = item.dataset.img;
             fechaInicioElem.textContent = item.dataset.fechainicio;
@@ -47,13 +46,11 @@ document.addEventListener("DOMContentLoaded", () => {
             propietarioElem.textContent = item.dataset.propietario;
             precioNocheElem.textContent = item.dataset.precionoche;
             totalElem.textContent = item.dataset.preciototal;
-            estadoElem.textContent = item.dataset.estado;
             politicaElem.textContent = item.dataset.politica;
 
             placeholder.style.display = "none";
             detalleInfo.classList.remove("hidden");
 
-            // Comprobar si se puede cancelar
             const hoy = new Date();
             hoy.setHours(0, 0, 0, 0);
             const fechaInicio = new Date(item.dataset.fechainicio);

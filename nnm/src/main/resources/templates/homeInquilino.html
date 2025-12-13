@@ -117,11 +117,6 @@
             </p>
 
             <div class="botones-propiedad">
-              <form th:action="@{/favoritos/agregar}" method="post">
-                <input type="hidden" th:name="id" th:value="${inmueble.id}">
-                <button type="submit" class="btn-favorito">Guardar</button>
-              </form>
-
               <form th:action="@{'/reserva/crear/' + ${inmueble.id}}" method="get">
                 <input type="hidden" name="idInmueble" th:value="${inmueble.id}">
                 <button type="submit" class="btn-reservar">Reservar</button>
