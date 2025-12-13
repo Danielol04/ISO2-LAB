@@ -29,6 +29,10 @@ public class GestorSolicitudes {
         return solicitudReservaDAO.findById(idSolicitud);
     }
 
+    public SolicitudReserva obtenerSolicitudporIDreserva(long idReserva){
+        return solicitudReservaDAO.findByIdReserva(idReserva);
+    }
+
     public void generarSolicitudReserva(Reserva reserva, Double precioTotal) {
         SolicitudReserva solicitud = new SolicitudReserva();
         solicitud.setReserva(reserva);

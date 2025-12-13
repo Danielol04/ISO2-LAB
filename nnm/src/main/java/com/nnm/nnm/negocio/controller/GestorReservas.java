@@ -18,8 +18,7 @@ public class GestorReservas {
         return reservaDAO.findById(id) != null;
     }
 
-    public void registrarReserva(Reserva reserva) { 
-        gestorDisponibilidad.actualizarDisponibilidadPorReserva(reserva.getInmueble().getId(), reserva.getFechaInicio(), reserva.getFechaFin());
+    public void registrarReserva(Reserva reserva) {
         reservaDAO.save(reserva);
     }
 

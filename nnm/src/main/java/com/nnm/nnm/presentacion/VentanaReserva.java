@@ -22,6 +22,7 @@ import com.nnm.nnm.negocio.controller.GestorDisponibilidad;
 import com.nnm.nnm.negocio.controller.GestorInmuebles;
 import com.nnm.nnm.negocio.controller.GestorPagos;
 import com.nnm.nnm.negocio.controller.GestorReservas;
+import com.nnm.nnm.negocio.controller.GestorSolicitudes;
 import com.nnm.nnm.negocio.controller.GestorUsuarios;
 import com.nnm.nnm.negocio.dominio.entidades.Disponibilidad;
 import com.nnm.nnm.negocio.dominio.entidades.EstadoReserva;
@@ -29,6 +30,7 @@ import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
 import com.nnm.nnm.negocio.dominio.entidades.Pago;
 import com.nnm.nnm.negocio.dominio.entidades.PoliticaCancelacion;
 import com.nnm.nnm.negocio.dominio.entidades.Reserva;
+import com.nnm.nnm.negocio.dominio.entidades.SolicitudReserva;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -43,6 +45,9 @@ public class VentanaReserva {
 
     @Autowired
     private GestorDisponibilidad gestorDisponibilidad;
+
+    @Autowired
+    private GestorSolicitudes gestorSolicitudes;
 
     @Autowired
     private GestorPagos gestorPago;
@@ -176,6 +181,10 @@ public class VentanaReserva {
         }
         Pago pago = gestorPago.obtenerPagoPorReserva(idReserva);
         gestorPago.borrarPago(pago);
+        SolicitudReserva solicitud = gestorSolicitudes.obtenerSolicitudporIDreserva(idReserva);
+        if(solicitud != null){
+            gestorSolicitudes.rechazarSolicitudReserva(solicitud.getId());
+        }
         gestorReservas.cancelarReserva(idReserva);
         return "redirect:/reserva/misReservas/" + username;
     }
