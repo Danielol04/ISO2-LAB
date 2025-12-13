@@ -18,12 +18,13 @@
                 <div class="usuario-nombre">
                     <span th:text="${username}">Nombre Usuario</span>
                 </div>
-                <p class="rol">Inquilino</p>
+                <p class="rol" th:text="${rol}">Rol Usuario</p>            
             </div>
 
             <nav class="menu">
                 <a th:href="@{/home}" class="menu-item">Inicio</a>
-                <a th:href="@{/reserva/misReservas/{username}(username=${username})}" class="menu-item activo">Mis Reservas</a>
+                <a th:href="@{/reserva/misReservas/{username}(username=${username})}" class="menu-item activo">Reservas</a>
+                <a th:href="@{/solicitudes/confirmacionReserva/{username}(username=${username})}" class="menu-item"th:if="${esPropietario}">Solicitudes</a>          
             </nav>
         </aside>
 

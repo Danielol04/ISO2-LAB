@@ -20,11 +20,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nnm.nnm.negocio.controller.GestorDisponibilidad;
 import com.nnm.nnm.negocio.controller.GestorInmuebles;
+import com.nnm.nnm.negocio.controller.GestorPagos;
 import com.nnm.nnm.negocio.controller.GestorReservas;
 import com.nnm.nnm.negocio.controller.GestorUsuarios;
 import com.nnm.nnm.negocio.dominio.entidades.Disponibilidad;
 import com.nnm.nnm.negocio.dominio.entidades.EstadoReserva;
 import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
+import com.nnm.nnm.negocio.dominio.entidades.Pago;
 import com.nnm.nnm.negocio.dominio.entidades.PoliticaCancelacion;
 import com.nnm.nnm.negocio.dominio.entidades.Reserva;
 
@@ -41,6 +43,9 @@ public class VentanaReserva {
 
     @Autowired
     private GestorDisponibilidad gestorDisponibilidad;
+
+    @Autowired
+    private GestorPagos gestorPago;
 
     @Autowired
     private GestorInmuebles gestorInmuebles;
@@ -137,10 +142,11 @@ public class VentanaReserva {
         }
         List<Reserva> reservas = new ArrayList<>();
         boolean cancelacionesRealizadas = false;
-        if (gestorUsuarios.esInquilino(username)) {
-            reservas = gestorReservas.obtenerReservasPorInquilino(username);
-        } else {
+        boolean esPropietario = gestorUsuarios.esPropietario(username);
+        if (esPropietario) {
             reservas = gestorReservas.obtenerReservasPorPropietario(username);
+        } else {
+            reservas = gestorReservas.obtenerReservasPorInquilino(username);
         }
         for (Reserva reserva : reservas) {
             reserva.getEstado(); // Actualiza el estado de la reserva
@@ -156,6 +162,7 @@ public class VentanaReserva {
                 reservas = gestorReservas.obtenerReservasPorPropietario(username);
             }
         }
+        model.addAttribute("esPropietario",esPropietario);
         model.addAttribute("reservas", reservas);
         model.addAttribute("username", username);
         return "misReservas";
@@ -167,6 +174,8 @@ public class VentanaReserva {
         if (username == null) {
             return "redirect:/login";
         }
+        Pago pago = gestorPago.obtenerPagoPorReserva(idReserva);
+        gestorPago.borrarPago(pago);
         gestorReservas.cancelarReserva(idReserva);
         return "redirect:/reserva/misReservas/" + username;
     }

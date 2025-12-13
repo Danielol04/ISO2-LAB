@@ -31,7 +31,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/disponibilidades")
 public class VentanaDisponibilidad {
-    private static final Logger log = LoggerFactory.getLogger(VentanaDisponibilidad.class);
+     private static final Logger log = LoggerFactory.getLogger(VentanaDisponibilidad.class);
 
     @Autowired
     private GestorDisponibilidad gestorDisponibilidad;
@@ -41,7 +41,7 @@ public class VentanaDisponibilidad {
     private GestorReservas gestorReservas;
 
     @GetMapping("/crear/{id}")
-    public String mostrarFormulario(@PathVariable long id, Model model, HttpSession session) {
+    public String mostrarFormulario(@PathVariable long id ,Model model, HttpSession session) {
         String username = (String) session.getAttribute("username");
         if (username == null) {
             return "redirect:/login";
@@ -87,35 +87,34 @@ public class VentanaDisponibilidad {
     @PostMapping("/crear/{id}")
     public String crearDisponibilidad(@PathVariable long id, @ModelAttribute("disponibilidad") Disponibilidad disponibilidad, HttpSession session, Model model) {
 
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
-            return "redirect:/login";
-        }
-        String mensajeError = "";
-        Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(id);
-        if (inmueble == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inmueble no encontrado");
-        }
-
-        if (!inmueble.getPropietario().getUsername().equals(username)) {
+            String username = (String) session.getAttribute("username");
+            if (username == null) {
+                return "redirect:/login";
+            }
+            String mensajeError = "";
+            Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(id);
+            if (inmueble == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inmueble no encontrado");
+            }
+            
+            if (!inmueble.getPropietario().getUsername().equals(username)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permiso");
-        }
+            }
 
-        disponibilidad.setInmueble(inmueble);
+            disponibilidad.setInmueble(inmueble);
 
-        if (disponibilidad.getFechaFin().isBefore(disponibilidad.getFechaInicio())) {
-            mensajeError = "La fecha de fin no puede ser anterior a la fecha de inicio.";
-            errorDisponibilidad(model, mensajeError, id);
-            // redirectAttributes.addFlashAttribute("error", mensajeError);
-            return "redirect:/disponibilidades/crear/" + id;
-        }
-
-        // Validar que no haya solapamiento con otras disponibilidades del mismo
-        // inmueble
-        List<Disponibilidad> disponibilidadesExistentes = gestorDisponibilidad.obtenerDisponibilidadPorInmueble(id);
-        boolean solapa = disponibilidadesExistentes.stream()
-                .anyMatch(d -> !d.getFechaFin().isBefore(disponibilidad.getFechaInicio()) &&
-                        !d.getFechaInicio().isAfter(disponibilidad.getFechaFin()));
+            if(disponibilidad.getFechaFin().isBefore(disponibilidad.getFechaInicio())) {
+                mensajeError = "La fecha de fin no puede ser anterior a la fecha de inicio.";
+                errorDisponibilidad(model, mensajeError, id);
+                return "Disponibilidad";
+            }
+            
+            // Validar que no haya solapamiento con otras disponibilidades del mismo inmueble
+            List<Disponibilidad> disponibilidadesExistentes = gestorDisponibilidad.obtenerDisponibilidadPorInmueble(id);
+            boolean solapa = disponibilidadesExistentes.stream().anyMatch(d ->
+                !d.getFechaFin().isBefore(disponibilidad.getFechaInicio()) &&
+                !d.getFechaInicio().isAfter(disponibilidad.getFechaFin())
+            );
 
         if (solapa) {
             mensajeError = "Las fechas se solapan con una disponibilidad existente.";
@@ -152,10 +151,11 @@ public class VentanaDisponibilidad {
         return "redirect:/disponibilidades/crear/" + idInmueble;
     }
 
-    private void errorDisponibilidad(Model model, String mensajeError, long id) {
-        model.addAttribute("error", mensajeError);
-        model.addAttribute("politicas", PoliticaCancelacion.values());
-        model.addAttribute("idInmueble", id);
-    }
+        private void errorDisponibilidad(Model model, String mensajeError, long id) {
+            model.addAttribute("error", mensajeError);
+            model.addAttribute("politicas", PoliticaCancelacion.values());
+            model.addAttribute("idInmueble", id);
+        }
+    
 
 }

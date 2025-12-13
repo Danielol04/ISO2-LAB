@@ -63,13 +63,16 @@
       <h2 class="titulo-seccion">Propiedades Disponibles</h2>
 
       <div th:if="${#lists.isEmpty(propiedades)}" class="mensaje-vacio">
-        <p>No hay propiedades disponibles</p>
+        <p>No tienes propiedades registradas</p>
       </div>
 
       <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
         <div th:each="inmueble : ${propiedades}" class="tarjeta-propiedad">
           <div class="imagen-contenedor">
             <img th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}" alt="Imagen del inmueble">
+
+            <!-- Botón del corazón -->
+              <button class="fav-btn" th:data-id="${inmueble.id}">♡</button>
           </div>
 
           <div class="contenido-propiedad">
@@ -115,6 +118,7 @@
         </div>
     </section>
   </main>
+    <script src="/js/favoritos.js"></script>
 </body>
 
 </html>

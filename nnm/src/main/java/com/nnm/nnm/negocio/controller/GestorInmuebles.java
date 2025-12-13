@@ -13,6 +13,8 @@ public class GestorInmuebles {
 
     @Autowired
     private InmuebleDAO inmuebleDAO;
+    @Autowired
+    private GestorUsuarios gestorUsuarios;
 
     public void registrarInmueble(Inmueble inmueble) {
         inmuebleDAO.save(inmueble);
@@ -28,4 +30,14 @@ public class GestorInmuebles {
     public List<Inmueble> listarInmueblesPorPropietario(String propietarioUsername) {
         return inmuebleDAO.findByPropietario(propietarioUsername);
     }
+    public boolean eliminarInmueble(Long id, String usernamePropietario) {
+        Inmueble inmueble = inmuebleDAO.findById(id);
+        boolean existe = gestorUsuarios.esPropietario(usernamePropietario);
+        if (inmueble != null && existe && inmueble.getPropietario().getUsername().equals(usernamePropietario)) {
+            inmuebleDAO.delete(inmueble);
+            return true;
+        }
+        return false;
+    }
 }
+    
