@@ -299,3 +299,18 @@ td:hover:not(.dia-no-disponible):not(.dia-seleccionado) {
     width: 100%;
   }
 }
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+.error-visual {
+  background-color: #ffcccc !important;
+  color: #cc0000 !important;            
+  animation: shake 0.4s ease-in-out;
+  border: 1px solid red !important;
+}

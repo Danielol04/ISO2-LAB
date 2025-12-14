@@ -177,9 +177,8 @@
           html += `<td class="dia-no-disponible">${dia}</td>`;
         }
         else if (!esPasado && disponible) {
-          html += `<td onclick="seleccionarDia(${ano},${mes},${dia})">${dia}</td>`;
-        }
-        else {
+          html += `<td onclick="seleccionarDia(${ano},${mes},${dia}, this)">${dia}</td>`;        
+        }else {
           html += `<td class="dia-no-disponible">${dia}</td>`;
         }
 
@@ -194,7 +193,7 @@
       return div;
     }
 
-    function seleccionarDia(ano, mes, dia) {
+    function seleccionarDia(ano, mes, dia, celdaPulsada) {
       const seleccion = new Date(ano, mes, dia);
 
       if (!fechaInicio || fechaFin) {
@@ -203,8 +202,23 @@
       } else {
         fechaFin = seleccion < fechaInicio ? fechaInicio : seleccion;
         if (seleccion < fechaInicio) fechaInicio = seleccion;
-      }
+        
+        let iterador= new Date(fechaInicio);
+        let hayConflicto= false;
 
+        while(iterador<=fechaFin){
+          if(fechasReservadas.includes(formatear(iterador))||!fechasDisponibles.includes(formatear(iterador))){
+            hayConflicto= true;
+            break;
+          }
+          iterador.setDate(iterador.getDate() + 1);
+        }
+      
+        if(hayConflicto){
+          animarError(celdaPulsada);
+          fechaFin= null;
+        }
+      }
       actualizarVisuales();
 
       if (fechaInicio && fechaFin) {
@@ -213,6 +227,14 @@
         calendario.style.display = 'none';
       }
     }
+
+    function animarError(celdaPulsada) {
+    if (!celdaPulsada) return;
+    
+    celdaPulsada.classList.add('error-visual');
+
+    setTimeout(() => {celdaPulsada.classList.remove('error-visual');}, 500);
+}
 
     function formatear(f) {
       return `${f.getFullYear()}-${String(f.getMonth() + 1).padStart(2, '0')}-${String(f.getDate()).padStart(2, '0')}`;

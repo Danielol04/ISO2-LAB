@@ -239,23 +239,6 @@
       idAEliminar = null;
     }
   </script>
-  <div id="popupError" class="popup-overlay" style="display:none;">
-    <div class="popup popup-error">
-      <p id="mensajeError"></p>
-    </div>
-  </div>
-  <script>
-    function mostrarPopupError(mensaje) {
-      const popup = document.getElementById("popupError");
-      document.getElementById("mensajeError").textContent = mensaje;
-
-      popup.style.display = "flex";
-
-      setTimeout(() => {
-        popup.style.display = "none";
-      }, 3000);
-    }
-  </script>
 
   <!-- POPUP ERROR -->
   <div id="popupError" class="popup-overlay" style="display:none;">
