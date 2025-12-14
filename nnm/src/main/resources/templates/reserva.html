@@ -200,8 +200,15 @@
         fechaInicio = seleccion;
         fechaFin = null;
       } else {
-        fechaFin = seleccion < fechaInicio ? fechaInicio : seleccion;
-        if (seleccion < fechaInicio) fechaInicio = seleccion;
+        if(seleccion < fechaInicio) {
+          fechaFin = fechaInicio;
+          fechaInicio = seleccion;
+        } else if(seleccion.getTime() === fechaInicio.getTime()) {
+          fechaFin=null;
+        }
+        else {
+          fechaFin = seleccion;
+        }
         
         let iterador= new Date(fechaInicio);
         let hayConflicto= false;

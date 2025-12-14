@@ -150,11 +150,8 @@
         if (seleccion < fechaInicio) {
           fechaFin = fechaInicio;
           fechaInicio = seleccion;
-        } else if (seleccion > fechaInicio) {
-          fechaFin = seleccion;
         } else {
-          fechaInicio = seleccion;
-          fechaFin = null;
+          fechaFin = seleccion;
         }
       }
 
