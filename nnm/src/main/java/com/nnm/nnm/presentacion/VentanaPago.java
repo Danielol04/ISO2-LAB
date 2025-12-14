@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nnm.nnm.negocio.controller.GestorInmuebles;
+import com.nnm.nnm.negocio.controller.GestorPagos;
 import com.nnm.nnm.negocio.controller.GestorReservas;
 import com.nnm.nnm.negocio.controller.GestorSolicitudes;
 import com.nnm.nnm.negocio.dominio.entidades.EstadoReserva;
@@ -30,6 +31,9 @@ public class VentanaPago {
 
     @Autowired
     private GestorReservas gestorReservas;
+
+    @Autowired
+    private GestorPagos gestorPagos;
 
     @Autowired
     private GestorSolicitudes gestorSolicitudes;
@@ -67,9 +71,9 @@ public class VentanaPago {
         reserva.setPagado(true);
         gestorReservas.actualizarReserva(reserva);
         Pago nuevoPago = new Pago();
-        nuevoPago.setReserva(reserva);
+        nuevoPago.setReserva(idReserva);
         nuevoPago.setMetodoPago(metodoPago);
-        nuevoPago.setReferencia(UUID.randomUUID()); // Genera referencia aleatoria
+        nuevoPago.setReferencia(UUID.randomUUID());
         gestorPagos.registrarPago(nuevoPago);
         model.addAttribute("idInmueble", idInmueble);
         return "redirect:/reserva/crear/" + idInmueble;

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ventana de Pago</title>
-<link rel="stylesheet" th:href="@{/css/pago.css}">
+    <link rel="stylesheet" th:href="@{/css/pago.css}">
 </head>
 <body>
     
@@ -36,7 +36,7 @@
                                 <div class="payment-info">
                                     <span class="payment-title">Tarjeta de crédito/débito</span>
                                 </div>
-                                <input type="radio" name="metodoPago" value="TARJETA_CREDITO" checked onclick="mostrarFormulario('TARJETA')">
+                                <input type="radio" name="metodoPago" value="TARJETA_CREDITO" checked onclick="gestionarValidaciones('TARJETA')">
                             </label>
 
                             <label class="payment-option">
@@ -46,7 +46,7 @@
                                 <div class="payment-info">
                                     <span class="payment-title" style="color: #003087; font-weight:800;">PayPal</span>
                                 </div>
-                                <input type="radio" name="metodoPago" value="PAYPAL" onclick="mostrarFormulario('PAYPAL')">
+                                <input type="radio" name="metodoPago" value="PAYPAL" onclick="gestionarValidaciones('PAYPAL')">
                             </label>
                         </div>
                     </section>
@@ -57,23 +57,23 @@
                             <div class="form-group">
                                 <label>Número de tarjeta</label>
                                 <div class="input-with-icon">
-                                    <input type="text" placeholder="0000 0000 0000 0000" maxlength="19">
+                                    <input type="text" placeholder="0000 0000 0000 0000" maxlength="19" required>
                                     <svg class="icon-input" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-col">
                                     <label>Fecha de caducidad</label>
-                                    <input type="text" placeholder="MM/AA">
+                                    <input type="text" placeholder="MM/AA" required>
                                 </div>
                                 <div class="form-col">
                                     <label>CVV</label>
-                                    <input type="password" placeholder="123">
+                                    <input type="password" placeholder="123" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Nombre del titular de la tarjeta</label>
-                                <input type="text" placeholder="Nombre Apellido">
+                                <input type="text" placeholder="Nombre Apellido" required>
                             </div>
                         </div>
                     </section>
@@ -94,7 +94,7 @@
                     
                             <div class="form-group" style="width: 100%; max-width: 400px; text-align: left;">
                                 <label style="color:#003087;">Correo Electrónico PayPal</label>
-                                <input type="text" name="emailPaypal" placeholder="ejemplo@correo.com" class="paypal-input">
+                                <input type="email" name="emailPaypal" placeholder="ejemplo@correo.com" class="paypal-input">
                             </div>
                     
                             <p class="paypal-footer-text">
@@ -119,7 +119,7 @@
                                     <label>Código Postal</label>
                                     <input type="text" th:value="${reserva.inmueble.codigo_postal}" readonly class="input-readonly">
                                 </div>
-        </div>
+                            </div>
                         </div>
                     </section>
                 </div>
@@ -131,7 +131,7 @@
                         <div class="summary-row">
                             <span class="text-muted">Estancia (<span th:text="${reserva.noches}"></span> noches)</span>
                             <span class="font-medium" th:text="${reserva.precioTotal} + ' €'"></span>
-        </div>
+                        </div>
                         <div class="summary-row">
                             <span class="text-muted">Impuestos</span>
                             <span class="font-medium">Incluidos</span>

@@ -21,16 +21,16 @@ public class DisponibilidadDAO extends EntidadDAO<Disponibilidad, Long> {
     }
 
     public List<Disponibilidad> encontrarAdyacentes(long idInmueble,PoliticaCancelacion politicaCancelacion,boolean reservaDirecta, LocalDate fechaInicio, LocalDate fechaFin) {
-        LocalDate fechaInicioAdj = fechaFin.plusDays(1);
-        LocalDate fechaFinAdj = fechaInicio.minusDays(1);
-        String jpql ="FROM Disponibilidad d WHERE d.inmueble.id = :idInmueble AND d.politicaCancelacion = :politica_cancelacion AND (d.fechaInicio = :fechaFin OR d.fechaFin = :fechaInicio)";
+        LocalDate fechaFinAdj = fechaFin.plusDays(1);
+        LocalDate fechaInicioAdj = fechaInicio.minusDays(1);
+        String jpql ="FROM Disponibilidad d WHERE d.inmueble.id = :idInmueble AND d.politicaCancelacion = :politica_cancelacion AND d.reservaDirecta = :reservaDirecta AND (d.fechaInicio = :diaDespuesFin OR d.fechaFin = :diaAntesInicio)";
     
         return gestorBD.selectList(jpql, Disponibilidad.class, 
             "idInmueble", idInmueble,
             "politica_cancelacion", politicaCancelacion,
             "reservaDirecta",reservaDirecta,
-            "fechaInicio", fechaInicioAdj,
-            "fechaFin", fechaFinAdj);
+            "diaAntesInicio", fechaInicioAdj,
+            "diaDespuesFin", fechaFinAdj);
     }
 
     public Disponibilidad findDisponibilidadparaReserva(long idInmueble, LocalDate reservaInicio, LocalDate reservaFin) {
@@ -41,21 +41,4 @@ public class DisponibilidadDAO extends EntidadDAO<Disponibilidad, Long> {
     return gestorBD.selectSingle(jpql, Disponibilidad.class, "idInmueble", idInmueble, 
         "reservaInicio", reservaInicio, "reservaFin", reservaFin);
     }
-
-    public void deleteAll(List<Disponibilidad> lista) {
-        for (Disponibilidad d : lista) {
-            gestorBD.delete(d);
-        }
-    }
-
-    public void saveAll(List<Disponibilidad> lista) {
-        for (Disponibilidad d : lista) {
-            save(d);
-        }
-    }
-    
-    
-    
-
-
 }
