@@ -65,7 +65,7 @@ public class VentanaDisponibilidad {
         }
         List<String> fechasReservadas = new ArrayList<>();
         for(Reserva reserva: reservas){
-            reserva.getEstado(); // Actualiza el estado de la reserva
+            reserva.getEstado();
             if (reserva.getEstado().equals(EstadoReserva.EXPIRADA) || !reserva.getPagado()) {
                 gestorReservas.cancelarReserva(reserva.getId());
                 continue;
@@ -91,7 +91,6 @@ public class VentanaDisponibilidad {
         if (username == null) {
             return "redirect:/login";
         }
-        String mensajeError = "";
         Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(id);
         if (inmueble == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inmueble no encontrado");
@@ -103,22 +102,10 @@ public class VentanaDisponibilidad {
 
         disponibilidad.setInmueble(inmueble);
 
-        if (disponibilidad.getFechaFin().isBefore(disponibilidad.getFechaInicio())) {
-            mensajeError = "La fecha de fin no puede ser anterior a la fecha de inicio.";
-            errorDisponibilidad(model, mensajeError, id);
-            // redirectAttributes.addFlashAttribute("error", mensajeError);
-            return "redirect:/disponibilidades/crear/" + id;
-        }
-
-        // Validar que no haya solapamiento con otras disponibilidades del mismo inmueble
         List<Disponibilidad> disponibilidadesExistentes = gestorDisponibilidad.obtenerDisponibilidadPorInmueble(id);
-        boolean solapa = disponibilidadesExistentes.stream()
-                .anyMatch(d -> !d.getFechaFin().isBefore(disponibilidad.getFechaInicio()) &&
-                        !d.getFechaInicio().isAfter(disponibilidad.getFechaFin()));
+        boolean solapa = disponibilidadesExistentes.stream().anyMatch(d -> !d.getFechaFin().isBefore(disponibilidad.getFechaInicio()) &&!d.getFechaInicio().isAfter(disponibilidad.getFechaFin()));
 
         if (solapa) {
-            mensajeError = "Las fechas se solapan con una disponibilidad existente.";
-            errorDisponibilidad(model, mensajeError, id);
             return "redirect:/disponibilidades/crear/" + id;
         }
 
@@ -149,12 +136,6 @@ public class VentanaDisponibilidad {
         gestorDisponibilidad.eliminarDisponibilidad(disponibilidad);
 
         return "redirect:/disponibilidades/crear/" + idInmueble;
-    }
-
-    private void errorDisponibilidad(Model model, String mensajeError, long id) {
-        model.addAttribute("error", mensajeError);
-        model.addAttribute("politicas", PoliticaCancelacion.values());
-        model.addAttribute("idInmueble", id);
     }
 
 }
