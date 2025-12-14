@@ -16,6 +16,7 @@
             </div>
             <nav class="menu">
                 <a th:href="@{/home}" class="menu-item">Inicio</a>
+                <a th:href="@{/lista-deseos}" class="btn-deseos">Lista de deseos</a>
                 <a th:href="@{/reserva/misReservas/{username}(username=${username})}" class="menu-item activo">Reservas</a>
                 <a th:href="@{/solicitudes/confirmacionReserva/{username}(username=${username})}" class="menu-item" th:if="${esPropietario}">Solicitudes</a>          
             </nav>
