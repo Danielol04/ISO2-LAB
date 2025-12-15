@@ -1,3 +1,4 @@
+
 package com.nnm.nnm.presentacion;
 
 import com.nnm.nnm.negocio.controller.GestorBusquedas;
@@ -12,80 +13,85 @@ public class VentanaBusqueda extends JFrame {
 
     private JTextField tfDestino, tfBanos, tfHabitaciones, tfPrecioMin, tfPrecioMax;
     private JTextArea taResultados;
-    private GestorBusquedas gestor;
 
-    public VentanaBusqueda() {
+    private GestorBusquedas gestorBusquedas;
+
+    public VentanaBusqueda(GestorBusquedas gestorBusquedas) {
         super("Búsqueda de Inmuebles");
-        gestor = new GestorBusquedas();
+        this.gestorBusquedas = gestorBusquedas;
 
         setLayout(new BorderLayout());
 
-        JPanel panelFormulario = new JPanel(new GridLayout(6, 2, 5, 5));
+        JPanel panel = new JPanel(new GridLayout(6, 2, 5, 5));
 
         tfDestino = new JTextField();
-        tfBanos = new JTextField("1");
-        tfHabitaciones = new JTextField("1");
-        tfPrecioMin = new JTextField("0");
-        tfPrecioMax = new JTextField("1000");
+        tfBanos = new JTextField();
+        tfHabitaciones = new JTextField();
+        tfPrecioMin = new JTextField();
+        tfPrecioMax = new JTextField();
 
-        panelFormulario.add(new JLabel("Destino:"));
-        panelFormulario.add(tfDestino);
-
-        panelFormulario.add(new JLabel("Baños (mínimo):"));
-        panelFormulario.add(tfBanos);
-
-        panelFormulario.add(new JLabel("Habitaciones (mínimo):"));
-        panelFormulario.add(tfHabitaciones);
-
-        panelFormulario.add(new JLabel("Precio mínimo:"));
-        panelFormulario.add(tfPrecioMin);
-
-        panelFormulario.add(new JLabel("Precio máximo:"));
-        panelFormulario.add(tfPrecioMax);
+        panel.add(new JLabel("Destino"));
+        panel.add(tfDestino);
+        panel.add(new JLabel("Baños (mínimo)"));
+        panel.add(tfBanos);
+        panel.add(new JLabel("Habitaciones (mínimo)"));
+        panel.add(tfHabitaciones);
+        panel.add(new JLabel("Precio mínimo"));
+        panel.add(tfPrecioMin);
+        panel.add(new JLabel("Precio máximo"));
+        panel.add(tfPrecioMax);
 
         JButton btnBuscar = new JButton("Buscar");
-        btnBuscar.addActionListener(this::buscarInmuebles);
-        panelFormulario.add(btnBuscar);
+        btnBuscar.addActionListener(this::buscar);
 
-        add(panelFormulario, BorderLayout.NORTH);
+        panel.add(btnBuscar);
+        add(panel, BorderLayout.NORTH);
 
-        taResultados = new JTextArea(15, 50);
+        taResultados = new JTextArea();
         taResultados.setEditable(false);
         add(new JScrollPane(taResultados), BorderLayout.CENTER);
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
-    private void buscarInmuebles(ActionEvent e) {
+    private void buscar(ActionEvent e) {
         try {
             String destino = tfDestino.getText();
-            int banos = Integer.parseInt(tfBanos.getText());
-            int habitaciones = Integer.parseInt(tfHabitaciones.getText());
-            double precioMin = Double.parseDouble(tfPrecioMin.getText());
-            double precioMax = Double.parseDouble(tfPrecioMax.getText());
+            Integer banos = tfBanos.getText().isBlank() ? null : Integer.parseInt(tfBanos.getText());
+            Integer habitaciones = tfHabitaciones.getText().isBlank() ? null : Integer.parseInt(tfHabitaciones.getText());
+            Double precioMin = tfPrecioMin.getText().isBlank() ? null : Double.parseDouble(tfPrecioMin.getText());
+            Double precioMax = tfPrecioMax.getText().isBlank() ? null : Double.parseDouble(tfPrecioMax.getText());
 
-            List<Inmueble> resultados = gestor.buscar(destino, 0, banos, habitaciones, precioMin, precioMax);
+            List<Inmueble> resultados = gestorBusquedas.buscar(
+                    destino, habitaciones, banos, precioMin, precioMax
+            );
 
             taResultados.setText("");
-            for (Inmueble i : resultados) {
-                taResultados.append(i.getTitulo() + " - " + i.getLocalidad() + ", " + i.getProvincia()
-                        + " | " + i.getHabitaciones() + " hab | " + i.getNumero_banos() + " baños | "
-                        + i.getPrecio_noche() + "€/noche\n");
-            }
 
             if (resultados.isEmpty()) {
-                taResultados.setText("No se encontraron inmuebles con esos filtros.");
+                taResultados.setText("No se encontraron inmuebles.");
+                return;
             }
+
+            for (Inmueble i : resultados) {
+                taResultados.append(
+                        i.getLocalidad() + ", " + i.getProvincia() +
+                        " | " + i.getHabitaciones() + " hab | " +
+                        i.getNumero_banos() + " baños | " +
+                        i.getPrecio_noche() + " €/noche\n"
+                );
+            }
+
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Introduce valores numéricos correctos para baños, habitaciones y precios.",
-                    "Error de entrada", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Valores numéricos incorrectos",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(VentanaBusqueda::new);
-    }
 }
+
+
+

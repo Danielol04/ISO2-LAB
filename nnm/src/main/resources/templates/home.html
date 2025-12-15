@@ -7,116 +7,98 @@
   <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
 <body>
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <a th:href="@{/home}" class="logo-link">
-      <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
-    </a>
-    <a th:href="@{/login}" class="btn-login">Iniciar sesión</a>
-  </nav>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <main class="main-content">
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a th:href="@{/home}" class="logo-link">
+    <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
+  </a>
+  <a th:href="@{/login}" class="btn-login">Iniciar sesión</a>
+</nav>
 
-    <!-- CONTENEDOR DE BÚSQUEDA -->
-    <section class="busqueda-box">
-      <h1 class="titulo-seccion">Buscar Propiedades</h1>
-      <form th:action="@{/buscar}" method="get" class="search-form">
-        <div class="form-group">
-          <label for="fechaDesde">Disponible desde:</label>
-          <input type="date" id="fechaDesde" name="fechaDesde">
-        </div>
+<main class="main-content">
 
-        <div class="form-group">
-          <label for="fechaHasta">Disponible hasta:</label>
-          <input type="date" id="fechaHasta" name="fechaHasta">
-        </div>
+<!-- BÚSQUEDA -->
+<section class="busqueda-box">
+  <h1 class="titulo-seccion">Buscar Propiedades</h1>
 
-        <div class="form-group">
-          <label for="habitaciones">Nº de habitaciones:</label>
-          <select id="habitaciones" name="habitaciones">
-            <option value="">Seleccionar</option>
-            <option value="1">1 habitación</option>
-            <option value="2">2 habitaciones</option>
-            <option value="3">3 habitaciones</option>
-            <option value="4">4 o más</option>
-          </select>
-        </div>
+  <form th:action="@{/buscar}" method="get" class="search-form">
 
-        <div class="form-group">
-          <label for="precio">Rango de precio:</label>
-          <select id="precio" name="precio">
-            <option value="">Seleccionar</option>
-            <option value="1">Menos de 100.000€</option>
-            <option value="2">100.000€ - 300.000€</option>
-            <option value="3">Más de 300.000€</option>
-          </select>
-        </div>
+    <div class="form-group">
+      <label for="destino">Destino</label>
+      <input type="text" id="destino" name="destino" placeholder="Ciudad o provincia">
+    </div>
 
-        <button type="submit" class="btn-buscar">Buscar</button>
-      </form>
-    </section>
+    <div class="form-group">
+      <label for="habitaciones">Habitaciones (mín.)</label>
+      <input type="number" id="habitaciones" name="habitaciones" min="1">
+    </div>
 
-    <!-- CONTENEDOR DE PROPIEDADES -->
-    <section class="propiedades-box">
-      <h2 class="titulo-seccion">Propiedades Disponibles</h2>
+    <div class="form-group">
+      <label for="banos">Baños (mín.)</label>
+      <input type="number" id="banos" name="banos" min="1">
+    </div>
 
-      <!-- Si no hay propiedades -->
-      <div th:if="${#lists.isEmpty(propiedades)}" class="mensaje-vacio">
-        <p>No hay propiedades que coincidan con la búsqueda</p>
+    <div class="form-group">
+      <label for="precioMin">Precio mínimo (€)</label>
+      <input type="number" id="precioMin" name="precioMin" min="0">
+    </div>
+
+    <div class="form-group">
+      <label for="precioMax">Precio máximo (€)</label>
+      <input type="number" id="precioMax" name="precioMax" min="0">
+    </div>
+
+    <!-- NUEVOS CAMPOS PARA FECHA -->
+    <div class="form-group">
+      <label for="fechaInicio">Fecha inicio</label>
+      <input type="date" id="fechaInicio" name="fechaInicio">
+    </div>
+
+    <div class="form-group">
+      <label for="fechaFin">Fecha fin</label>
+      <input type="date" id="fechaFin" name="fechaFin">
+    </div>
+
+    <button type="submit" class="btn-buscar">Buscar</button>
+  </form>
+</section>
+
+<!-- PROPIEDADES -->
+<section class="propiedades-box">
+  <h2 class="titulo-seccion">Propiedades Disponibles</h2>
+
+  <div th:if="${#lists.isEmpty(propiedades)}" class="mensaje-vacio">
+    <p>No hay propiedades que coincidan con la búsqueda</p>
+  </div>
+
+  <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
+    <div th:each="inmueble : ${propiedades}" class="tarjeta-propiedad">
+
+      <div class="imagen-contenedor">
+        <img th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}" alt="Imagen del inmueble">
       </div>
 
-      <!-- Si hay propiedades -->
-      <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
-        <div th:each="inmueble : ${propiedades}" class="tarjeta-propiedad">
-          <div class="imagen-contenedor">
-            <img th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}" alt="Imagen del inmueble">
-          </div>
+      <div class="contenido-propiedad">
+        <h3 th:text="${inmueble.titulo}">Título</h3>
 
-          <div class="contenido-propiedad">
-            <h3 class="titulo-propiedad" th:text="${inmueble.titulo}">Título</h3>
+        <p class="ubicacion">
+          <span th:text="${inmueble.localidad}"></span>,
+          <span th:text="${inmueble.provincia}"></span>
+        </p>
 
-            <p class="ubicacion">
-              <img src="/images/ubicacion.png" alt="Ubicación" class="icono">
-              <span th:text="${inmueble.localidad}"></span>,
-              <span th:text="${inmueble.provincia}"></span>,
-              <span th:text="${inmueble.codigo_postal}"></span>
-            </p>
-
-            <p>
-              <strong>Dirección:</strong>
-              <span th:text="${inmueble.direccion}">Dirección</span>
-            </p>
-
-            <p class="caracteristicas">
-              <img src="/images/habitacion.png" alt="Habitaciones" class="icono">
-              <span th:text="${inmueble.habitaciones}">habitaciones</span>
-            </p>
-            <p> 
-              <img src="/images/baños.png" alt="Baños" class="icono">
-              <span th:text="${inmueble.numero_banos}">baños</span> 
-            </p>
-
-            <p class="precio">
-              <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
-            </p>
-
-            <div class="botones-propiedad">
-              <form th:action="@{/favoritos/agregar}" method="post">
-                <input type="hidden" th:name="id" th:value="${inmueble.id}">
-                <button type="submit" class="btn-favorito">Guardar</button>
-              </form>
-
-              <form th:action="@{/reservar}" method="get">
-                <input type="hidden" th:name="id" th:value="${inmueble.id}">
-                <button type="submit" class="btn-reservar">Reservar</button>
-              </form>
-            </div>
-          </div>
-        </div>
+        <p>
+          <strong th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></strong>/noche
+        </p>
       </div>
 
-    </section>
-  </main>
+    </div>
+  </div>
+</section>
+
+</main>
 </body>
 </html>
+
+
+

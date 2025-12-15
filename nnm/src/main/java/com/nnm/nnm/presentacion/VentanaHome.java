@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.nnm.nnm.negocio.controller.GestorBusquedas;
 import com.nnm.nnm.negocio.controller.GestorInmuebles;
 import com.nnm.nnm.negocio.controller.GestorUsuarios;
 import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
@@ -25,6 +26,9 @@ public class VentanaHome {
     private GestorInmuebles gestorInmuebles;
 
     @Autowired
+    private GestorBusquedas gestorBusquedas;
+
+    @Autowired
     private GestorUsuarios gestorUsuarios;
 
     /**
@@ -37,19 +41,19 @@ public class VentanaHome {
         List<Inmueble> propiedades;
 
         if (gestorUsuarios.esPropietario(username)) {
-            log.info("Redirigiendo al propietario a su página de inicio");
-            propiedades = gestorInmuebles.listarInmueblesPorPropietario(username);
+            log.info("Home propietario");
+            propiedades = gestorInmuebles.listarPorPropietario(username);
             model.addAttribute("propiedades", propiedades);
             return "homePropietario";
 
         } else if (gestorUsuarios.esInquilino(username)) {
-            log.info("Redirigiendo al inquilino a su página de inicio");
+            log.info("Home inquilino");
             propiedades = gestorInmuebles.listarInmuebles();
             model.addAttribute("propiedades", propiedades);
             return "homeInquilino";
 
         } else {
-            log.info("Mostrando la página de inicio genérico");
+            log.info("Home público");
             propiedades = gestorInmuebles.listarInmuebles();
             model.addAttribute("propiedades", propiedades);
             return "home";
@@ -57,7 +61,7 @@ public class VentanaHome {
     }
 
     /**
-     * Búsqueda filtrada rápida = /buscar
+     * Búsqueda filtrada = /buscar
      */
     @GetMapping("/buscar")
     public String buscar(
@@ -71,24 +75,16 @@ public class VentanaHome {
 
         String username = (String) session.getAttribute("username");
 
-        // Llamamos al nuevo método compatible con GestorBD
-        List<Inmueble> resultado = gestorInmuebles.buscarFiltradoRapido(destino, habitaciones, banos);
-
-        // Filtrar precios en memoria si se han indicado
-        if (precioMin != null) {
-            resultado = resultado.stream()
-                    .filter(i -> i.getPrecio_noche() >= precioMin)
-                    .toList();
-        }
-        if (precioMax != null) {
-            resultado = resultado.stream()
-                    .filter(i -> i.getPrecio_noche() <= precioMax)
-                    .toList();
-        }
+        List<Inmueble> resultado = gestorBusquedas.buscar(
+                destino,
+                habitaciones,
+                banos,
+                precioMin,
+                precioMax
+        );
 
         model.addAttribute("propiedades", resultado);
 
-        // Redirigir según tipo de usuario
         if (gestorUsuarios.esPropietario(username)) {
             return "homePropietario";
         } else if (gestorUsuarios.esInquilino(username)) {
@@ -98,3 +94,5 @@ public class VentanaHome {
         }
     }
 }
+
+

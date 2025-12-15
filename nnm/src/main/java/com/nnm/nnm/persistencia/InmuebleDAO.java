@@ -1,13 +1,10 @@
 package com.nnm.nnm.persistencia;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
 import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
-import com.nnm.nnm.negocio.dominio.entidades.PoliticaCancelacion;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -24,58 +21,62 @@ public class InmuebleDAO {
         em.persist(inmueble);
     }
 
+    public Inmueble findById(Long id) {
+        return em.find(Inmueble.class, id);
+    }
+
     public List<Inmueble> findAll() {
         return em.createQuery("SELECT i FROM Inmueble i", Inmueble.class)
                  .getResultList();
     }
 
-    public Inmueble findById(Long id) {
-        return em.find(Inmueble.class, id);
-    }
-
     public List<Inmueble> findByPropietario(String username) {
-        return em.createQuery("SELECT i FROM Inmueble i WHERE i.propietario.username = :username", Inmueble.class)
-                 .setParameter("username", username)
-                 .getResultList();
+        return em.createQuery(
+                "SELECT i FROM Inmueble i WHERE i.propietario.username = :username",
+                Inmueble.class)
+                .setParameter("username", username)
+                .getResultList();
     }
 
-    /**
-     * Búsqueda filtrada completa (equivalente al anterior selectList).
-     */
     public List<Inmueble> buscarFiltrado(
-            String localidad,
-            String provincia,
-            String titulo,
-            LocalDate fechaInicio,
-            LocalDate fechaFin,
-            String tipo,
+            String destino,
             Integer habitaciones,
             Integer banos,
-            Boolean reservaDirecta,
-            PoliticaCancelacion politica
+            Double precioMin,
+            Double precioMax
     ) {
-        List<Inmueble> inmuebles = em.createQuery("SELECT DISTINCT i FROM Inmueble i LEFT JOIN FETCH i.disponibilidades d", Inmueble.class)
-                                     .getResultList();
 
-        return inmuebles.stream()
-                .filter(i -> localidad == null || localidad.isEmpty() ||
-                        i.getLocalidad().toLowerCase().contains(localidad.toLowerCase()))
-                .filter(i -> provincia == null || provincia.isEmpty() ||
-                        i.getProvincia().toLowerCase().contains(provincia.toLowerCase()))
-                .filter(i -> titulo == null || titulo.isEmpty() ||
-                        i.getTitulo().toLowerCase().contains(titulo.toLowerCase()))
-                .filter(i -> tipo == null || tipo.isEmpty() ||
-                        i.getTipo_inmueble().toLowerCase().contains(tipo.toLowerCase()))
-                .filter(i -> habitaciones == null || i.getHabitaciones() == habitaciones)
-                .filter(i -> banos == null || i.getNumero_banos() == banos)
-                .filter(i -> reservaDirecta == null || i.getDisponibilidades().stream()
-                        .anyMatch(d -> d.getReservaDirecta() == reservaDirecta))
-                .filter(i -> politica == null || i.getDisponibilidades().stream()
-                        .anyMatch(d -> d.getPoliticaCancelacion() == politica))
-                .filter(i -> fechaInicio == null || i.getDisponibilidades().stream()
-                        .anyMatch(d -> !d.getFechaInicio().isAfter(fechaInicio)))
-                .filter(i -> fechaFin == null || i.getDisponibilidades().stream()
-                        .anyMatch(d -> !d.getFechaFin().isBefore(fechaFin)))
-                .collect(Collectors.toList());
+        StringBuilder jpql = new StringBuilder("SELECT i FROM Inmueble i WHERE 1=1");
+
+        if (destino != null && !destino.isBlank()) {
+            jpql.append(" AND (LOWER(i.localidad) LIKE :destino OR LOWER(i.provincia) LIKE :destino)");
+        }
+        if (habitaciones != null) {
+            jpql.append(" AND i.habitaciones >= :habitaciones");
+        }
+        if (banos != null) {
+            jpql.append(" AND i.numero_banos >= :banos");
+        }
+        if (precioMin != null) {
+            jpql.append(" AND i.precio_noche >= :precioMin");
+        }
+        if (precioMax != null) {
+            jpql.append(" AND i.precio_noche <= :precioMax");
+        }
+
+        var query = em.createQuery(jpql.toString(), Inmueble.class);
+
+        if (destino != null && !destino.isBlank())
+            query.setParameter("destino", "%" + destino.toLowerCase() + "%");
+        if (habitaciones != null)
+            query.setParameter("habitaciones", habitaciones);
+        if (banos != null)
+            query.setParameter("banos", banos);
+        if (precioMin != null)
+            query.setParameter("precioMin", precioMin);
+        if (precioMax != null)
+            query.setParameter("precioMax", precioMax);
+
+        return query.getResultList();
     }
 }

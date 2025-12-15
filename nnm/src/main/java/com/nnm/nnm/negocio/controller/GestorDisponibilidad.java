@@ -20,5 +20,5 @@ public class GestorDisponibilidad {
 
     public List<Disponibilidad> obtenerDisponibilidadPorInmueble(long id_inmueble) {
         return disponibilidadDAO.findByInmueble(id_inmueble);
-    } 
+    }
 }
