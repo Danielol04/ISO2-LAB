@@ -8,8 +8,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 @Entity
 public class Pago {
     @Id
@@ -17,9 +15,8 @@ public class Pago {
     @Column(name="id", nullable = false, unique = true)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "id_reserva", referencedColumnName = "id", nullable = false)
-    private Reserva reserva;
+    @Column(name = "idReserva", nullable = false)
+    private long idReserva;
    
     @Column(name = "referencia", nullable = false)
     private UUID referencia;
@@ -31,9 +28,9 @@ public class Pago {
     public Pago() {
     }
 
-    public Pago(Long id, Reserva reserva, UUID referencia, MetodoPago metodoPago) {
+    public Pago(Long id, Long idReserva, UUID referencia, MetodoPago metodoPago) {
         this.id = id;
-        this.reserva = reserva;
+        this.idReserva = idReserva;
         this.referencia = referencia;
         this.metodoPago = metodoPago;
     }
@@ -43,11 +40,11 @@ public class Pago {
     public void setId(Long id) {
         this.id = id;
     }
-    public Reserva getReserva() {
-        return reserva;
+    public Long getReserva() {
+        return idReserva;
     }
-    public void setReserva(Reserva reserva) {
-        this.reserva = reserva;
+    public void setReserva(Long idReserva) {
+        this.idReserva = idReserva;
     }
     public UUID getReferencia() {
         return referencia;

@@ -1,0 +1,145 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to bottom, #fff8f4, #fceae4);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container {
+  background-color: #fff;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-logo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 0rem;
+}
+
+.login-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2B2D42;
+  margin-bottom: 0.2rem;
+}
+
+.login-subtitle {
+  font-size: 1rem;
+  color: #888;
+  margin-bottom: 2rem;
+}
+
+.mensaje-error {
+  color: #fd0303;
+  margin-bottom: 1rem;
+}
+
+.mensaje-ok {
+  color: green;
+  margin-bottom: 1rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  display: block;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 2.5rem;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+/* Checkbox para mostrar contraseña */
+/* Bloque para mostrar contraseña */
+.show-password {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  display: flex;          /* coloca checkbox y texto en la misma línea */
+  align-items: center;    /* centra verticalmente ambos */
+  gap: 0.4rem;            /* espacio entre el cuadrado y el texto */
+}
+
+.show-password input[type="checkbox"] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  accent-color: #FF8C42;  /* color del check al marcar */
+}
+
+.show-password label {
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn-login {
+  background-color: #FF8C42;
+  color: white;
+  border: none;
+  padding: 0.7rem;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-login:hover {
+  background-color: #e6762f;
+}
+
+.login-links {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.link {
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.destacado {
+  color: #FF8C42;
+  font-weight: bold;
+  text-decoration: none;
+}

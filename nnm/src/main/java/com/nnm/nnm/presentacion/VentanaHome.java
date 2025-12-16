@@ -31,25 +31,22 @@ public class VentanaHome {
     @Autowired
     private GestorUsuarios gestorUsuarios;
 
-    /**
-     * Home NORMAL = /home
-     */
-    @GetMapping("/home")
-    public String mostrarHome(Model model, HttpSession session) {
-
-        String username = (String) session.getAttribute("username");
-        List<Inmueble> propiedades;
-
-        if (gestorUsuarios.esPropietario(username)) {
-            log.info("Home propietario");
-            propiedades = gestorInmuebles.listarPorPropietario(username);
-            model.addAttribute("propiedades", propiedades);
-            return "homePropietario";
+        @GetMapping("/home")
+        public String mostrarHome(Model model, HttpSession session) {
+            String username = (String) session.getAttribute("username");
+            List<Inmueble> propiedades;
+            if (gestorUsuarios.esPropietario(username)) {
+                log.info("Redirigiendo al propietario a su página de inicio");
+                propiedades = gestorInmuebles.listarInmueblesPorPropietario(username);
+                model.addAttribute("propiedades", propiedades);
+                model .addAttribute("username", username);
+                return "homePropietario";
 
         } else if (gestorUsuarios.esInquilino(username)) {
             log.info("Home inquilino");
             propiedades = gestorInmuebles.listarInmuebles();
             model.addAttribute("propiedades", propiedades);
+                model .addAttribute("username", username);
             return "homeInquilino";
 
         } else {
@@ -60,9 +57,6 @@ public class VentanaHome {
         }
     }
 
-    /**
-     * Búsqueda filtrada = /buscar
-     */
     @GetMapping("/buscar")
     public String buscar(
             @RequestParam(required = false) String destino,

@@ -1,0 +1,316 @@
+/* =============================
+   ESTILOS GENERALES
+============================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f7f7f7;
+  color: #222;
+}
+
+/* =============================
+   CONTENEDOR PRINCIPAL
+============================= */
+.contenedor-detalle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding: 40px;
+  justify-content: center;
+}
+
+/* =============================
+   RECUADROS (FOTO, INFO, ETC)
+============================= */
+.box {
+  background: #fff;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 25px;
+}
+
+.foto-inmueble img {
+  width: 100%;
+  max-width: 700px;
+  border-radius: 10px;
+  display: block;
+  margin: 0 auto;
+}
+
+.placeholder {
+  width: 100%;
+  height: 350px;
+  background: #ececec;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 18px;
+}
+
+/* =============================
+   INFORMACIÓN DEL INMUEBLE
+============================= */
+.info-inmueble {
+  flex: 1;
+  max-width: 700px;
+}
+
+.info-inmueble p {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.precio {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ff7b00;
+}
+
+/* =============================
+   PANEL DE RESERVA
+============================= */
+.reserva-box {
+  background: #fff;
+  padding: 25px;
+  border-radius: 15px;
+  width: 350px;
+  height: fit-content;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.reserva-box h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* =============================
+   CAMPOS DE FECHAS
+============================= */
+.campo-fecha {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.campo-fecha label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.campo-fecha input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #000;
+  font-size: 15px;
+  cursor: pointer;
+  background-color: #fff;
+  transition: all 0.2s ease;
+}
+
+.campo-fecha input:hover {
+  border-color: #ff7b00;
+}
+
+.campo-fecha input:focus {
+  outline: none;
+  border-color: #ff7b00;
+  box-shadow: 0 0 0 2px rgba(255, 123, 0, 0.2);
+}
+
+/* =============================
+   BOTÓN RESERVAR
+============================= */
+.btn-reservar-lateral {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(to right, #ff9500, #ff5e00);
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 50px;
+  margin-top: 10px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.btn-reservar-lateral:hover {
+  transform: scale(1.03);
+  opacity: 0.9;
+}
+
+/* =============================
+   CALENDARIO MODERNO
+============================= */
+.calendario {
+  display: none;
+  background: #fff;
+  padding: 18px;
+  border-radius: 15px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+  z-index: 999;
+  width: fit-content;
+  max-width: 90vw;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Tabla del calendario */
+.calendario table {
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 14px;
+}
+
+.calendario thead {
+  color: #666;
+  font-weight: 600;
+}
+
+.calendario th {
+  padding-bottom: 8px;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.calendario td {
+  padding: 6px 9px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  min-width: 28px;
+}
+
+.calendario td:hover {
+  background: #ffe6cc;
+}
+
+/* Días seleccionados */
+
+td:hover:not(.dia-no-disponible):not(.dia-seleccionado) {
+  background-color: #dcdcdc;
+}
+
+.dia-seleccionado {
+  background-color: #FF8C42;
+  color: #fff;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+/* Rango de fechas */
+.rango {
+  background: #e0e0e0;
+  color: #000;
+  border-radius: 8px;
+}
+
+.dia-no-disponible {
+  color: #ccc;
+  cursor: default;
+}
+
+/* Días no disponibles */
+.calendario td.dia-no-disponible {
+  color: #aaaaaa;
+  cursor: not-allowed;
+  pointer-events: none;
+  background: #f5f5f5;
+}
+
+/* =============================
+   CABECERA DE MES (botones)
+============================= */
+.calendario-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.calendario-header button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #000;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  transition: background 0.2s ease;
+}
+
+.calendario-header button:hover {
+  background: #f0f0f0;
+}
+
+.calendario-header span {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+#contenedorMeses {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+#contenedorMeses table {
+  width: 260px;
+}
+
+/* Ajustes responsive */
+@media (max-width: 768px) {
+  .contenedor-detalle {
+    padding: 20px;
+  }
+
+  .reserva-box {
+    width: 100%;
+  }
+
+  #contenedorMeses {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .calendario {
+    left: 0;
+    transform: none;
+    width: 100%;
+  }
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+.error-visual {
+  background-color: #ffcccc !important;
+  color: #cc0000 !important;            
+  animation: shake 0.4s ease-in-out;
+  border: 1px solid red !important;
+}

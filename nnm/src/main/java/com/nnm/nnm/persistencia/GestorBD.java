@@ -1,10 +1,13 @@
 package com.nnm.nnm.persistencia;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.nnm.nnm.negocio.dominio.entidades.Disponibilidad;
 import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
+import com.nnm.nnm.negocio.dominio.entidades.PoliticaCancelacion;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -37,6 +40,19 @@ public class GestorBD {
             return null;
         }   
     }
+    // SELECT con tres parámetros (por ejemplo WHERE)
+    public <T> T selectSingle(String jpql, Class<T> entityClass, String param1, Object value1, String param2, Object value2, String param3, Object value3) {
+        try {
+            return entityManager.createQuery(jpql, entityClass)
+                .setParameter(param1, value1)
+                .setParameter(param2, value2)
+                .setParameter(param3, value3)
+                .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }   
+    }
+
 
     // SELECT con parámetro (por ejemplo WHERE) 
     public <T> List<T> selectList(String jpql, Class<T> entityClass, String paramName, Object value) {
@@ -48,7 +64,8 @@ public class GestorBD {
             return List.of();
         }
     
-}
+    }
+    
 
 
     // INSERT genérico
@@ -122,4 +139,19 @@ public class GestorBD {
 
             return query.getResultList();
         }
+
+    public List<Disponibilidad> selectList(String jpql, Class<Disponibilidad> class1, String string, long idInmueble,
+        String string2, PoliticaCancelacion politicaCancelacion, String string3,boolean reservaDirecta,String string4, LocalDate fechaInicio, String string5, LocalDate fechaFin) {
+        try{
+            return entityManager.createQuery(jpql, class1)
+            .setParameter(string, idInmueble)
+            .setParameter(string2, politicaCancelacion)//PoliticaCancelacion
+            .setParameter(string3, reservaDirecta)
+            .setParameter(string4, fechaInicio)
+            .setParameter(string5, fechaFin)
+            .getResultList();
+        } catch (NoResultException e) {
+            return List.of();
+        }
+    }
 }

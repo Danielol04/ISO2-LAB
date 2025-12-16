@@ -1,11 +1,16 @@
 package com.nnm.nnm.negocio.dominio.entidades;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 @Entity
@@ -20,12 +25,12 @@ public class ListaDeseos {
     @OneToOne
     @JoinColumn(name= "username_inquilino", referencedColumnName = "username", nullable = false, unique = true)
     private Inquilino inquilino;
-/*
+
     @ManyToMany
     @JoinTable(name = "lista_deseos_inmueble",joinColumns = @JoinColumn(name = "id_lista_deseos"),
     inverseJoinColumns = @JoinColumn(name = "id_inmueble"))
     private Set<Inmueble> inmuebles = new HashSet<>();
-*/
+
 
     public ListaDeseos() {}
 
@@ -40,5 +45,8 @@ public class ListaDeseos {
     }
     public void setInquilino(Inquilino inquilino) {
         this.inquilino = inquilino;
+    }
+    public Set<Inmueble> getInmuebles() {
+        return inmuebles;
     }
 }

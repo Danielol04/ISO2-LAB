@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Reservas</title>
+    <link rel="stylesheet" href="/css/bandeja.css">
+    <link rel="stylesheet" href="/css/cancelarReserva.css">
+</head>
+<body>
+    <div class="contenedor-principal">
+        <aside class="sidebar">
+            <div class="usuario-info">
+                <div class="avatar">👤</div>
+                <div class="usuario-nombre"><span th:text="${username}">Usuario</span></div>
+                <p class="rol" th:text="${rol}">Rol</p>            
+            </div>
+            <nav class="menu">
+                <a th:href="@{/home}" class="menu-item">Inicio</a>
+                <a th:href="@{/reserva/misReservas/{username}(username=${username})}" class="menu-item activo">Reservas</a>
+                <a th:href="@{/solicitudes/confirmacionReserva/{username}(username=${username})}" class="menu-item" th:if="${esPropietario}">Solicitudes</a>          
+            </nav>
+        </aside>
+
+        <main class="zona-bandeja">
+            
+            <section class="lista-bandeja">
+                <h2>Reservas (<span th:text="${reservas.size()}">0</span>)</h2>
+
+                <div th:if="${#lists.isEmpty(reservas)}" class="sin-solicitudes">
+                    <p>No tienes reservas actualmente.</p>
+                </div>
+
+                <div th:unless="${#lists.isEmpty(reservas)}">
+                    <ul class="bandeja-lista">
+                        <li class="bandeja-item" th:each="reserva : ${reservas}" 
+                            th:data-id="${reserva.id}"
+                            th:data-titulo="${reserva.inmueble.titulo}"
+                            th:data-propietario="${reserva.inmueble.propietario.username}"
+                            th:data-fechainicio="${#temporals.format(reserva.fechaInicio, 'yyyy-MM-dd')}"
+                            th:data-fechafin="${#temporals.format(reserva.fechaFin, 'yyyy-MM-dd')}"
+                            th:data-precionoche="${reserva.inmueble.precio_noche}" 
+                            th:data-noches="${reserva.noches}"
+                            th:data-preciototal="${reserva.precioTotal}"
+                            th:data-estado="${reserva.estado}"
+                            th:data-politica="${reserva.politicaCancelacion}"
+                            th:data-img="@{/inmuebles/{id}/foto(id=${reserva.inmueble.id})}">
+
+                            <div class="contenido-item">
+                                <div class="info-principal">
+                                    <strong class="titulo" th:text="${reserva.inmueble.titulo}">Título</strong><br>
+                                    <span class="inquilino">
+                                        Propietario: <span th:text="${reserva.inmueble.propietario.username}"></span>
+                                    </span><br>
+                                    <div class="fechas">
+                                        <small th:text="${#temporals.format(reserva.fechaInicio, 'dd MMM')}"></small> - 
+                                        <small th:text="${#temporals.format(reserva.fechaFin, 'dd MMM')}"></small>
+                                    </div>
+                                </div>
+                                <small th:text="${reserva.estado}" style="font-weight:bold; color:var(--color-primario);"></small>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="detalle-bandeja">
+                <div class="detalle-contenido">
+                    <p class="mensaje-placeholder">Selecciona una reserva para ver los detalles.</p>
+
+                    <div id="detalleInfo" class="hidden">
+                        <h2 id="mdTitulo"></h2>
+                        <div class="img-container">
+                            <img id="mdImg" alt="Imagen inmueble">
+                        </div>
+                        <h3>Detalles de la reserva</h3>
+                        <p><strong>Entrada: </strong> <span id="mdFechaInicio"></span></p>
+                        <p><strong>Salida: </strong> <span id="mdFechaFin"></span></p>
+                        <p><strong>Noches: </strong> <span id="mdNoches"></span></p>
+                        <p><strong>Politica: </strong><span id="mdPolitica"></span></p>
+                        <h3>Propietario</h3>
+                        <p id="mdPropietario"></p>
+                        <h3>Pago</h3>
+                        <ul>
+                            <li>Precio/noche: <span id="mdPrecioNoche"></span></li>
+                            <li>Total: <strong id="mdPrecioTotal"></strong></li>
+                        </ul>
+                        <button id="btnCancelarReserva" style="display:none;" class="btn-rojo">Cancelar Reserva</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/js/detallesReservas.js"></script>
+
+    <div id="popupCancelarReserva" class="popup-overlay" style="display:none;">
+        <div class="popup">
+            <p>¿Estás seguro de cancelar la reserva?</p>
+            <div class="popup-buttons">
+                <form id="formCancelarReserva" method="POST">
+                    <button type="submit" class="btn-rojo">Sí, cancelar</button>
+                </form>
+                <button type="button" onclick="cerrarPopupCancelar()" class="btn-rojo" style="background:#888;">No, mantener</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

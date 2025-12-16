@@ -40,8 +40,17 @@ public class Disponibilidad {
     @Column(name= "politica_cancelacion", nullable = false)
     private PoliticaCancelacion politicaCancelacion;
 
-    // Constructor vacío para JPA
+
     public Disponibilidad() {}
+
+    public Disponibilidad(Inmueble inmueble, LocalDate fechaInicio, LocalDate fechaFin, PoliticaCancelacion politicaCancelacion, boolean reservaDirecta) {
+        this.inmueble = inmueble;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.politicaCancelacion = politicaCancelacion;
+        this.reservaDirecta = reservaDirecta;
+    }
+
 
     // Getters y setters
     public long getId() { return id; }
