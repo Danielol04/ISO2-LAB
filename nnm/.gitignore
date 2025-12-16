@@ -32,11 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
-# Archivos de la base de datos Derby
-nnm/database/**
-
-# Lock y logs de Derby
-nnm/database/db.lck
-nnm/derby.log
-nnm/database/log/*.dat
-nnm/database/log/*.ctrl
+nnm/database/
+*.log
+*.lck

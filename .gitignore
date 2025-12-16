@@ -1,1 +1,5 @@
 /.metadata/
+
+nnm/database/
+*.log
+*.lck
