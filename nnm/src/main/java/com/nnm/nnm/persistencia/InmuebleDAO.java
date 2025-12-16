@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
-
 @Repository
 public class InmuebleDAO extends EntidadDAO<Inmueble, Long> {
 
@@ -21,5 +20,16 @@ public class InmuebleDAO extends EntidadDAO<Inmueble, Long> {
     public Inmueble findById(Long id) {
         String jpql = "FROM Inmueble i WHERE i.id = :id";
         return gestorBD.selectSingle(jpql, Inmueble.class, "id", id);
+    }
+
+    public List<Inmueble> buscarFiltrado(
+            String destino,
+            Integer habitaciones,
+            Integer banos,
+            Double precioMin,
+            Double precioMax
+    ) 
+    {
+        return gestorBD.buscarFiltradoInmuebles(destino, habitaciones, banos, precioMin, precioMax);
     }
 }

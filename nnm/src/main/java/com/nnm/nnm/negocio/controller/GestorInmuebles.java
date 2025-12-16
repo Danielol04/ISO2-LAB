@@ -20,15 +20,16 @@ public class GestorInmuebles {
         inmuebleDAO.save(inmueble);
     }
 
+    public Inmueble obtenerInmueblePorId(Long id) {
+        return inmuebleDAO.findById(id);
+    }
+
     public List<Inmueble> listarInmuebles() {
         return inmuebleDAO.findAll();
     }
 
-    public Inmueble obtenerInmueblePorId(long id) {
-        return inmuebleDAO.findById(id);
-    }
-    public List<Inmueble> listarInmueblesPorPropietario(String propietarioUsername) {
-        return inmuebleDAO.findByPropietario(propietarioUsername);
+    public List<Inmueble> listarPorPropietario(String username) {
+        return inmuebleDAO.findByPropietario(username);
     }
     public boolean eliminarInmueble(Long id, String usernamePropietario) {
         Inmueble inmueble = inmuebleDAO.findById(id);
@@ -38,6 +39,10 @@ public class GestorInmuebles {
             return true;
         }
         return false;
+    }
+
+    public List<Inmueble> listarInmueblesPorPropietario(String username) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
     

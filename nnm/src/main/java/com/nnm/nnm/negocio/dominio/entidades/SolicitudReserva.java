@@ -37,6 +37,7 @@ public class SolicitudReserva {
     private LocalDateTime fechaCreacion; 
 
     public SolicitudReserva() {
+        super();
     }
 
     public SolicitudReserva(Long id, Reserva reserva, Double precioTotal, long noches, LocalDateTime fechaCreacion) {

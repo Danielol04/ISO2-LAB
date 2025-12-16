@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.nnm.nnm.negocio.dominio.entidades.Disponibilidad;
+import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
 import com.nnm.nnm.negocio.dominio.entidades.PoliticaCancelacion;
 
 import jakarta.persistence.EntityManager;
@@ -85,6 +86,59 @@ public class GestorBD {
     public <T> void delete(T entity) {
         entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
     }
+    // Busqueda con varios parametros
+    public <T> List<T> selectListConParametros(String jpql, Class<T> entityClass, String[] paramNames, Object[] values) {
+        try {
+            var query = entityManager.createQuery(jpql, entityClass);
+            for (int i = 0; i < paramNames.length; i++) {
+                query.setParameter(paramNames[i], values[i]);
+            }
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return List.of();
+        }
+        }
+        public List<Inmueble> buscarFiltradoInmuebles(
+                String destino,
+                Integer habitaciones,
+                Integer banos,
+                Double precioMin,
+                Double precioMax
+        ) {
+
+            StringBuilder jpql = new StringBuilder("SELECT i FROM Inmueble i WHERE 1=1");
+
+            if (destino != null && !destino.isBlank()) {
+                jpql.append(" AND (LOWER(i.localidad) LIKE :destino OR LOWER(i.provincia) LIKE :destino)");
+            }
+            if (habitaciones != null) {
+                jpql.append(" AND i.habitaciones >= :habitaciones");
+            }
+            if (banos != null) {
+                jpql.append(" AND i.numero_banos >= :banos");
+            }
+            if (precioMin != null) {
+                jpql.append(" AND i.precio_noche >= :precioMin");
+            }
+            if (precioMax != null) {
+                jpql.append(" AND i.precio_noche <= :precioMax");
+            }
+
+            var query = entityManager.createQuery(jpql.toString(), Inmueble.class);
+
+            if (destino != null && !destino.isBlank())
+                query.setParameter("destino", "%" + destino.toLowerCase() + "%");
+            if (habitaciones != null)
+                query.setParameter("habitaciones", habitaciones);
+            if (banos != null)
+                query.setParameter("banos", banos);
+            if (precioMin != null)
+                query.setParameter("precioMin", precioMin);
+            if (precioMax != null)
+                query.setParameter("precioMax", precioMax);
+
+            return query.getResultList();
+        }
 
     public List<Disponibilidad> selectList(String jpql, Class<Disponibilidad> class1, String string, long idInmueble,
         String string2, PoliticaCancelacion politicaCancelacion, String string3,boolean reservaDirecta,String string4, LocalDate fechaInicio, String string5, LocalDate fechaFin) {
