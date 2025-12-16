@@ -73,48 +73,60 @@
     </div>
 
     <button type="submit" class="btn-buscar">Buscar</button>
-  </form>
-</section>
+    </form>
+  </section>
+  <!-- PROPIEDADES -->
+  <section class="propiedades-box">
+    <h2 class="titulo-seccion">Propiedades Disponibles</h2>
 
-<!-- PROPIEDADES -->
-<section class="propiedades-box">
-  <h2 class="titulo-seccion">Propiedades Disponibles</h2>
+    <div th:if="${#lists.isEmpty(propiedades)}" class="mensaje-vacio">
+      <p>No hay propiedades que coincidan con la búsqueda</p>
+    </div>
 
-  <div th:if="${#lists.isEmpty(propiedades)}" class="mensaje-vacio">
-    <p>No hay propiedades que coincidan con la búsqueda</p>
-  </div>
+        <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
+          <div th:each="inmueble : ${propiedades}" class="tarjeta-propiedad">
+            <div class="imagen-contenedor">
+              <img th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}" alt="Imagen del inmueble">
 
-      <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
-        <div th:each="inmueble : ${propiedades}" class="tarjeta-propiedad">
-          
-          <div class="imagen-contenedor">
-            <img th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}" alt="Imagen del inmueble">
+              <!-- Botón del corazón -->
+                <button class="fav-btn" th:data-id="${inmueble.id}">♡</button>
+            </div>
 
-            <!-- Botón del corazón -->
-              <button class="fav-btn" th:data-id="${inmueble.id}">♡</button>
-          </div>
+        <div class="contenido-propiedad">
+          <h3 th:text="${inmueble.titulo}">Título</h3>
 
-      <div class="contenido-propiedad">
-        <h3 th:text="${inmueble.titulo}"></h3>
+          <p class="ubicacion">
+            <span th:text="${inmueble.localidad}"></span>,
+            <span th:text="${inmueble.provincia}"></span>
+          </p>
 
-        <p class="ubicacion">
-          <span th:text="${inmueble.localidad}"></span>,
-          <span th:text="${inmueble.provincia}"></span>
-        </p>
+              <p>
+                <strong>Dirección:</strong>
+                <span th:text="${inmueble.direccion}">Dirección</span>
+              </p>
 
-        <p class="precio">
-          <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
-        </p>
+              <p class="caracteristicas">
+                <img src="/images/habitacion.png" alt="Habitaciones" class="icono">
+                <span th:text="${inmueble.habitaciones}">habitaciones</span>
+              </p>
+              <p>
+                <img src="/images/baños.png" alt="Baños" class="icono">
+                <span th:text="${inmueble.numero_banos}">baños</span>
+              </p>
 
-            <div class="botones-propiedad">
-              <form th:action="@{'/reserva/crear/' + ${inmueble.id}}" method="get">
-                <input type="hidden" name="idInmueble" th:value="${inmueble.id}">
-                <button type="submit" class="btn-reservar">Reservar</button>
-              </form>
+              <p class="precio">
+                <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
+              </p>
+
+              <div class="botones-propiedad">
+                <form th:action="@{'/reserva/crear/' + ${inmueble.id}}" method="get">
+                  <input type="hidden" name="idInmueble" th:value="${inmueble.id}">
+                  <button type="submit" class="btn-reservar">Reservar</button>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-    </section>
+      </section>
   </main>
   <script src="/js/favoritos.js"></script>
 </body>

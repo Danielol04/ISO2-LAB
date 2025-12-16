@@ -1,7 +1,9 @@
 /* Tipografía elegante y base */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
 body {
-  font-family: 'Poppins', 'Segoe UI', sans-serif;
-  background-color: #fef8f4;
+  font-family: 'Inter', sans-serif;
+  background-color: #f7f7f7;
   margin: 0;
   padding: 0;
   color: #333;
