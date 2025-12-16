@@ -28,7 +28,7 @@ public class GestorInmuebles {
         return inmuebleDAO.findAll();
     }
 
-    public List<Inmueble> listarPorPropietario(String username) {
+    public List<Inmueble> listarInmueblesPorPropietario(String username) {
         return inmuebleDAO.findByPropietario(username);
     }
     public boolean eliminarInmueble(Long id, String usernamePropietario) {
@@ -41,8 +41,5 @@ public class GestorInmuebles {
         return false;
     }
 
-    public List<Inmueble> listarInmueblesPorPropietario(String username) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }
     
