@@ -30,14 +30,16 @@ public class VentanaHome {
             List<Inmueble> propiedades;
             if (gestorUsuarios.esPropietario(username)) {
                 log.info("Redirigiendo al propietario a su página de inicio");
-                propiedades = gestorInmuebles.listarInmueblesPorPropietario(username); 
+                propiedades = gestorInmuebles.listarInmueblesPorPropietario(username);
                 model.addAttribute("propiedades", propiedades);
+                model .addAttribute("username", username);
                 return "homePropietario";
 
             } else if (gestorUsuarios.esInquilino(username)) {
                 log.info("Redirigiendo al inquilino a su página de inicio");
                 propiedades = gestorInmuebles.listarInmuebles(); 
                 model.addAttribute("propiedades", propiedades);
+                model .addAttribute("username", username);
                 return "homeInquilino";
             } else {
                 log.info("Mostrando la página de inicio generico");

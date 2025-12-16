@@ -17,8 +17,9 @@
 
     <!-- Botones a la derecha -->
     <div class="navbar-right">
-        <a th:href="@{/lista-deseos}" class="btn-deseos">Lista de deseos</a>
-        <div class="dropdown">
+      <a th:href="@{/lista-deseos}" class="btn-deseos">Lista de deseos</a>
+      <a th:href="@{/reserva/misReservas/{username}(username=${username})}" class="btn-deseos">Mis reservas</a>
+      <div class="dropdown">
         <button class="btn-circular">☰</button>
         <div class="dropdown-content">
             <a th:href="@{/datos-personales}">Datos personales</a>
@@ -115,14 +116,14 @@
               <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
             </p>
 
-          <div class="botones-propiedad">
-            <form th:action="@{/reservar}" method="get">
-              <input type="hidden" th:name="id" th:value="${inmueble}">
-              <button type="submit" class="btn-reservar">Reservar</button>
-            </form>
+            <div class="botones-propiedad">
+              <form th:action="@{'/reserva/crear/' + ${inmueble.id}}" method="get">
+                <input type="hidden" name="idInmueble" th:value="${inmueble.id}">
+                <button type="submit" class="btn-reservar">Reservar</button>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
     </section>
   </main>
   <script src="/js/favoritos.js"></script>

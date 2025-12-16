@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
   <title>Inicio Propietario</title>
@@ -8,29 +9,31 @@
   <link rel="stylesheet" href="/css/popup.css">
 
 </head>
+
 <body>
-    <!-- NAVBAR -->
-    <nav class="navbar">
+  <!-- NAVBAR -->
+  <nav class="navbar">
     <!-- Logo a la izquierda -->
     <a th:href="@{/home}" class="logo-link">
-        <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
+      <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
     </a>
 
     <!-- Botones a la derecha -->
     <div class="navbar-right">
-        <a th:href="@{/reservas/Propietario}" class="btn-deseos">Solicitudes</a>
-        <a th:href="@{/inmuebles/alta}" class="btn-deseos">Registrar Inmuebles</a>
-        
-        <div class="dropdown">
+      <a th:href="@{/solicitudes/confirmacionReserva/{username}(username=${username})}" class="btn-deseos">Solicitudes</a>
+      <a th:href="@{/reserva/misReservas/{username}(username=${username})}" class="btn-deseos">Mis reservas</a>
+      <a th:href="@{/inmuebles/alta}" class="btn-deseos">Registrar Inmuebles</a>
+
+      <div class="dropdown">
 
         <button class="btn-circular">☰</button>
         <div class="dropdown-content">
-            <a th:href="@{/datos_personales}">Datos personales</a>
-            <a th:href="@{/logout}">Cerrar sesión</a>
+          <a th:href="@{/datos_personales}">Datos personales</a>
+          <a th:href="@{/logout}">Cerrar sesión</a>
         </div>
-        </div>
+      </div>
     </div>
-    </nav>
+  </nav>
 
   <!-- CONTENIDO PRINCIPAL -->
   <main class="main-content">
@@ -71,15 +74,15 @@
 
         <button type="submit" class="btn-buscar">Buscar</button>
       </form>
-      
-    </section>
-            <!-- CONTENEDOR DE PROPIEDADES -->
-      <section class="propiedades-box">
-        <h2 class="titulo-seccion">Tus Propiedades</h2>
 
-        <div th:if="${#lists.isEmpty(propiedades)}" class="mensaje-vacio">
-          <p>No tienes propiedades registradas</p>
-        </div>
+    </section>
+    <!-- CONTENEDOR DE PROPIEDADES -->
+    <section class="propiedades-box">
+      <h2 class="titulo-seccion">Tus Propiedades</h2>
+
+      <div th:if="${#lists.isEmpty(propiedades)}" class="mensaje-vacio">
+        <p>No tienes propiedades registradas</p>
+      </div>
 
         <div th:unless="${#lists.isEmpty(propiedades)}" class="propiedades-grid">
 
@@ -88,33 +91,33 @@
               <img th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}" alt="Imagen del inmueble">
             </div>
 
-            <div class="contenido-propiedad">
-              <h3 class="titulo-propiedad" th:text="${inmueble.titulo}">Título</h3>
+          <div class="contenido-propiedad">
+            <h3 class="titulo-propiedad" th:text="${inmueble.titulo}">Título</h3>
 
-              <p class="ubicacion">
-                <img src="/images/ubicacion.png" alt="Ubicación" class="icono">
-                <span th:text="${inmueble.localidad}"></span>,
-                <span th:text="${inmueble.provincia}"></span>,
-                <span th:text="${inmueble.codigo_postal}"></span>
-              </p>
+            <p class="ubicacion">
+              <img src="/images/ubicacion.png" alt="Ubicación" class="icono">
+              <span th:text="${inmueble.localidad}"></span>,
+              <span th:text="${inmueble.provincia}"></span>,
+              <span th:text="${inmueble.codigo_postal}"></span>
+            </p>
 
-              <p>
-                <strong>Dirección:</strong>
-                <span th:text="${inmueble.direccion}">Dirección</span>
-              </p>
+            <p>
+              <strong>Dirección:</strong>
+              <span th:text="${inmueble.direccion}">Dirección</span>
+            </p>
 
-              <p class="caracteristicas">
-                <img src="/images/habitacion.png" alt="Habitaciones" class="icono">
-                <span th:text="${inmueble.habitaciones}">habitaciones</span>
-              </p>
-              <p> 
-                <img src="/images/baños.png" alt="Baños" class="icono">
-                <span th:text="${inmueble.numero_banos}">baños</span> 
-              </p>
+            <p class="caracteristicas">
+              <img src="/images/habitacion.png" alt="Habitaciones" class="icono">
+              <span th:text="${inmueble.habitaciones}">habitaciones</span>
+            </p>
+            <p>
+              <img src="/images/baños.png" alt="Baños" class="icono">
+              <span th:text="${inmueble.numero_banos}">baños</span>
+            </p>
 
-              <p class="precio">
-                <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
-              </p>
+            <p class="precio">
+              <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
+            </p>
 
               <button type="button" class="btn-eliminar" 
               th:onclick="|eliminarInmueble(${inmueble.id})|">Eliminar 
@@ -140,4 +143,5 @@
   <script src="/js/popup.js"></script>
   <script src="/js/inmuebles.js"></script>
 </body>
+
 </html>

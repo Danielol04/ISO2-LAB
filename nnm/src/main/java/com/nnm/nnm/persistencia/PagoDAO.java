@@ -13,11 +13,7 @@ public class PagoDAO extends EntidadDAO<Pago, Long > {
     }
 
     public Pago findByReservaID(Long idReserva) {
-        String jpql = "SELECT p FROM Pago p WHERE p.reserva.id = :idReserva";
+        String jpql = "SELECT p FROM Pago p WHERE p.idReserva = :idReserva";
         return gestorBD.selectSingle(jpql, Pago.class, "idReserva", idReserva);
-    }
-
-    public void eliminarPago(Pago pago) {
-        delete(pago);
     }
 }
