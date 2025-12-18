@@ -33,6 +33,10 @@ import jakarta.servlet.http.HttpSession;
 public class VentanaDisponibilidad {
     private static final Logger log = LoggerFactory.getLogger(VentanaDisponibilidad.class);
 
+    private static final String USERNAME = "username";
+    private static final String RETURNLOGING = "redirect:/login";
+    private static final String RETURNCREAR = "redirect:/disponibilidades/crear/";
+
     private final GestorDisponibilidad gestorDisponibilidad;
     private final GestorInmuebles gestorInmuebles;
     private final GestorReservas gestorReservas;
@@ -46,9 +50,9 @@ public class VentanaDisponibilidad {
 
     @GetMapping("/crear/{id}")
     public String mostrarFormulario(@PathVariable long id, Model model, HttpSession session) {
-        String username = (String) session.getAttribute("username");
+        String username = (String) session.getAttribute(USERNAME);
         if (username == null) {
-            return "redirect:/login";
+            return RETURNLOGING;
         }
         Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(id);
         List<Disponibilidad> disponibilidades = gestorDisponibilidad.obtenerDisponibilidadPorInmueble(id);
@@ -91,9 +95,9 @@ public class VentanaDisponibilidad {
     @PostMapping("/crear/{id}")
     public String crearDisponibilidad(@PathVariable long id, @ModelAttribute("disponibilidad") Disponibilidad disponibilidad, HttpSession session, Model model) {
 
-        String username = (String) session.getAttribute("username");
+        String username = (String) session.getAttribute(USERNAME);
         if (username == null) {
-            return "redirect:/login";
+            return RETURNLOGING;
         }
         String mensajeError = "";
         Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(id);
@@ -111,7 +115,7 @@ public class VentanaDisponibilidad {
             mensajeError = "La fecha de fin no puede ser anterior a la fecha de inicio.";
             errorDisponibilidad(model, mensajeError, id);
             
-            return "redirect:/disponibilidades/crear/" + id;
+            return RETURNCREAR + id;
         }
 
         // Validar que no haya solapamiento con otras disponibilidades del mismo inmueble
@@ -123,21 +127,21 @@ public class VentanaDisponibilidad {
         if (solapa) {
             mensajeError = "Las fechas se solapan con una disponibilidad existente.";
             errorDisponibilidad(model, mensajeError, id);
-            return "redirect:/disponibilidades/crear/" + id;
+            return RETURNCREAR + id;
         }
 
         log.info("Creando disponibilidad para el inmueble: {}", id);
         gestorDisponibilidad.registrarDisponibilidad(disponibilidad);
-        return "redirect:/disponibilidades/crear/" + id;
+        return RETURNCREAR + id;
     }
 
     @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable long id, HttpSession session) {
 
 
-        String username = (String) session.getAttribute("username");
+        String username = (String) session.getAttribute(USERNAME);
         if (username == null) {
-            return "redirect:/login";
+            return RETURNLOGING;
         }
         Disponibilidad disponibilidad = gestorDisponibilidad.obtenerDisponibilidadPorId(id);
         if (disponibilidad == null) {
@@ -152,7 +156,7 @@ public class VentanaDisponibilidad {
 
         gestorDisponibilidad.eliminarDisponibilidad(disponibilidad);
 
-        return "redirect:/disponibilidades/crear/" + idInmueble;
+        return RETURNCREAR + idInmueble;
     }
 
     private void errorDisponibilidad(Model model, String mensajeError, long id) {

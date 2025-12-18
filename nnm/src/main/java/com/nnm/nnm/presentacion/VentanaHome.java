@@ -22,6 +22,7 @@ public class VentanaHome {
 
     private static final Logger log = LoggerFactory.getLogger(VentanaHome.class);
 
+     private static final String USERNAME = "username";
     private final GestorInmuebles gestorInmuebles;
     private final GestorBusquedas gestorBusquedas;
     private final GestorUsuarios gestorUsuarios;
@@ -35,7 +36,7 @@ public class VentanaHome {
 
         @GetMapping("/home")
         public String mostrarHome(Model model, HttpSession session) {
-            String username = (String) session.getAttribute("username");
+            String username = (String) session.getAttribute(USERNAME);
             List<Inmueble> propiedades;
             if (gestorUsuarios.esPropietario(username)) {
                 log.info("Redirigiendo al propietario a su página de inicio");
@@ -69,7 +70,7 @@ public class VentanaHome {
             Model model,
             HttpSession session) {
 
-        String username = (String) session.getAttribute("username");
+        String username = (String) session.getAttribute(USERNAME);
 
         List<Inmueble> resultado = gestorBusquedas.buscar(
                 destino,

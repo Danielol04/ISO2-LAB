@@ -54,21 +54,25 @@ public class VentanaPago {
 
     @PostMapping("/confirmarPago/{idReserva}")
     public String confirmarPago(@PathVariable("idReserva") Long idReserva, @RequestParam Double precioTotal,@RequestParam MetodoPago metodoPago,Model model, RedirectAttributes redirectAttrs) {
-        log.info("Confirmando pago para la reserva ID: " + idReserva);
+        log.info("Confirmando pago para la reserva ID: {}", idReserva);
         Reserva reserva = gestorReservas.obtenerReservaPorId(idReserva);
         Long idInmueble = reserva.getInmueble().getId();
         Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(idInmueble);
         reserva.setInmueble(inmueble);
-        Boolean reservaDirecta = reserva.getReservaDirecta();
+        boolean reservaDirecta = Boolean.TRUE.equals(reserva.getReservaDirecta());
         if (reservaDirecta) {
             reserva.setEstado(EstadoReserva.ACEPTADA);
-            log.info("Reserva directa para la reserva ID: " + idReserva);
+            log.info("Reserva directa para  la reserva ID: {}", idReserva);
+
         } else {
             reserva.setEstado(EstadoReserva.PAGADA);
-            log.info("Solicitud de reserva para la reserva ID: " + idReserva);
+            log.info("Solicitud de reserva para la reserva ID: {}", idReserva);
+
             gestorSolicitudes.generarSolicitudReserva(reserva, precioTotal);
         }
-        log.info("Marcando la reserva como pagada para la reserva ID: " + idReserva);
+    
+        log.info("Marcando la reserva como pagada para la reserva ID: {}", idReserva);
+
         reserva.setPagado(true);
         gestorReservas.actualizarReserva(reserva);
         Pago nuevoPago = new Pago();
