@@ -42,14 +42,14 @@ public class VentanaHome {
                 log.info("Redirigiendo al propietario a su página de inicio");
                 propiedades = gestorInmuebles.listarInmueblesPorPropietario(username);
                 model.addAttribute("propiedades", propiedades);
-                model.addAttribute("username", username);
+                model.addAttribute(USERNAME, username);
                 return "homePropietario";
 
         } else if (gestorUsuarios.esInquilino(username)) {
             log.info("Home inquilino");
             propiedades = gestorInmuebles.listarInmuebles();
             model.addAttribute("propiedades", propiedades);
-                model .addAttribute("username", username);
+                model .addAttribute(USERNAME, username);
             return "homeInquilino";
 
         } else {
