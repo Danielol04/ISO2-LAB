@@ -35,7 +35,7 @@ public class VentanaListaDeseos{
 
     @PostMapping("/favoritos/toggle")
     @ResponseBody
-    public ResponseEntity<?> toggleFavorito(@RequestParam Long idInmueble, HttpSession session) {
+    public ResponseEntity<Boolean> toggleFavorito(@RequestParam Long idInmueble, HttpSession session) {
 
         String username = (String) session.getAttribute("username");
 

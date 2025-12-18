@@ -32,7 +32,7 @@ public class VentanaLogin {
 
     @PostMapping("/login")
     public String procesarLogin(@RequestParam String username,  @RequestParam String password, Model model, HttpSession session) {
-        if (gestorUsuarios.login(username, password) == false) {
+        if (!gestorUsuarios.login(username, password)) {
             log.warn("Login fallido para usuario: {}", username);
             model.addAttribute("error", "Usuario o contraseña incorrectos");
             return "login";

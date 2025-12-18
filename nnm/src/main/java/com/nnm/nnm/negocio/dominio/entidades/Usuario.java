@@ -12,17 +12,17 @@ import jakarta.persistence.Table;
 public abstract class Usuario {
     @Id 
     @Column(name ="username", nullable = false, unique = true)
-    private String username;
+    protected String username;
     @Column(name = "password",nullable = false)
-    private String password;
+    protected String password;
     @Column(name = "correo", nullable = false)
-    private String correo;
+    protected String correo;
     @Column(name = "nombre", nullable = false)
-    private String nombre;
+    protected String nombre;
     @Column(name = "apellidos", nullable = false)
-    private String apellidos;
+    protected String apellidos;
     @Column(name = "direccion", nullable = false)
-    private String direccion;
+    protected String direccion;
 
     public Usuario() {}
     
