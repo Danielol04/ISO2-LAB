@@ -29,7 +29,7 @@ public class GestorListaDeseos {
         Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(idInmueble);
 
         if (inmueble == null) {
-            throw new RuntimeException("El inmueble no existe");
+            throw new IllegalArgumentException("El inmueble no existe");
         }
 
         // Crear lista si no existe

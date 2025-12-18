@@ -150,7 +150,7 @@ public class GestorBD {
             .setParameter(string4, fechaInicio)
             .setParameter(string5, fechaFin)
             .getResultList();
-        } catch (NoResultException e) {
+        } catch (NoResultException _) {
             return List.of();
         }
     }

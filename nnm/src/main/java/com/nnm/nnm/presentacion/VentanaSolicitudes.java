@@ -24,6 +24,7 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/solicitudes")
 public class VentanaSolicitudes {
     private static final Logger log = Logger.getLogger(VentanaSolicitudes.class.getName());
+    private static final String USERNAME = "username";
 
     private final GestorSolicitudes gestorSolicitudes;
     private final GestorPagos gestorPagos;
@@ -38,13 +39,13 @@ public class VentanaSolicitudes {
 
     @GetMapping("/confirmacionReserva/{username}")
     public String verSolicitudes(@PathVariable String username, Model model, HttpSession session) {
-        String sessionUsername = (String) session.getAttribute("username");
+        String sessionUsername = (String) session.getAttribute(USERNAME);
         if (sessionUsername == null || !sessionUsername.equals(username)) {
             return "redirect:/login";
         }
 
         List<SolicitudReserva> solicitudes = gestorSolicitudes.obtenerSolicitudesPorPropietario(username);
-        model.addAttribute("username", username);
+        model.addAttribute(USERNAME, username);
         model.addAttribute("solicitudes", solicitudes);
         model.addAttribute("solicitudSeleccionada", null);
         return "solicitudes";
@@ -53,23 +54,24 @@ public class VentanaSolicitudes {
     @PostMapping("/solicitud/{id}/aceptar")
     public String aceptarSolicitud(@PathVariable Long id, HttpSession session) {
         gestorSolicitudes.aceptarSolicitudReserva(id);
-        String username = (String) session.getAttribute("username");
+        String username = (String) session.getAttribute(USERNAME);
         return "redirect:/solicitudes/confirmacionReserva/" + username;
     }
 
     @PostMapping("/solicitud/{id}/rechazar")
     public String rechazarSolicitud(@PathVariable Long id, HttpSession session) {
         SolicitudReserva solicitud = gestorSolicitudes.obtenerSolicitudPorId(id);
-        log.info("Rechazando solicitud con ID: " + id);
+        log.info("Rechazando solicitud con ID: {}" + id);
         gestorSolicitudes.borrarSolicitudReserva(solicitud);
         Reserva reserva = solicitud.getReserva();
         Pago pago = gestorPagos.obtenerPagoPorReserva(reserva.getId());
-        log.info("Borrando pago asociado con ID: " + pago.getId());
+        log.info("Borrando pago asociado con ID: {}" + pago.getId());
+        
         gestorPagos.borrarPago(pago);
-        log.info("Cancelando reserva asociada con ID: " + reserva.getId());
+        log.info("Cancelando reserva asociada con ID: {} " + reserva.getId());
         gestorReservas.cancelarReserva(reserva.getId());
 
-        String username = (String) session.getAttribute("username");
+        String username = (String) session.getAttribute(USERNAME);
         return "redirect:/solicitudes/confirmacionReserva/" + username;
     }
 }

@@ -14,10 +14,11 @@ public class DisponibilidadDAO extends EntidadDAO<Disponibilidad, Long> {
     public DisponibilidadDAO() {
         super(Disponibilidad.class);
     }
+    private static final String IDINMUEBLE = "idInmueble";
 
     public List<Disponibilidad> findByInmueble(long idInmueble) {
         String jpql = "FROM Disponibilidad d WHERE d.inmueble.id = :idInmueble";
-        return gestorBD.selectList(jpql, Disponibilidad.class, "idInmueble", idInmueble);
+        return gestorBD.selectList(jpql, Disponibilidad.class, IDINMUEBLE, idInmueble);
     }
 
     public List<Disponibilidad> encontrarAdyacentes(long idInmueble,PoliticaCancelacion politicaCancelacion,boolean reservaDirecta, LocalDate fechaInicio, LocalDate fechaFin) {
@@ -26,7 +27,7 @@ public class DisponibilidadDAO extends EntidadDAO<Disponibilidad, Long> {
         String jpql ="FROM Disponibilidad d WHERE d.inmueble.id = :idInmueble AND d.politicaCancelacion = :politica_cancelacion AND d.reservaDirecta = :reservaDirecta AND (d.fechaInicio = :diaDespuesFin OR d.fechaFin = :diaAntesInicio)";
     
         return gestorBD.selectList(jpql, Disponibilidad.class, 
-            "idInmueble", idInmueble,
+            IDINMUEBLE, idInmueble,
             "politica_cancelacion", politicaCancelacion,
             "reservaDirecta",reservaDirecta,
             "diaAntesInicio", fechaInicioAdj,
@@ -38,7 +39,7 @@ public class DisponibilidadDAO extends EntidadDAO<Disponibilidad, Long> {
                   "WHERE d.inmueble.id = :idInmueble " +
                   "AND d.fechaInicio <= :reservaInicio " +
                   "AND d.fechaFin >= :reservaFin";
-    return gestorBD.selectSingle(jpql, Disponibilidad.class, "idInmueble", idInmueble, 
+    return gestorBD.selectSingle(jpql, Disponibilidad.class, IDINMUEBLE, idInmueble, 
         "reservaInicio", reservaInicio, "reservaFin", reservaFin);
     }
 }
