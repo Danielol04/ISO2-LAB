@@ -24,9 +24,9 @@ public abstract class Usuario {
     @Column(name = "direccion", nullable = false)
     protected String direccion;
 
-    public Usuario() {}
+    protected Usuario() {}
     
-    public Usuario(String username, String password, String correo, String nombre, String apellidos, String direccion) {
+    protected Usuario(String username, String password, String correo, String nombre, String apellidos, String direccion) {
         this.username = username;
         this.password = password;
         this.correo = correo;
