@@ -86,7 +86,7 @@ public class VentanaDisponibilidad {
         }
         model.addAttribute("fechasReservadas", fechasReservadas);
         model.addAttribute("fechasDisponibles", fechasDisponibles);
-        model.addAttribute("username", username);
+        model.addAttribute(USERNAME, username);
 
         log.info("Mostrando formulario de Disponibilidad para el inmueble: {}", id);
         return "disponibilidad";

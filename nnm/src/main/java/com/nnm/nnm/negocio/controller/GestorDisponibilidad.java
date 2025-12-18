@@ -76,7 +76,7 @@ public class GestorDisponibilidad {
         List<Disponibilidad> disponibles = obtenerDisponibilidadPorInmueble(idInmueble);
 
         for (Disponibilidad d : disponibles) {
-            /*  Comprobamos si la disponibilidad cubre todo el rango solicitado*/
+            
             if (!fechaInicio.isBefore(d.getFechaInicio()) && !fechaFin.isAfter(d.getFechaFin())) {
                 return d.getReservaDirecta(); // Devuelve true si es directa, false si no
             }
@@ -90,7 +90,7 @@ public class GestorDisponibilidad {
         List<Disponibilidad> afectadas = new ArrayList<>();
 
         for (Disponibilidad d : disponibles) {
-            /*  Comprobamos si la disponibilidad cubre todo el rango solicitado*/
+            
             if (!fechaFin.isBefore(d.getFechaInicio()) && !fechaInicio.isAfter(d.getFechaFin())) {
                 afectadas.add(d);
             }
