@@ -50,7 +50,7 @@ public class GestorInmuebles {
         List<Reserva> reservas = inmueble.getReservas();
         if(reservas != null && !reservas.isEmpty()) {
             for(Reserva reserva : reservas){
-                if(reserva.getEstado() == EstadoReserva.EXPIRADA) {
+                if(reserva.getEstado() != EstadoReserva.EXPIRADA) {
                     return false;
                 }
             }
