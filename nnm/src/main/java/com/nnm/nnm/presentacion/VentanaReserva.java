@@ -92,7 +92,7 @@ public class VentanaReserva {
         model.addAttribute("idInmueble", idInmueble);
         model.addAttribute("fechasDisponibles", fechasDisponibles);
         model.addAttribute("fechasReservadas", fechasReservadas);
-        model.addAttribute("username", username);
+        model.addAttribute(NAME, username);
 
         return "reserva";
     }
@@ -168,7 +168,7 @@ public class VentanaReserva {
         }
         model.addAttribute("esPropietario",esPropietario);
         model.addAttribute("reservas", reservas);
-        model.addAttribute("username", username);
+        model.addAttribute(NAME, username);
         return "misReservas";
     }
 
