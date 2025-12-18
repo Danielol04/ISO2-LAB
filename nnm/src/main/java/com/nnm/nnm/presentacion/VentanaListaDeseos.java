@@ -24,10 +24,14 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class VentanaListaDeseos{
 
+    private final GestorListaDeseos gestorLista;
+    private final GestorUsuarios gestorUsuarios;
+
     @Autowired
-    private GestorListaDeseos gestorLista;
-    @Autowired
-    private GestorUsuarios gestorUsuarios;
+    public VentanaListaDeseos(GestorListaDeseos gestorLista, GestorUsuarios gestorUsuarios) {
+        this.gestorLista = gestorLista;
+        this.gestorUsuarios = gestorUsuarios;
+    }
 
     @PostMapping("/favoritos/toggle")
     @ResponseBody

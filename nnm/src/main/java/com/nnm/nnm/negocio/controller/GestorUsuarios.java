@@ -13,19 +13,22 @@ import com.nnm.nnm.persistencia.UsuarioDAO;
 @Service
 public class GestorUsuarios {
 
+    private final UsuarioDAO usuarioDAO;
+    private final InquilinoDAO inquilinoDAO;
+    private final PropietarioDAO propietarioDAO;
+
     @Autowired
-    private UsuarioDAO usuarioDAO;
-    @Autowired
-    private InquilinoDAO inquilinoDAO;
-    @Autowired
-    private PropietarioDAO propietarioDAO;
+    public GestorUsuarios(UsuarioDAO usuarioDAO, InquilinoDAO inquilinoDAO, PropietarioDAO propietarioDAO) {
+        this.usuarioDAO = usuarioDAO;
+        this.inquilinoDAO = inquilinoDAO;
+        this.propietarioDAO = propietarioDAO;
+    }
 
     public boolean login(String username, String password) {
         Usuario usuario = usuarioDAO.findByUsername(username);
         if(usuario == null) return false; // No se encontro el usuario
-        if(!usuario.getPassword().equals(password)) return false; // Contraseña incorrecta
-
-       return true;
+       
+        return usuario.getPassword().equals(password);
     }
     public boolean existeUsuario(String username) {
         return usuarioDAO.findByUsername(username) != null;

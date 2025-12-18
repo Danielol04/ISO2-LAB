@@ -56,7 +56,7 @@
                         <span th:text="${inmueble.codigo_postal}"></span>
                     </p>
 
-                    <p><strong>Dirección:</strong> <span th:text="${inmueble.direccion}"></span></p>
+                    <p><span th:text="${inmueble.direccion}"></span></p>
 
                     <p class="caracteristicas">
                         <img src="/images/habitacion.png" alt="Habitaciones" class="icono">
@@ -68,7 +68,7 @@
                         <span th:text="${inmueble.numero_banos}"></span>
                     </p>
 
-                    <p class="precio">
+                    <p class="precio-noche">
                         <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
                     </p>
 

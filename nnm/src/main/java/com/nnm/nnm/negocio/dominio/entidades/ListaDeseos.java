@@ -32,8 +32,6 @@ public class ListaDeseos {
     private Set<Inmueble> inmuebles = new HashSet<>();
 
 
-    public ListaDeseos() {}
-
     public long getId() {
         return id;
     }

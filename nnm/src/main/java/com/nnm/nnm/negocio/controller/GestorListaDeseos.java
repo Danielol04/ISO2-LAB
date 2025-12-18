@@ -11,13 +11,17 @@ import com.nnm.nnm.persistencia.ListaDeseosDAO;
 @Service
 public class GestorListaDeseos {
 
+    private final GestorInmuebles gestorInmuebles;
+    private final GestorUsuarios gestorUsuarios;
+    private final ListaDeseosDAO listadeseosDAO;
+
     @Autowired
-    private GestorInmuebles gestorInmuebles;
-    @Autowired
-    private GestorUsuarios gestorUsuarios;
-    @Autowired
-    private ListaDeseosDAO listadeseosDAO;
-    
+    public GestorListaDeseos(GestorInmuebles gestorInmuebles, GestorUsuarios gestorUsuarios, ListaDeseosDAO listadeseosDAO) {
+        this.gestorInmuebles = gestorInmuebles;
+        this.gestorUsuarios = gestorUsuarios;
+        this.listadeseosDAO = listadeseosDAO;
+    }
+
     public boolean toggleInmueble(Long idInmueble, String usernameInquilino) {
 
         Inquilino inquilino = gestorUsuarios.obtenerInquilinoPorUsername(usernameInquilino);

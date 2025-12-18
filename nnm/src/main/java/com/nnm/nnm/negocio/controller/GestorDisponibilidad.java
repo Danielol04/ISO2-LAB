@@ -14,8 +14,12 @@ import com.nnm.nnm.persistencia.DisponibilidadDAO;
 @Service
 public class GestorDisponibilidad {
 
+    private final DisponibilidadDAO disponibilidadDAO;
+    
     @Autowired
-    private DisponibilidadDAO disponibilidadDAO;
+    public GestorDisponibilidad(DisponibilidadDAO disponibilidadDAO) {
+        this.disponibilidadDAO = disponibilidadDAO;
+    }
 
     public void registrarDisponibilidad(Disponibilidad nueva) {
         List<Disponibilidad> adyacentes = disponibilidadDAO.encontrarAdyacentes(

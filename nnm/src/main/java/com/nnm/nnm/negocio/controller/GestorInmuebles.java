@@ -13,10 +13,14 @@ import com.nnm.nnm.persistencia.InmuebleDAO;
 @Service
 public class GestorInmuebles {
 
+    private final InmuebleDAO inmuebleDAO;
+    private final GestorUsuarios gestorUsuarios;
+
     @Autowired
-    private InmuebleDAO inmuebleDAO;
-    @Autowired
-    private GestorUsuarios gestorUsuarios;
+    public GestorInmuebles(InmuebleDAO inmuebleDAO, GestorUsuarios gestorUsuarios) {
+        this.inmuebleDAO = inmuebleDAO;
+        this.gestorUsuarios = gestorUsuarios;
+    }   
 
     public void registrarInmueble(Inmueble inmueble) {
         inmuebleDAO.save(inmueble);

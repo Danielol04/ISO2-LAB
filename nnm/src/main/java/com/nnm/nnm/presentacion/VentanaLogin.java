@@ -17,8 +17,12 @@ public class VentanaLogin {
 
     private static final Logger log = LoggerFactory.getLogger(VentanaLogin.class);
 
+    private final GestorUsuarios gestorUsuarios;
+
     @Autowired
-    private GestorUsuarios gestorUsuarios; 
+    public VentanaLogin(GestorUsuarios gestorUsuarios) {
+        this.gestorUsuarios = gestorUsuarios;
+    }
 
     @GetMapping("/login")
     public String mostrarLogin() {

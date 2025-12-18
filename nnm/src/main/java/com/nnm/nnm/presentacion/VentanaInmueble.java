@@ -39,10 +39,14 @@ public class VentanaInmueble{
 
     private static final Logger log = LoggerFactory.getLogger(VentanaInmueble.class);
 
+    private final GestorInmuebles gestorInmuebles;
+    private final GestorUsuarios gestorUsuarios;
+
     @Autowired
-    private GestorInmuebles gestorInmuebles;
-    @Autowired
-    private GestorUsuarios gestorUsuarios;
+    public VentanaInmueble(GestorInmuebles gestorInmuebles, GestorUsuarios gestorUsuarios) {
+        this.gestorInmuebles = gestorInmuebles;
+        this.gestorUsuarios = gestorUsuarios;
+    }
 
     @GetMapping("/alta")
     public String mostrarFormulario(Model model, HttpSession session) {

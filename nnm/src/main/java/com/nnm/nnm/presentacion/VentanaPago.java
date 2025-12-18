@@ -29,17 +29,18 @@ import com.nnm.nnm.negocio.dominio.entidades.Reserva;
 public class VentanaPago {
     Logger log = LoggerFactory.getLogger(VentanaPago.class);
 
-    @Autowired
-    private GestorReservas gestorReservas;
+    private final GestorReservas gestorReservas;
+    private final GestorPagos gestorPagos;
+    private final GestorSolicitudes gestorSolicitudes;
+    private final GestorInmuebles gestorInmuebles;
 
     @Autowired
-    private GestorPagos gestorPagos;
-
-    @Autowired
-    private GestorSolicitudes gestorSolicitudes;
-
-    @Autowired
-    private GestorInmuebles gestorInmuebles;
+    public VentanaPago(GestorReservas gestorReservas, GestorPagos gestorPagos, GestorSolicitudes gestorSolicitudes, GestorInmuebles gestorInmuebles) {
+        this.gestorReservas = gestorReservas;
+        this.gestorPagos = gestorPagos;
+        this.gestorSolicitudes = gestorSolicitudes;
+        this.gestorInmuebles = gestorInmuebles;
+    }
 
     @GetMapping("/confirmarPago/{idReserva}")
     public String mostrarPago(@PathVariable("idReserva") Long idReserva, Double precioTotal, Model model) {

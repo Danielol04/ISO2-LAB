@@ -95,15 +95,15 @@
         <div class="contenido-propiedad">
           <h3 th:text="${inmueble.titulo}">Título</h3>
 
-          <p class="ubicacion">
-            <span th:text="${inmueble.localidad}"></span>,
-            <span th:text="${inmueble.provincia}"></span>
+         <p class="ubicacion">
+              <img src="/images/ubicacion.png" alt="Ubicación" class="icono">
+              <span th:text="${inmueble.localidad}"></span>,
+              <span th:text="${inmueble.provincia}"></span>,
+              <span th:text="${inmueble.codigo_postal}"></span>
           </p>
-
-              <p>
-                <strong>Dirección:</strong>
-                <span th:text="${inmueble.direccion}">Dirección</span>
-              </p>
+          <p>
+              <span th:text="${inmueble.direccion}"></span>
+          </p>
 
               <p class="caracteristicas">
                 <img src="/images/habitacion.png" alt="Habitaciones" class="icono">
@@ -114,7 +114,7 @@
                 <span th:text="${inmueble.numero_banos}">baños</span>
               </p>
 
-              <p class="precio">
+              <p class="precio-noche">
                 <span th:text="${#numbers.formatCurrency(inmueble.precio_noche)}"></span>/noche
               </p>
 

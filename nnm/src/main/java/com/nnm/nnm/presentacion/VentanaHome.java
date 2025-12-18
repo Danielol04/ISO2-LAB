@@ -22,14 +22,16 @@ public class VentanaHome {
 
     private static final Logger log = LoggerFactory.getLogger(VentanaHome.class);
 
-    @Autowired
-    private GestorInmuebles gestorInmuebles;
+    private final GestorInmuebles gestorInmuebles;
+    private final GestorBusquedas gestorBusquedas;
+    private final GestorUsuarios gestorUsuarios;
 
     @Autowired
-    private GestorBusquedas gestorBusquedas;
-
-    @Autowired
-    private GestorUsuarios gestorUsuarios;
+    public VentanaHome(GestorInmuebles gestorInmuebles, GestorBusquedas gestorBusquedas, GestorUsuarios gestorUsuarios) {
+        this.gestorInmuebles = gestorInmuebles;
+        this.gestorBusquedas = gestorBusquedas;
+        this.gestorUsuarios = gestorUsuarios;
+    }  
 
         @GetMapping("/home")
         public String mostrarHome(Model model, HttpSession session) {

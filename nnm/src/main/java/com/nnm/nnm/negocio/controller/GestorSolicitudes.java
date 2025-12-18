@@ -20,14 +20,19 @@ import com.nnm.nnm.presentacion.VentanaReserva;
 @Service
 public class GestorSolicitudes {
     private static final Logger log = LoggerFactory.getLogger(VentanaReserva.class);
+    
+    private final SolicitudReservaDAO solicitudReservaDAO;
+    private final ReservaDAO reservaDAO;
+    private final GestorInmuebles gestorInmuebles;
+    private final GestorReservas gestorReservas;
+
     @Autowired
-    private SolicitudReservaDAO solicitudReservaDAO;
-    @Autowired
-    private ReservaDAO reservaDAO;
-    @Autowired
-    private GestorInmuebles gestorInmuebles;
-    @Autowired
-    private GestorReservas gestorReservas;
+    public GestorSolicitudes(SolicitudReservaDAO solicitudReservaDAO, ReservaDAO reservaDAO, GestorInmuebles gestorInmuebles, GestorReservas gestorReservas) {
+        this.solicitudReservaDAO = solicitudReservaDAO;
+        this.reservaDAO = reservaDAO;
+        this.gestorInmuebles = gestorInmuebles;
+        this.gestorReservas = gestorReservas;
+    }
 
     public SolicitudReserva obtenerSolicitudPorId(long idSolicitud) {
         return solicitudReservaDAO.findById(idSolicitud);

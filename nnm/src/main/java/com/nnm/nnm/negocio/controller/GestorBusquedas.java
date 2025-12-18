@@ -11,8 +11,12 @@ import com.nnm.nnm.persistencia.InmuebleDAO;
 @Service
 public class GestorBusquedas {
 
+    private final InmuebleDAO inmuebleDAO;
+
     @Autowired
-    private InmuebleDAO inmuebleDAO;
+    public GestorBusquedas(InmuebleDAO inmuebleDAO) {
+        this.inmuebleDAO = inmuebleDAO;
+    }
 
     public List<Inmueble> buscar(
             String destino,

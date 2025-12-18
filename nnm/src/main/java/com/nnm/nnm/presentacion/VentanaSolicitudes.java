@@ -23,13 +23,18 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/solicitudes")
 public class VentanaSolicitudes {
-    Logger log = Logger.getLogger(VentanaSolicitudes.class.getName());
+    private static final Logger log = Logger.getLogger(VentanaSolicitudes.class.getName());
+
+    private final GestorSolicitudes gestorSolicitudes;
+    private final GestorPagos gestorPagos;
+    private final GestorReservas gestorReservas;
+
     @Autowired
-    private GestorSolicitudes gestorSolicitudes;
-    @Autowired
-    private GestorPagos gestorPagos;
-    @Autowired
-    private GestorReservas gestorReservas;
+    public VentanaSolicitudes(GestorSolicitudes gestorSolicitudes, GestorPagos gestorPagos, GestorReservas gestorReservas) {
+        this.gestorSolicitudes = gestorSolicitudes;
+        this.gestorPagos = gestorPagos;
+        this.gestorReservas = gestorReservas;
+    }
 
     @GetMapping("/confirmacionReserva/{username}")
     public String verSolicitudes(@PathVariable String username, Model model, HttpSession session) {

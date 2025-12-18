@@ -17,8 +17,12 @@ import com.nnm.nnm.negocio.dominio.entidades.Propietario;
 public class VentanaRegistro {
     private  static final Logger log = LoggerFactory.getLogger(VentanaRegistro.class);
     
+    private final GestorUsuarios gestorUsuarios; 
+
     @Autowired
-    private GestorUsuarios gestorUsuarios; 
+    public VentanaRegistro(GestorUsuarios gestorUsuarios) {
+        this.gestorUsuarios = gestorUsuarios;
+    }
 
     @GetMapping("/registro")
     public String mostrarFormulario(Model model) {

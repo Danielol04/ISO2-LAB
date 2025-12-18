@@ -11,8 +11,12 @@ import com.nnm.nnm.persistencia.ReservaDAO;
 @Service
 public class GestorReservas {
 
+    private final ReservaDAO reservaDAO;
+
     @Autowired
-    private ReservaDAO reservaDAO;
+    public GestorReservas(ReservaDAO reservaDAO) {
+        this.reservaDAO = reservaDAO;
+    }
 
     public boolean existeReserva(long id) {
         return reservaDAO.findById(id) != null;

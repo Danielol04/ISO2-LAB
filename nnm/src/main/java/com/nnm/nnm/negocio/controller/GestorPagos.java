@@ -9,8 +9,14 @@ import com.nnm.nnm.persistencia.PagoDAO;
 
 @Service
 public class GestorPagos {
+
+    private final PagoDAO pagoDAO;
+
     @Autowired
-    private PagoDAO pagoDAO;
+    public GestorPagos(PagoDAO pagoDAO) {
+        this.pagoDAO = pagoDAO;
+    }
+
     public void registrarPago(com.nnm.nnm.negocio.dominio.entidades.Pago pago) {
         pagoDAO.guardarPago(pago);
     }

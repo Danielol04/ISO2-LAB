@@ -40,23 +40,24 @@ public class VentanaReserva {
 
     private static final Logger log = LoggerFactory.getLogger(VentanaReserva.class);
 
-    @Autowired
-    private GestorReservas gestorReservas;
+    private final GestorReservas gestorReservas;
+    private final GestorDisponibilidad gestorDisponibilidad;
+    private final GestorSolicitudes gestorSolicitudes;
+    private final GestorPagos gestorPago;
+    private final GestorInmuebles gestorInmuebles;
+    private final GestorUsuarios gestorUsuarios;
 
     @Autowired
-    private GestorDisponibilidad gestorDisponibilidad;
-
-    @Autowired
-    private GestorSolicitudes gestorSolicitudes;
-
-    @Autowired
-    private GestorPagos gestorPago;
-
-    @Autowired
-    private GestorInmuebles gestorInmuebles;
-
-    @Autowired
-    private GestorUsuarios gestorUsuarios;
+    public VentanaReserva(GestorReservas gestorReservas, GestorDisponibilidad gestorDisponibilidad,
+            GestorSolicitudes gestorSolicitudes, GestorPagos gestorPago, GestorInmuebles gestorInmuebles,
+            GestorUsuarios gestorUsuarios) {
+        this.gestorReservas = gestorReservas;
+        this.gestorDisponibilidad = gestorDisponibilidad;
+        this.gestorSolicitudes = gestorSolicitudes;
+        this.gestorPago = gestorPago;
+        this.gestorInmuebles = gestorInmuebles;
+        this.gestorUsuarios = gestorUsuarios;
+    }
 
     @GetMapping("/crear/{idInmueble}")
     public String mostrarFormularioReserva(@PathVariable Long idInmueble, Model model, HttpSession session) {

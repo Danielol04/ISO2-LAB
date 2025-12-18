@@ -33,12 +33,16 @@ import jakarta.servlet.http.HttpSession;
 public class VentanaDisponibilidad {
     private static final Logger log = LoggerFactory.getLogger(VentanaDisponibilidad.class);
 
+    private final GestorDisponibilidad gestorDisponibilidad;
+    private final GestorInmuebles gestorInmuebles;
+    private final GestorReservas gestorReservas;
+
     @Autowired
-    private GestorDisponibilidad gestorDisponibilidad;
-    @Autowired
-    private GestorInmuebles gestorInmuebles;
-    @Autowired
-    private GestorReservas gestorReservas;
+    public VentanaDisponibilidad(GestorDisponibilidad gestorDisponibilidad, GestorInmuebles gestorInmuebles, GestorReservas gestorReservas) {
+        this.gestorDisponibilidad = gestorDisponibilidad;
+        this.gestorInmuebles = gestorInmuebles;
+        this.gestorReservas = gestorReservas;
+    }
 
     @GetMapping("/crear/{id}")
     public String mostrarFormulario(@PathVariable long id, Model model, HttpSession session) {
