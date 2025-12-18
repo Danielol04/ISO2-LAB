@@ -11,10 +11,14 @@ import java.util.List;
 
 public class VentanaBusqueda extends JFrame {
 
-    private JTextField tfDestino, tfBanos, tfHabitaciones, tfPrecioMin, tfPrecioMax;
+    private JTextField tfDestino;
+    private JTextField tfBanos;
+    private JTextField tfHabitaciones;
+    private JTextField tfPrecioMin;
+    private JTextField tfPrecioMax;
     private JTextArea taResultados;
 
-    private GestorBusquedas gestorBusquedas;
+    private transient GestorBusquedas gestorBusquedas;
 
     public VentanaBusqueda(GestorBusquedas gestorBusquedas) {
         super("Búsqueda de Inmuebles");
@@ -84,7 +88,7 @@ public class VentanaBusqueda extends JFrame {
                 );
             }
 
-        } catch (NumberFormatException ex) {
+        } catch (NumberFormatException _) {
             JOptionPane.showMessageDialog(this,
                     "Valores numéricos incorrectos",
                     "Error",
