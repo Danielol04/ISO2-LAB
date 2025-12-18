@@ -126,7 +126,7 @@ public class VentanaInmueble{
     
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Map<String, Object>> eliminarInmueble(@PathVariable Long id, HttpSession session) {
-        String usernamePropietario = (String) session.getAttribute("username");
+        String usernamePropietario = (String) session.getAttribute(USERNAME);
         boolean eliminado = gestorInmuebles.eliminarInmueble(id, usernamePropietario);
         Map<String, Object> respuesta = new HashMap<>();
         respuesta.put("exito", eliminado);
