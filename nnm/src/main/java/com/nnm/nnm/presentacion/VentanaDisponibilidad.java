@@ -110,7 +110,7 @@ public class VentanaDisponibilidad {
         if (disponibilidad.getFechaFin().isBefore(disponibilidad.getFechaInicio())) {
             mensajeError = "La fecha de fin no puede ser anterior a la fecha de inicio.";
             errorDisponibilidad(model, mensajeError, id);
-            // redirectAttributes.addFlashAttribute("error", mensajeError);
+            
             return "redirect:/disponibilidades/crear/" + id;
         }
 
