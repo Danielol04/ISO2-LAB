@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nnm.nnm.negocio.controller.GestorDisponibilidad;
@@ -96,7 +95,7 @@ public class VentanaReserva {
     }
 
     @PostMapping("/crear/{idInmueble}")
-    public String crearReserva(@RequestParam long idInmueble, @ModelAttribute Reserva reserva, Model model,
+    public String crearReserva(@PathVariable long idInmueble, @ModelAttribute Reserva reserva, Model model,
             HttpSession session, RedirectAttributes redirectAttrs) {
         String username = (String) session.getAttribute("username");
 
@@ -141,7 +140,7 @@ public class VentanaReserva {
         if (usernameSession == null || !usernameSession.equals(username)) {
             return "redirect:/login";
         }
-        List<Reserva> reservas = new ArrayList<>();
+        List<Reserva> reservas;
         boolean cancelacionesRealizadas = false;
         boolean esPropietario = gestorUsuarios.esPropietario(username);
         if (esPropietario) {
@@ -176,7 +175,7 @@ public class VentanaReserva {
             return "redirect:/login";
         }
         Pago pago = gestorPago.obtenerPagoPorReserva(idReserva);
-        log.info("Cancelando pago asociado a la reserva ID: " + idReserva);
+        log.info("Cancelando pago asociado a la reserva ID: {}", idReserva);
         gestorPago.borrarPago(pago);
         SolicitudReserva solicitud = gestorSolicitudes.obtenerSolicitudporIDreserva(idReserva);
         if(solicitud != null){
