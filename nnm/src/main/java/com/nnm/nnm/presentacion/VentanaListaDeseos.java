@@ -26,6 +26,8 @@ public class VentanaListaDeseos{
 
     private final GestorListaDeseos gestorLista;
     private final GestorUsuarios gestorUsuarios;
+    private static final String USERNAME = "username";
+    
 
     @Autowired
     public VentanaListaDeseos(GestorListaDeseos gestorLista, GestorUsuarios gestorUsuarios) {
@@ -37,7 +39,7 @@ public class VentanaListaDeseos{
     @ResponseBody
     public ResponseEntity<Boolean> toggleFavorito(@RequestParam Long idInmueble, HttpSession session) {
 
-        String username = (String) session.getAttribute("username");
+        String username = (String) session.getAttribute(USERNAME);
 
         // Usuario no logueado lanzar 401 Unauthorized
         if (username == null) {
@@ -53,7 +55,7 @@ public class VentanaListaDeseos{
     @GetMapping("/favoritos/lista")
     @ResponseBody
     public ResponseEntity<Set<Long>> obtenerFavoritos(HttpSession session) {
-        String username = (String) session.getAttribute("username");
+        String username = (String) session.getAttribute(USERNAME);
 
         // Usuario no logueado -> 401 Unauthorized
         if (username == null) {
@@ -78,7 +80,7 @@ public class VentanaListaDeseos{
 
     @GetMapping("/lista-deseos")
     public String mostrarListaDeseos(Model model, HttpSession session) {
-        String username = (String) session.getAttribute("username");
+        String username = (String) session.getAttribute(USERNAME);
         if (username == null) return "redirect:/login";
 
         Inquilino inquilino = gestorUsuarios.obtenerInquilinoPorUsername(username);

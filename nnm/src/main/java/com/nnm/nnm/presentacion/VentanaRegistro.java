@@ -16,6 +16,7 @@ import com.nnm.nnm.negocio.dominio.entidades.Propietario;
 @Controller
 public class VentanaRegistro {
     private  static final Logger log = LoggerFactory.getLogger(VentanaRegistro.class);
+    private static final String REGISTRO = "registro";
     
     private final GestorUsuarios gestorUsuarios; 
 
@@ -27,7 +28,7 @@ public class VentanaRegistro {
     @GetMapping("/registro")
     public String mostrarFormulario(Model model) {
         log.info("Mostrando formulario de registro");
-        return "registro";
+        return REGISTRO;
     }
     
     @PostMapping("/registro")
@@ -37,7 +38,7 @@ public class VentanaRegistro {
 
         if (gestorUsuarios.existeUsuario(username)) {
             model.addAttribute("error", "El nombre de usuario ya existe");
-            return "registro";
+            return REGISTRO;
         }
 
         if ("PROPIETARIO".equalsIgnoreCase(userType)) {
@@ -50,7 +51,7 @@ public class VentanaRegistro {
 
         } else {
             model.addAttribute("error", "Tipo de usuario no válido");
-            return "registro";
+            return REGISTRO;
         }
         log.info("Usuario {} registrado", username);
         model.addAttribute("mensaje", "Usuario registrado correctamente");

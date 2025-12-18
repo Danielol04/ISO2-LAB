@@ -38,6 +38,7 @@ import jakarta.servlet.http.HttpSession;
 public class VentanaInmueble{
 
     private static final Logger log = LoggerFactory.getLogger(VentanaInmueble.class);
+    private static final String USERNAME = "username";
 
     private final GestorInmuebles gestorInmuebles;
     private final GestorUsuarios gestorUsuarios;
@@ -50,7 +51,7 @@ public class VentanaInmueble{
 
     @GetMapping("/alta")
     public String mostrarFormulario(Model model, HttpSession session) {
-        model.addAttribute("username", session.getAttribute("username"));
+        model.addAttribute(USERNAME, session.getAttribute(USERNAME));
         model.addAttribute("inmueble", new Inmueble());
         log.info("Mostrando formulario de AltaInmueble");
         return "AltaInmuebles";
@@ -64,7 +65,7 @@ public class VentanaInmueble{
                 inmueble.setFoto(foto.getBytes());
             }
             
-            String usernamePropietario = (String) session.getAttribute("username");
+            String usernamePropietario = (String) session.getAttribute(USERNAME);
             if(gestorUsuarios.esPropietario(usernamePropietario)) {
                 
                 Propietario propietario = gestorUsuarios.obtenerPropietarioPorUsername(usernamePropietario);
