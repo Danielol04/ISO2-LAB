@@ -61,6 +61,10 @@ public class Inmueble {
     @OneToMany(mappedBy="inmueble", cascade = CascadeType.ALL)
     private List<Disponibilidad> disponibilidades;
 
+    @OneToMany(mappedBy = "inmueble", cascade = CascadeType.ALL)
+    private List<Reserva> reservas;
+
+
     public Inmueble() {}
 
     public Inmueble(long id, Propietario username_propietario,String titulo, String tipo_inmueble,
@@ -93,6 +97,7 @@ public class Inmueble {
     public int getHabitaciones() { return habitaciones; }
     public byte[] getFoto() { return foto; }
     public List<Disponibilidad> getDisponibilidades() { return disponibilidades; }
+    public List<Reserva> getReservas() { return reservas; }
 
     public void setUsername_propietario(Propietario username_propietario) { this.propietario = username_propietario; }
     public void setTitulo(String titulo) { this.titulo = titulo; }

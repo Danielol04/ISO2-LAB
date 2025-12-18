@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nnm.nnm.negocio.dominio.entidades.EstadoReserva;
 import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
+import com.nnm.nnm.negocio.dominio.entidades.Reserva;
 import com.nnm.nnm.persistencia.InmuebleDAO;
 
 @Service
@@ -34,11 +36,22 @@ public class GestorInmuebles {
     public boolean eliminarInmueble(Long id, String usernamePropietario) {
         Inmueble inmueble = inmuebleDAO.findById(id);
         boolean existe = gestorUsuarios.esPropietario(usernamePropietario);
-        if (inmueble != null && existe && inmueble.getPropietario().getUsername().equals(usernamePropietario)) {
+        if (inmueble != null && existe && inmueble.getPropietario().getUsername().equals(usernamePropietario) && sePuedeEliminarInmuebleSegunReservas(inmueble)) {
             inmuebleDAO.delete(inmueble);
             return true;
         }
         return false;
+    }
+    private boolean sePuedeEliminarInmuebleSegunReservas(Inmueble inmueble) {
+        List<Reserva> reservas = inmueble.getReservas();
+        if(reservas != null && !reservas.isEmpty()) {
+            for(Reserva reserva : reservas){
+                if(reserva.getEstado() == EstadoReserva.EXPIRADA) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 }

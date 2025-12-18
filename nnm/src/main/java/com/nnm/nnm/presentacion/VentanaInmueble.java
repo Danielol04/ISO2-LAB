@@ -45,7 +45,8 @@ public class VentanaInmueble{
     private GestorUsuarios gestorUsuarios;
 
     @GetMapping("/alta")
-    public String mostrarFormulario(Model model) {
+    public String mostrarFormulario(Model model, HttpSession session) {
+        model.addAttribute("username", session.getAttribute("username"));
         model.addAttribute("inmueble", new Inmueble());
         log.info("Mostrando formulario de AltaInmueble");
         return "AltaInmuebles";
