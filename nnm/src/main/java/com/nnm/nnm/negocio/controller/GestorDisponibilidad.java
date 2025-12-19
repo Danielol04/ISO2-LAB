@@ -72,18 +72,6 @@ public class GestorDisponibilidad {
         return disponibilidadDAO.findById(id);
     }
 
-    public Boolean obtenerTipoReserva(long idInmueble, LocalDate fechaInicio, LocalDate fechaFin) {
-        List<Disponibilidad> disponibles = obtenerDisponibilidadPorInmueble(idInmueble);
-
-        for (Disponibilidad d : disponibles) {
-            
-            if (!fechaInicio.isBefore(d.getFechaInicio()) && !fechaFin.isAfter(d.getFechaFin())) {
-                return d.getReservaDirecta(); // Devuelve true si es directa, false si no
-            }
-        }
-        return null;
-    }
-
     public List<Disponibilidad> obtenerDisponibilidadParaReserva(long idInmueble, LocalDate fechaInicio,
             LocalDate fechaFin) {
         List<Disponibilidad> disponibles = obtenerDisponibilidadPorInmueble(idInmueble);

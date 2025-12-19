@@ -21,7 +21,6 @@ public class GestorBD {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // SELECT genérico
     public <T> List<T> select(String jpql, Class<T> entityClass) {
         try {
             return entityManager.createQuery(jpql, entityClass).getResultList();
@@ -30,31 +29,27 @@ public class GestorBD {
         }
     }
 
-    // SELECT con parámetro (por ejemplo WHERE)
-    public <T> T selectSingle(String jpql, Class<T> entityClass, String paramName, Object value) {
+    public <T> T selectSingle(String jpql, Class<T> entityClass, String paramName, Object value, Object... extras) {
         try {
-            return entityManager.createQuery(jpql, entityClass)
-                .setParameter(paramName, value)
-                .getSingleResult();
+            var query = entityManager.createQuery(jpql, entityClass);
+            
+            query.setParameter(paramName, value);
+            
+            if (extras != null && extras.length > 0) {
+                for (int i = 0; i < extras.length; i += 2) {
+                    if (i + 1 < extras.length) {
+                        query.setParameter((String) extras[i], extras[i + 1]);
+                    }
+                }
+            }
+            
+            return query.getSingleResult();
         } catch (NoResultException _) {
             return null;
-        }   
-    }
-    // SELECT con tres parámetros (por ejemplo WHERE)
-    public <T> T selectSingle(String jpql, Class<T> entityClass, String param1, Object value1, String param2, Object value2, String param3, Object value3) {
-        try {
-            return entityManager.createQuery(jpql, entityClass)
-                .setParameter(param1, value1)
-                .setParameter(param2, value2)
-                .setParameter(param3, value3)
-                .getSingleResult();
-        } catch (NoResultException _) {
-            return null;
-        }   
+        }
     }
 
 
-    // SELECT con parámetro (por ejemplo WHERE) 
     public <T> List<T> selectList(String jpql, Class<T> entityClass, String paramName, Object value) {
         try {
             return entityManager.createQuery(jpql, entityClass)
@@ -68,12 +63,10 @@ public class GestorBD {
     
 
 
-    // INSERT genérico
     public <T> void insert(T entity) {
         entityManager.persist(entity);
     }
 
-    // UPDATE genérico
     public <T> T update(T entity) {
         try {
             return entityManager.merge(entity);
@@ -82,11 +75,9 @@ public class GestorBD {
         }
     }
 
-    // DELETE genérico
     public <T> void delete(T entity) {
         entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
     }
-    // Busqueda con varios parametros
     public <T> List<T> selectListConParametros(String jpql, Class<T> entityClass, String[] paramNames, Object[] values) {
         try {
             var query = entityManager.createQuery(jpql, entityClass);
@@ -145,7 +136,7 @@ public class GestorBD {
         try{
             return entityManager.createQuery(jpql, class1)
             .setParameter(string, idInmueble)
-            .setParameter(string2, politicaCancelacion)//PoliticaCancelacion
+            .setParameter(string2, politicaCancelacion)
             .setParameter(string3, reservaDirecta)
             .setParameter(string4, fechaInicio)
             .setParameter(string5, fechaFin)
