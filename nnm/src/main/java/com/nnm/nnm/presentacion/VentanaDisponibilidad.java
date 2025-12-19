@@ -65,11 +65,7 @@ public class VentanaDisponibilidad {
 
         List<String> fechasDisponibles = new ArrayList<>();
         for (Disponibilidad d : disponibilidades) {
-            LocalDate fecha = d.getFechaInicio();
-            while (!fecha.isAfter(d.getFechaFin())) {
-                fechasDisponibles.add(fecha.toString());
-                fecha = fecha.plusDays(1);
-            }
+            fechasDisponibles.addAll(generarListaFechas(d.getFechaInicio(),d.getFechaFin()));
         }
         List<String> fechasReservadas = new ArrayList<>();
         for(Reserva reserva: reservas){
@@ -78,11 +74,7 @@ public class VentanaDisponibilidad {
                 gestorReservas.cancelarReserva(reserva.getId());
                 continue;
             }
-            LocalDate fecha = reserva.getFechaInicio();
-            while (!fecha.isAfter(reserva.getFechaFin())) {
-                fechasReservadas.add(fecha.toString());
-                fecha = fecha.plusDays(1);
-            }
+            fechasReservadas.addAll(generarListaFechas(reserva.getFechaInicio(),reserva.getFechaFin()));
         }
         model.addAttribute("fechasReservadas", fechasReservadas);
         model.addAttribute("fechasDisponibles", fechasDisponibles);
@@ -163,6 +155,14 @@ public class VentanaDisponibilidad {
         model.addAttribute("error", mensajeError);
         model.addAttribute("politicas", PoliticaCancelacion.values());
         model.addAttribute("idInmueble", id);
+    }
+    public List<String> generarListaFechas(LocalDate fecha, LocalDate fechaFin ){
+        List <String> fechas= new ArrayList<>();
+        while (!fecha.isAfter(fechaFin)) {
+            fechas.add(fecha.toString());
+            fecha = fecha.plusDays(1);
+        }
+        return fechas;
     }
 
 }
