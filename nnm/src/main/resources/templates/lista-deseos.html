@@ -12,9 +12,11 @@
     <a th:href="@{/home}" class="logo-link">
         <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
     </a>
-
+      
+    <!-- Botones a la derecha -->
     <div class="navbar-right">
-        <a th:href="@{/lista-deseos}" class="btn-deseos activo">Lista de deseos</a>
+        <a th:href="@{/lista-deseos}" class="btn-deseos">Lista de deseos</a>
+        <a th:href="@{/reserva/misReservas/{username}(username=${username})}" class="btn-deseos">Mis reservas</a>
         <div class="dropdown">
             <button class="btn-circular">☰</button>
             <div class="dropdown-content">
