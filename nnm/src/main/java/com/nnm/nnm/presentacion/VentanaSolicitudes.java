@@ -1,8 +1,9 @@
 package com.nnm.nnm.presentacion;
 
 import java.util.List;
-import java.util.logging.Logger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +24,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/solicitudes")
 public class VentanaSolicitudes {
-    private static final Logger log = Logger.getLogger(VentanaSolicitudes.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(VentanaSolicitudes.class);
     private static final String USERNAME = "username";
 
     private final GestorSolicitudes gestorSolicitudes;
@@ -61,11 +62,11 @@ public class VentanaSolicitudes {
     @PostMapping("/solicitud/{id}/rechazar")
     public String rechazarSolicitud(@PathVariable Long id, HttpSession session) {
         SolicitudReserva solicitud = gestorSolicitudes.obtenerSolicitudPorId(id);
-        log.info("Rechazando solicitud con ID: {}" + id);
+        log.info("Rechazando solicitud con ID: {}", id);
         gestorSolicitudes.borrarSolicitudReserva(solicitud);
         Reserva reserva = solicitud.getReserva();
         Pago pago = gestorPagos.obtenerPagoPorReserva(reserva.getId());
-        log.info("Borrando pago asociado con ID: {}" + pago.getId());
+        log.info("Borrando pago asociado con ID: {}", pago.getId());
         
         gestorPagos.borrarPago(pago);
         log.info("Cancelando reserva asociada con ID: {} " + reserva.getId());

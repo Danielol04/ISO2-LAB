@@ -71,7 +71,7 @@ public class VentanaInmueble{
                 Propietario propietario = gestorUsuarios.obtenerPropietarioPorUsername(usernamePropietario);
                 inmueble.setUsername_propietario(propietario);
                 gestorInmuebles.registrarInmueble(inmueble);
-                log.info("Inmueble registrado: {}", inmueble.getTitulo());
+                log.info("Inmueble registrado: {}", inmueble.getTitulo().replaceAll("[\n\r]", "_"));
                 return"redirect:/home";
             }else{
                 log.warn("No se encontró el username del propietario en la sesión");
@@ -136,4 +136,5 @@ public class VentanaInmueble{
 
         return ResponseEntity.ok(respuesta);
     }
+
 }

@@ -53,7 +53,7 @@ public class VentanaRegistro {
             model.addAttribute("error", "Tipo de usuario no válido");
             return REGISTRO;
         }
-        log.info("Usuario {} registrado", username);
+        log.info("Usuario {} registrado", username.replaceAll("[\n\r]", "_"));
         model.addAttribute("mensaje", "Usuario registrado correctamente");
         return "login";
     }
