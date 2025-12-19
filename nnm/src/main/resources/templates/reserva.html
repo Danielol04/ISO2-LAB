@@ -63,14 +63,14 @@
       <!-- RESERVA -->
       <div class="reserva-box">
         <h3>Selecciona tus fechas</h3>
-        <form th:action="@{'/reserva/crear/' + ${idInmueble}}" th:object="${reserva}" method="post">
+        <form id="formCrear" th:action="@{'/reserva/crear/' + ${idInmueble}}" th:object="${reserva}" method="post">
           <input type="hidden" name="idInmueble" th:value="${inmueble.id}">
           <div class="campo-fecha">
             <label>Fechas</label>
 
             <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 10px;">
-              <input type="text" id="inputLlegada" name="fechaInicio" placeholder="Llegada" readonly>
-              <input type="text" id="inputSalida" name="fechaFin" placeholder="Salida" readonly>
+              <input type="text" id="inputLlegada" name="fechaInicio" placeholder="Llegada" readonly required>
+              <input type="text" id="inputSalida" name="fechaFin" placeholder="Salida" readonly required>
             </div>
 
             <div id="calendarioRango" class="calendario">
@@ -86,7 +86,6 @@
           <button type="submit" class="btn-reservar-lateral">Reservar</button>
         </form>
       </div>
-
     </section>
   </main>
 
@@ -98,5 +97,38 @@
 
   <!-- LÓGICA CALENDARIO -->
   <script th:src="@{/js/calendarioReservas.js}"></script>
+  <!-- POPUP ERROR -->
+  <div id="popupError" class="popup-overlay" style="display:none;">
+    <div class="popup popup-error">
+      <p id="mensajeError"></p>
+    </div>
+  </div>
+
+  <script>
+    function mostrarPopupError(mensaje) {
+      const popup = document.getElementById("popupError");
+      document.getElementById("mensajeError").textContent = mensaje;
+
+      popup.style.display = "flex";
+
+      setTimeout(() => {
+        popup.style.display = "none";
+      }, 3000);
+    }
+  </script>
+
+  <!-- VALIDACIÓN FINAL -->
+  <script>
+    document.getElementById("formCrear").addEventListener("submit", function (event) {
+      const inicio = document.getElementById("inputLlegada").value;
+      const fin = document.getElementById("inputSalida").value;
+
+      if (!inicio || !fin) {
+        event.preventDefault();
+        mostrarPopupError("Debes seleccionar la fecha de inicio y la fecha de fin.");
+      }
+    });
+  </script>
 </body>
+
 </html>
