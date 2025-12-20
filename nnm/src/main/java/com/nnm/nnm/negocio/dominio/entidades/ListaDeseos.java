@@ -47,4 +47,7 @@ public class ListaDeseos {
     public Set<Inmueble> getInmuebles() {
         return inmuebles;
     }
+    public void setInmuebles(Set<Inmueble> inmuebles) {
+        this.inmuebles = inmuebles;
+    }
 }

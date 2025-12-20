@@ -78,7 +78,7 @@ public class Reserva {
     public void setPoliticaCancelacion(PoliticaCancelacion politicaCancelacion) {this.politicaCancelacion = politicaCancelacion;}
 
     public EstadoReserva getEstado() {
-        if (fechaFin.isBefore(LocalDate.now())) {setEstado(EstadoReserva.EXPIRADA);}
+        if (fechaFin != null && fechaFin.isBefore(LocalDate.now())) {setEstado(EstadoReserva.EXPIRADA);}
         return estado;
     }
     public void setEstado(EstadoReserva estado) { this.estado = estado;}
