@@ -24,7 +24,7 @@ public class GestorBD {
     public <T> List<T> select(String jpql, Class<T> entityClass) {
         try {
             return entityManager.createQuery(jpql, entityClass).getResultList();
-        } catch (NoResultException _) {
+        } catch (NoResultException exception) {
             return List.of();
         }
     }
@@ -44,7 +44,7 @@ public class GestorBD {
             }
             
             return query.getSingleResult();
-        } catch (NoResultException _) {
+        } catch (NoResultException exception) {
             return null;
         }
     }
@@ -55,7 +55,7 @@ public class GestorBD {
             return entityManager.createQuery(jpql, entityClass)
             .setParameter(paramName, value)
             .getResultList();
-        } catch (NoResultException _) {
+        } catch (NoResultException e) {
             return List.of();
         }
     
@@ -70,7 +70,7 @@ public class GestorBD {
     public <T> T update(T entity) {
         try {
             return entityManager.merge(entity);
-        } catch (Exception _) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -85,7 +85,7 @@ public class GestorBD {
                 query.setParameter(paramNames[i], values[i]);
             }
             return query.getResultList();
-        } catch (NoResultException _) {
+        } catch (NoResultException e) {
             return List.of();
         }
         }
@@ -141,7 +141,7 @@ public class GestorBD {
             .setParameter(string4, fechaInicio)
             .setParameter(string5, fechaFin)
             .getResultList();
-        } catch (NoResultException _) {
+        } catch (NoResultException error) {
             return List.of();
         }
     }

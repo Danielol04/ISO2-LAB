@@ -1,13 +1,22 @@
 
 package com.nnm.nnm.presentacion;
 
-import com.nnm.nnm.negocio.controller.GestorBusquedas;
-import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import com.nnm.nnm.negocio.controller.GestorBusquedas;
+import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
 
 public class VentanaBusqueda extends JFrame {
 
@@ -88,7 +97,7 @@ public class VentanaBusqueda extends JFrame {
                 );
             }
 
-        } catch (NumberFormatException _) {
+        } catch (NumberFormatException exception) {
             JOptionPane.showMessageDialog(this,
                     "Valores numéricos incorrectos",
                     "Error",
