@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -18,7 +19,8 @@ public class Pago {
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
-    @OneToOne(mappedBy = "pago")
+    @OneToOne
+    @JoinColumn(name = "id_reserva", referencedColumnName = "id")
     private Reserva reserva;
 
     @Column(name = "referencia", nullable = false)

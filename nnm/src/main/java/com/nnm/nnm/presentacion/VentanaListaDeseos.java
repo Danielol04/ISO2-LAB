@@ -90,8 +90,8 @@ public class VentanaListaDeseos{
         } else {
             model.addAttribute("propiedades", inquilino.getListaDeseos().getInmuebles());
         }
-
-        return "lista-deseos";
+        model.addAttribute("username", username);
+        return "lista-deseos";  
     }
 
 

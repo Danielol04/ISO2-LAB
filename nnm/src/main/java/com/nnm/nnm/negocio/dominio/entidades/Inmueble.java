@@ -58,10 +58,10 @@ public class Inmueble {
     private byte[] foto;
 
 
-    @OneToMany(mappedBy="inmueble", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="inmueble", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Disponibilidad> disponibilidades;
 
-    @OneToMany(mappedBy = "inmueble", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "inmueble", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reserva> reservas;
 
 

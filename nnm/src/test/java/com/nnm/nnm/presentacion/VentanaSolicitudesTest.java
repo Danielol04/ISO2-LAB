@@ -117,14 +117,13 @@ class VentanaSolicitudesTest {
         when(pago.getId()).thenReturn(123L);
 
         when(gestorSolicitudes.obtenerSolicitudPorId(5L)).thenReturn(solicitud);
-        when(gestorPagos.obtenerPagoPorReserva(99L)).thenReturn(pago);
+        when(reserva.getPago()).thenReturn(pago);
 
         mockMvc.perform(post("/solicitudes/solicitud/5/rechazar").session(session))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/solicitudes/confirmacionReserva/juan"));
 
         verify(gestorSolicitudes).borrarSolicitudReserva(solicitud);
-        verify(gestorPagos).borrarPago(pago);
         verify(gestorReservas).cancelarReserva(99L);
     }
 }

@@ -48,9 +48,10 @@ public class Reserva {
     @Column(name = "reserva_directa", nullable = false)
     private boolean reservaDirecta;
 
-    @OneToOne(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "id_pago", nullable = false)
+    @OneToOne(mappedBy="reserva", cascade = CascadeType.ALL, orphanRemoval = true)
     private Pago pago;
+
+    
 
     public Reserva() {
     }
