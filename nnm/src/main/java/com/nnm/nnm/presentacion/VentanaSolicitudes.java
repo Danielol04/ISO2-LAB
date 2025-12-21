@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.nnm.nnm.negocio.controller.GestorPagos;
 import com.nnm.nnm.negocio.controller.GestorReservas;
 import com.nnm.nnm.negocio.controller.GestorSolicitudes;
 import com.nnm.nnm.negocio.dominio.entidades.Reserva;
@@ -27,13 +26,11 @@ public class VentanaSolicitudes {
     private static final String USERNAME = "username";
 
     private final GestorSolicitudes gestorSolicitudes;
-    private final GestorPagos gestorPagos;
     private final GestorReservas gestorReservas;
 
     @Autowired
-    public VentanaSolicitudes(GestorSolicitudes gestorSolicitudes, GestorPagos gestorPagos, GestorReservas gestorReservas) {
+    public VentanaSolicitudes(GestorSolicitudes gestorSolicitudes, GestorReservas gestorReservas) {
         this.gestorSolicitudes = gestorSolicitudes;
-        this.gestorPagos = gestorPagos;
         this.gestorReservas = gestorReservas;
     }
 

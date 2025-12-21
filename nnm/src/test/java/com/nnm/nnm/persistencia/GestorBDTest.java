@@ -1,13 +1,13 @@
 package com.nnm.nnm.persistencia;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
-import jakarta.persistence.TypedQuery;
 import org.junit.jupiter.api.Test;
 
 import com.nnm.nnm.negocio.dominio.entidades.Disponibilidad;
@@ -16,7 +16,7 @@ import com.nnm.nnm.negocio.dominio.entidades.PoliticaCancelacion;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
-import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
 class GestorBDTest {
 

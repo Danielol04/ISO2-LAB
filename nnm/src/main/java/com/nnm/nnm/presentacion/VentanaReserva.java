@@ -19,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nnm.nnm.negocio.controller.GestorDisponibilidad;
 import com.nnm.nnm.negocio.controller.GestorInmuebles;
-import com.nnm.nnm.negocio.controller.GestorPagos;
 import com.nnm.nnm.negocio.controller.GestorReservas;
 import com.nnm.nnm.negocio.controller.GestorSolicitudes;
 import com.nnm.nnm.negocio.controller.GestorUsuarios;
@@ -44,18 +43,16 @@ public class VentanaReserva {
     private final GestorReservas gestorReservas;
     private final GestorDisponibilidad gestorDisponibilidad;
     private final GestorSolicitudes gestorSolicitudes;
-    private final GestorPagos gestorPago;
     private final GestorInmuebles gestorInmuebles;
     private final GestorUsuarios gestorUsuarios;
 
     @Autowired
     public VentanaReserva(GestorReservas gestorReservas, GestorDisponibilidad gestorDisponibilidad,
-            GestorSolicitudes gestorSolicitudes, GestorPagos gestorPago, GestorInmuebles gestorInmuebles,
+            GestorSolicitudes gestorSolicitudes, GestorInmuebles gestorInmuebles,
             GestorUsuarios gestorUsuarios) {
         this.gestorReservas = gestorReservas;
         this.gestorDisponibilidad = gestorDisponibilidad;
         this.gestorSolicitudes = gestorSolicitudes;
-        this.gestorPago = gestorPago;
         this.gestorInmuebles = gestorInmuebles;
         this.gestorUsuarios = gestorUsuarios;
     }
