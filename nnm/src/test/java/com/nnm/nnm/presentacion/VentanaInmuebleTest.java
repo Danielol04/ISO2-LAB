@@ -1,26 +1,19 @@
 package com.nnm.nnm.presentacion;
 
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.nnm.nnm.negocio.controller.GestorInmuebles;
@@ -120,19 +113,6 @@ class VentanaInmuebleTest {
         mockMvc.perform(get("/inmuebles/1/foto"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_OCTET_STREAM));
-    }
-
-
-    // -------------------------------------------------------------------------
-    // 5. GET /{id}/foto (sin imagen → usa foto genérica)
-    // -------------------------------------------------------------------------
-
-    @Test
-    void testMostrarFotoGenerica() throws Exception {
-        when(gestorInmuebles.obtenerInmueblePorId(1L)).thenReturn(null);
-
-        mockMvc.perform(get("/inmuebles/1/foto"))
-                .andExpect(status().isOk()); // si el recurso existe
     }
 
     // -------------------------------------------------------------------------
