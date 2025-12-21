@@ -3,6 +3,8 @@ package com.nnm.nnm.presentacion;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -42,9 +44,9 @@ class VentanaDisponibilidadTest {
 
         List<String> fechas = controlador.generarListaFechas(inicio, fin);
 
-        assert fechas.size() == 3;
-        assert fechas.get(0).equals("2025-01-01");
-        assert fechas.get(2).equals("2025-01-03");
+        assertEquals(3, fechas.size());
+        assertEquals("2025-01-01", fechas.get(0));
+        assertEquals("2025-01-03", fechas.get(2));
     }
 
     // -------------------------------------------------------------------------
@@ -54,8 +56,10 @@ class VentanaDisponibilidadTest {
     @Test
     void testEliminarSinSesion() {
         MockHttpSession session = new MockHttpSession();
+
         String resultado = controlador.eliminar(1L, session);
-        assert resultado.equals("redirect:/login");
+
+        assertEquals("redirect:/login", resultado);
     }
 
     // -------------------------------------------------------------------------
@@ -69,12 +73,12 @@ class VentanaDisponibilidadTest {
 
         when(gestorDisponibilidad.obtenerDisponibilidadPorId(1L)).thenReturn(null);
 
-        try {
-            controlador.eliminar(1L, session);
-            assert false;
-        } catch (ResponseStatusException ex) {
-            assert ex.getStatusCode().value() == 404;
-        }
+        ResponseStatusException ex = assertThrows(
+                ResponseStatusException.class,
+                () -> controlador.eliminar(1L, session)
+        );
+
+        assertEquals(404, ex.getStatusCode().value());
     }
 
     // -------------------------------------------------------------------------
@@ -100,10 +104,12 @@ class VentanaDisponibilidadTest {
         existente.setFechaFin(LocalDate.of(2025, 1, 18));
 
         when(gestorInmuebles.obtenerInmueblePorId(1L)).thenReturn(inm);
-        when(gestorDisponibilidad.obtenerDisponibilidadPorInmueble(1L)).thenReturn(List.of(existente));
+        when(gestorDisponibilidad.obtenerDisponibilidadPorInmueble(1L))
+                .thenReturn(List.of(existente));
 
         String resultado = controlador.crearDisponibilidad(1L, nueva, session, model);
-        assert resultado.equals("redirect:/disponibilidades/crear/1");
+
+        assertEquals("redirect:/disponibilidades/crear/1", resultado);
     }
 
     // -------------------------------------------------------------------------
@@ -127,6 +133,7 @@ class VentanaDisponibilidadTest {
         when(gestorInmuebles.obtenerInmueblePorId(1L)).thenReturn(inm);
 
         String resultado = controlador.crearDisponibilidad(1L, nueva, session, model);
-        assert resultado.equals("redirect:/disponibilidades/crear/1");
+
+        assertEquals("redirect:/disponibilidades/crear/1", resultado);
     }
 }
