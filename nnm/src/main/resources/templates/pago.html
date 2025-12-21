@@ -15,7 +15,7 @@
         <div class="container">
             <div class="header">
                 <h1>Completa tu reserva</h1>
-                <a th:href="@{/home}" class="btn-cancelar">
+                <a th:href="@{/reserva/crear/{idInmueble}(idInmueble=${reserva.inmueble.id})}" class="btn-cancelar">
                     <svg class="icon-svg" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                     Cancelar
                 </a>

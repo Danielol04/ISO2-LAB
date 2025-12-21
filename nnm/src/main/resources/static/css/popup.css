@@ -94,3 +94,71 @@
     justify-content: center;
     align-items: center;
 }
+
+/* Estilo específico para el popup de éxito moderno */
+.popup-success-modern {
+    padding: 40px 30px !important;
+    max-width: 420px !important;
+    border-radius: 20px !important; /* Bordes más redondeados */
+}
+
+/* El círculo del icono con el efecto Halo */
+.success-icon-circle {
+    width: 70px;
+    height: 70px;
+    background-color: #ecfdf5; /* Verde muy clarito */
+    color: #10b981;            /* Verde esmeralda */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 25px auto;
+    /* Este es el truco del anillo exterior suave (halo) */
+    box-shadow: 0 0 0 10px rgba(236, 253, 245, 0.7);
+}
+
+.success-icon-circle svg {
+    width: 32px;
+    height: 32px;
+}
+
+/* Tipografía del título */
+.popup-success-modern h2 {
+    font-family: 'Inter', sans-serif;
+    color: #111827 !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    margin-bottom: 15px !important;
+}
+
+/* Texto de descripción */
+.popup-success-modern p {
+    color: #6b7280;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* Botón de ancho completo */
+.popup-botones-full {
+    width: 100%;
+}
+
+.btn-exito-full {
+    width: 100%;
+    background-color: #10b981 !important;
+    color: white !important;
+    border: none;
+    padding: 14px 0;
+    border-radius: 12px !important;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-exito-full:hover {
+    background-color: #059669 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}

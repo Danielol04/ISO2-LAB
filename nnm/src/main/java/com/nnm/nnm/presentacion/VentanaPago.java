@@ -81,6 +81,6 @@ public class VentanaPago {
         nuevoPago.setReferencia(UUID.randomUUID());
         gestorPagos.registrarPago(nuevoPago);
         model.addAttribute("idInmueble", idInmueble);
-        return "redirect:/reserva/crear/" + idInmueble;
+        return "redirect:/reserva/crear/" + idInmueble+"?reservado=true";
     }
 }
