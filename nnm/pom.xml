@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.nnm</groupId>
 	<artifactId>nnm</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>nnm</name>
 	<description>Projecto de un sistema similar a Airbnb donde personas particulares pueden reservar alojamientos de propietarios particulares</description>
 	<url/>
