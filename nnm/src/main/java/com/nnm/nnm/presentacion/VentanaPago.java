@@ -35,7 +35,8 @@ public class VentanaPago {
     private final GestorInmuebles gestorInmuebles;
 
     @Autowired
-    public VentanaPago(GestorReservas gestorReservas, GestorPagos gestorPagos, GestorSolicitudes gestorSolicitudes, GestorInmuebles gestorInmuebles) {
+    public VentanaPago(GestorReservas gestorReservas, GestorPagos gestorPagos, GestorSolicitudes gestorSolicitudes,
+            GestorInmuebles gestorInmuebles) {
         this.gestorReservas = gestorReservas;
         this.gestorPagos = gestorPagos;
         this.gestorSolicitudes = gestorSolicitudes;
@@ -53,9 +54,13 @@ public class VentanaPago {
     }
 
     @PostMapping("/confirmarPago/{idReserva}")
-    public String confirmarPago(@PathVariable("idReserva") Long idReserva, @RequestParam Double precioTotal,@RequestParam MetodoPago metodoPago,Model model, RedirectAttributes redirectAttrs) {
-        log.info("Confirmando pago para la reserva ID: {}", idReserva);
+    public String confirmarPago(@PathVariable("idReserva") Long idReserva, @RequestParam Double precioTotal,
+            @RequestParam MetodoPago metodoPago, Model model, RedirectAttributes redirectAttrs) {
         Reserva reserva = gestorReservas.obtenerReservaPorId(idReserva);
+        if (reserva == null || reserva.getPagado()) {
+            return "redirect:/home";
+        }
+        log.info("Confirmando pago para la reserva ID: {}", idReserva);
         Long idInmueble = reserva.getInmueble().getId();
         Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(idInmueble);
         reserva.setInmueble(inmueble);
@@ -70,7 +75,7 @@ public class VentanaPago {
 
             gestorSolicitudes.generarSolicitudReserva(reserva, precioTotal);
         }
-    
+
         log.info("Marcando la reserva como pagada para la reserva ID: {}", idReserva);
 
         reserva.setPagado(true);
@@ -81,6 +86,6 @@ public class VentanaPago {
         nuevoPago.setReferencia(UUID.randomUUID());
         gestorPagos.registrarPago(nuevoPago);
         model.addAttribute("idInmueble", idInmueble);
-        return "redirect:/reserva/crear/" + idInmueble+"?reservado=true";
+        return "redirect:/reserva/crear/" + idInmueble + "?reservado=true";
     }
 }

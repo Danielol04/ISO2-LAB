@@ -20,6 +20,9 @@ document.addEventListener("DOMContentLoaded", function() {
         const popupExito = document.getElementById("popupExito");
         if (popupExito) {
             popupExito.style.display = "flex";
+            window.history.replaceState({}, document.title, window.location.pathname);
+            setTimeout(() => { popupExito.style.display = "none"; }, 3000);
+
         }
     }
     renderCalendarios();
@@ -27,7 +30,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function cerrarPopupExito() {
     document.getElementById("popupExito").style.display = "none";
-    // Limpia la URL para que el popup no vuelva a salir al refrescar
     window.history.replaceState({}, document.title, window.location.pathname);
 }
 
@@ -187,7 +189,7 @@ function mostrarPopupError(mensaje) {
     const popup = document.getElementById("popupError");
     document.getElementById("mensajeError").textContent = mensaje;
     popup.style.display = "flex";
-    setTimeout(() => { popup.style.display = "none"; }, 2000);
+    setTimeout(() => { popup.style.display = "none"; }, 3000);
 }
 
 document.getElementById("formCrear").addEventListener("submit", function (event) {

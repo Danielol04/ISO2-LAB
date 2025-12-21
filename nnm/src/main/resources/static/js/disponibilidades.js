@@ -138,12 +138,8 @@ function cerrarPopup() {
 function mostrarPopupError(mensaje) {
     const popup = document.getElementById("popupError");
     document.getElementById("mensajeError").textContent = mensaje;
-
     popup.style.display = "flex";
-
-    setTimeout(() => {
-      popup.style.display = "none";
-    }, 2000);
+    setTimeout(() => { popup.style.display = "none"; }, 3000);
 }
 
 document.getElementById("formCrear").addEventListener("submit", function (event) {
@@ -151,7 +147,7 @@ document.getElementById("formCrear").addEventListener("submit", function (event)
     const fin = document.getElementById("inputSalida").value;
 
     if (!inicio || !fin) {
-      event.preventDefault();
-      mostrarPopupError("Debes seleccionar la fecha de inicio y la fecha de fin.");
+        event.preventDefault();
+        mostrarPopupError("Debes seleccionar la fecha de inicio y la fecha de fin.");
     }
 });
