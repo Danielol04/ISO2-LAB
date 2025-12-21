@@ -12,6 +12,11 @@
   z-index: 1000;
 }
 
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
 .logo-link {
   display: inline-block;
   align-items: center;
@@ -70,6 +75,9 @@
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-circular:hover {

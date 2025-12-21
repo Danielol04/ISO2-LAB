@@ -19,16 +19,21 @@
     </a>
 
     <!-- Botones a la derecha -->
+
     <div class="navbar-right">
-      <a th:href="@{/lista-deseos}" class="btn-deseos">Lista de deseos</a>
-      <a th:href="@{/reserva/misReservas/{username}(username=${username})}" class="btn-deseos">Mis reservas</a>
-      <div class="dropdown">
-        <button class="btn-circular">☰</button>
-        <div class="dropdown-content">
-          <a th:href="@{/datos-personales}">Datos personales</a>
-          <a th:href="@{/logout}">Cerrar sesión</a>
+      <th:block th:if="${username != null}">
+        <a th:href="@{/lista-deseos}" class="btn-deseos">Lista de deseos</a>
+        <a th:href="@{/reserva/misReservas/{username}(username=${username})}" class="btn-deseos">Mis reservas</a>
+        <div class="dropdown">
+          <button class="btn-circular">☰</button>
+          <div class="dropdown-content">
+            <a th:href="@{/logout}">Cerrar sesión</a>
+          </div>
         </div>
-      </div>
+      </th:block>
+      <th:block th:unless="${username != null}">
+        <a th:href="@{/login}" class="btn-deseos">Iniciar sesión</a>
+      </th:block>
     </div>
   </nav>
 
