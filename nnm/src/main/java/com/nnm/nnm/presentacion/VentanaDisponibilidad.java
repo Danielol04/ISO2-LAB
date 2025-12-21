@@ -65,11 +65,16 @@ public class VentanaDisponibilidad {
 
         List<String> fechasDisponibles = new ArrayList<>();
         for (Disponibilidad d : disponibilidades) {
-            fechasDisponibles.addAll(generarListaFechas(d.getFechaInicio(),d.getFechaFin()));
+            LocalDate fechaFin=d.getFechaFin();
+            if (fechaFin != null && fechaFin.isBefore(LocalDate.now())){
+                gestorDisponibilidad.eliminarDisponibilidad(d);
+                continue;
+            }
+            fechasDisponibles.addAll(generarListaFechas(d.getFechaInicio(),fechaFin));
         }
         List<String> fechasReservadas = new ArrayList<>();
         for(Reserva reserva: reservas){
-            reserva.getEstado(); // Actualiza el estado de la reserva
+            reserva.getEstado();
             if (reserva.getEstado().equals(EstadoReserva.EXPIRADA) || !reserva.getPagado()) {
                 gestorReservas.cancelarReserva(reserva.getId());
                 continue;
@@ -91,7 +96,6 @@ public class VentanaDisponibilidad {
         if (username == null) {
             return RETURNLOGING;
         }
-        String mensajeError = "";
         Inmueble inmueble = gestorInmuebles.obtenerInmueblePorId(id);
         if (inmueble == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inmueble no encontrado");
@@ -100,27 +104,7 @@ public class VentanaDisponibilidad {
         if (!inmueble.getPropietario().getUsername().equals(username)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permiso");
         }
-
         disponibilidad.setInmueble(inmueble);
-
-        if (disponibilidad.getFechaFin().isBefore(disponibilidad.getFechaInicio())) {
-            mensajeError = "La fecha de fin no puede ser anterior a la fecha de inicio.";
-            errorDisponibilidad(model, mensajeError, id);
-            
-            return RETURNCREAR + id;
-        }
-
-        // Validar que no haya solapamiento con otras disponibilidades del mismo inmueble
-        List<Disponibilidad> disponibilidadesExistentes = gestorDisponibilidad.obtenerDisponibilidadPorInmueble(id);
-        boolean solapa = disponibilidadesExistentes.stream()
-                .anyMatch(d -> !d.getFechaFin().isBefore(disponibilidad.getFechaInicio()) &&
-                        !d.getFechaInicio().isAfter(disponibilidad.getFechaFin()));
-
-        if (solapa) {
-            mensajeError = "Las fechas se solapan con una disponibilidad existente.";
-            errorDisponibilidad(model, mensajeError, id);
-            return RETURNCREAR + id;
-        }
 
         log.info("Creando disponibilidad para el inmueble: {}", id);
         gestorDisponibilidad.registrarDisponibilidad(disponibilidad);
@@ -140,7 +124,6 @@ public class VentanaDisponibilidad {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Disponibilidad no encontrada");
         }
 
-        // verificar propietario
         if (!disponibilidad.getInmueble().getPropietario().getUsername().equals(username)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permiso");
         }
@@ -151,11 +134,7 @@ public class VentanaDisponibilidad {
         return RETURNCREAR + idInmueble;
     }
 
-    private void errorDisponibilidad(Model model, String mensajeError, long id) {
-        model.addAttribute("error", mensajeError);
-        model.addAttribute("politicas", PoliticaCancelacion.values());
-        model.addAttribute("idInmueble", id);
-    }
+    
     public List<String> generarListaFechas(LocalDate fecha, LocalDate fechaFin ){
         List <String> fechas= new ArrayList<>();
         while (!fecha.isAfter(fechaFin)) {

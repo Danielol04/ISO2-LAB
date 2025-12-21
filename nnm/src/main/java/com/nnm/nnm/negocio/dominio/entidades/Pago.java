@@ -1,4 +1,5 @@
 package com.nnm.nnm.negocio.dominio.entidades;
+
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -8,16 +9,18 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+
 @Entity
 public class Pago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id", nullable = false, unique = true)
+    @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
-    @Column(name = "idReserva", nullable = false)
-    private long idReserva;
-   
+    @OneToOne(mappedBy = "pago")
+    private Reserva reserva;
+
     @Column(name = "referencia", nullable = false)
     private UUID referencia;
 
@@ -28,35 +31,24 @@ public class Pago {
     public Pago() {
     }
 
-    public Pago(Long id, Long idReserva, UUID referencia, MetodoPago metodoPago) {
+    public Pago(Long id, Reserva reserva, UUID referencia, MetodoPago metodoPago) {
         this.id = id;
-        this.idReserva = idReserva;
+        this.reserva=reserva;
         this.referencia = referencia;
         this.metodoPago = metodoPago;
     }
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public Long getReserva() {
-        return idReserva;
-    }
-    public void setReserva(Long idReserva) {
-        this.idReserva = idReserva;
-    }
-    public UUID getReferencia() {
-        return referencia;
-    }
-    public void setReferencia(UUID referencia) {
-        this.referencia = referencia;
-    }
-    public MetodoPago getMetodoPago() {
-        return metodoPago;
-    }
-    public void setMetodoPago(MetodoPago metodoPago) {
-        this.metodoPago = metodoPago;
-    }
+
+    public Long getId() {return id;}
+    public void setId(Long id) {this.id = id;}
+
+    public Reserva getReserva() {return reserva;}
+    public void setReserva(Reserva reserva) {this.reserva=reserva;}
+
+    public UUID getReferencia() {return referencia;}
+    public void setReferencia(UUID referencia) {this.referencia = referencia;}
+
+    public MetodoPago getMetodoPago() {return metodoPago;}
+    public void setMetodoPago(MetodoPago metodoPago) {this.metodoPago = metodoPago;}
+    
 
 }

@@ -76,7 +76,7 @@ public class VentanaPago {
         reserva.setPagado(true);
         gestorReservas.actualizarReserva(reserva);
         Pago nuevoPago = new Pago();
-        nuevoPago.setReserva(idReserva);
+        nuevoPago.setReserva(reserva);
         nuevoPago.setMetodoPago(metodoPago);
         nuevoPago.setReferencia(UUID.randomUUID());
         gestorPagos.registrarPago(nuevoPago);

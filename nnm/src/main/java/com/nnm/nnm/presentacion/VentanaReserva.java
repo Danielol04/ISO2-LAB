@@ -26,7 +26,6 @@ import com.nnm.nnm.negocio.controller.GestorUsuarios;
 import com.nnm.nnm.negocio.dominio.entidades.Disponibilidad;
 import com.nnm.nnm.negocio.dominio.entidades.EstadoReserva;
 import com.nnm.nnm.negocio.dominio.entidades.Inmueble;
-import com.nnm.nnm.negocio.dominio.entidades.Pago;
 import com.nnm.nnm.negocio.dominio.entidades.PoliticaCancelacion;
 import com.nnm.nnm.negocio.dominio.entidades.Reserva;
 import com.nnm.nnm.negocio.dominio.entidades.SolicitudReserva;
@@ -69,6 +68,11 @@ public class VentanaReserva {
         List<String> fechasDisponibles = new ArrayList<>();
         for (Disponibilidad d : disponibilidades) {
             LocalDate fecha = d.getFechaInicio();
+            LocalDate fechaFin=d.getFechaFin();
+            if (fechaFin != null && fechaFin.isBefore(LocalDate.now())){
+                gestorDisponibilidad.eliminarDisponibilidad(d);
+                continue;
+            }
             while (!fecha.isAfter(d.getFechaFin())) {
                 fechasDisponibles.add(fecha.toString());
                 fecha = fecha.plusDays(1);
@@ -76,7 +80,7 @@ public class VentanaReserva {
         }
         List<String> fechasReservadas = new ArrayList<>();
         for (Reserva reserva : reservas) {
-            reserva.getEstado(); // Actualiza el estado de la reserva
+            reserva.getEstado();
             if (reserva.getEstado().equals(EstadoReserva.EXPIRADA) || !reserva.getPagado()) {
                 gestorReservas.cancelarReserva(reserva.getId());
                 continue;
@@ -153,7 +157,7 @@ public class VentanaReserva {
             reservas = gestorReservas.obtenerReservasPorInquilino(username);
         }
         for (Reserva reserva : reservas) {
-            reserva.getEstado(); // Actualiza el estado de la reserva
+            reserva.getEstado();
             if (reserva.getEstado().equals(EstadoReserva.EXPIRADA) || !reserva.getPagado()) {
                 gestorReservas.cancelarReserva(reserva.getId());
                 cancelacionesRealizadas = true;
@@ -178,10 +182,6 @@ public class VentanaReserva {
         if (username == null) {
             return REDIRECTLOGIN;
         }
-        Pago pago = gestorPago.obtenerPagoPorReserva(idReserva);
-        log.info("Cancelando pago asociado a la reserva ID: {}", idReserva);
-        
-        gestorPago.borrarPago(pago);
         SolicitudReserva solicitud = gestorSolicitudes.obtenerSolicitudporIDreserva(idReserva);
         if(solicitud != null){
             log.info("Cancelando solicitud asociada a la reserva ID: {}", idReserva);

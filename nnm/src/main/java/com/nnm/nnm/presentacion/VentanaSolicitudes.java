@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.nnm.nnm.negocio.controller.GestorPagos;
 import com.nnm.nnm.negocio.controller.GestorReservas;
 import com.nnm.nnm.negocio.controller.GestorSolicitudes;
-import com.nnm.nnm.negocio.dominio.entidades.Pago;
 import com.nnm.nnm.negocio.dominio.entidades.Reserva;
 import com.nnm.nnm.negocio.dominio.entidades.SolicitudReserva;
 
@@ -65,10 +64,6 @@ public class VentanaSolicitudes {
         log.info("Rechazando solicitud con ID: {}", id);
         gestorSolicitudes.borrarSolicitudReserva(solicitud);
         Reserva reserva = solicitud.getReserva();
-        Pago pago = gestorPagos.obtenerPagoPorReserva(reserva.getId());
-        log.info("Borrando pago asociado con ID: {}", pago.getId());
-        
-        gestorPagos.borrarPago(pago);
         log.info("Cancelando reserva asociada con ID: {} " + reserva.getId());
         gestorReservas.cancelarReserva(reserva.getId());
 

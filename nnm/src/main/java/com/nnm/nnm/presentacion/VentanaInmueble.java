@@ -75,11 +75,10 @@ public class VentanaInmueble{
                 return"redirect:/home";
             }else{
                 log.warn("No se encontró el username del propietario en la sesión");
-                return "redirect:/login"; // Redirigir al login si no hay usuario en sesión
+                return "redirect:/login"; 
             }
         } catch (IOException e) {
             log.error("Error al guardar la foto del inmueble", e);
-            // manejar el error según tu necesidad
         }
         return "redirect:/home";
     }

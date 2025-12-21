@@ -3,6 +3,7 @@ package com.nnm.nnm.negocio.dominio.entidades;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -38,25 +40,30 @@ public class Reserva {
     @Column(name = "politica_cancelacion", nullable = false)
     private PoliticaCancelacion politicaCancelacion;
     @Column(name = "estado", nullable = false)
-    private EstadoReserva estado= EstadoReserva.NOPAGADA;
+    private EstadoReserva estado = EstadoReserva.NOPAGADA;
 
-    @Column(name ="pagada", nullable = false)
+    @Column(name = "pagada", nullable = false)
     private boolean pagada = false;
 
-    @Column(name= "reserva_directa", nullable =  false)
+    @Column(name = "reserva_directa", nullable = false)
     private boolean reservaDirecta;
+
+    @OneToOne(cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @JoinColumn(name = "id_pago", nullable = false)
+    private Pago pago;
 
     public Reserva() {
     }
 
     public Reserva(Long id, Inmueble inmueble, Inquilino inquilino, LocalDate fechaInicio,
-            LocalDate fechaFin, PoliticaCancelacion politicaCancelacion) {
+            LocalDate fechaFin, PoliticaCancelacion politicaCancelacion,Pago pago) {
         this.id = id;
         this.inmueble = inmueble;
         this.inquilino = inquilino;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.politicaCancelacion = politicaCancelacion;
+        this.pago=pago;
     }
 
     public void setId(Long idReserva) {this.id = idReserva;}
@@ -78,12 +85,15 @@ public class Reserva {
     public void setPoliticaCancelacion(PoliticaCancelacion politicaCancelacion) {this.politicaCancelacion = politicaCancelacion;}
 
     public EstadoReserva getEstado() {
-        if (fechaFin != null && fechaFin.isBefore(LocalDate.now())) {setEstado(EstadoReserva.EXPIRADA);}
+        if (fechaFin != null && fechaFin.isBefore(LocalDate.now())) {
+            setEstado(EstadoReserva.EXPIRADA);
+        }
         return estado;
     }
-    public void setEstado(EstadoReserva estado) { this.estado = estado;}
 
+    public void setEstado(EstadoReserva estado) {this.estado = estado;}
     public boolean getPagado() {return pagada;}
+
     public void setPagado(boolean pagada) {this.pagada = pagada;}
 
     public boolean getReservaDirecta() {return reservaDirecta;}
@@ -94,5 +104,10 @@ public class Reserva {
         return noches * inmueble.getPrecio_noche();
     }
 
-    public long getNoches() {return ChronoUnit.DAYS.between(fechaInicio, fechaFin);}
+    public long getNoches() {
+        return ChronoUnit.DAYS.between(fechaInicio, fechaFin);
+    }
+
+    public Pago getPago(){return pago;}
+    public void setPago(Pago pago){this.pago=pago;}
 }
