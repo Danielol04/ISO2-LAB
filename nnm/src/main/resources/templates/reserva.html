@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title th:text="'Detalle de ' + ${inmueble.titulo}">Detalle del Inmueble</title>
+  <link rel="stylesheet" th:href="@{/css/navbar.css}">
+  <link rel="stylesheet" th:href="@{/css/reservar.css}">
+  <link rel="stylesheet" th:href="@{/css/popup.css}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <!-- Logo a la izquierda -->
+    <a th:href="@{/home}" class="logo-link">
+      <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
+    </a>
+
+    <!-- Botones a la derecha -->
+
+    <div class="navbar-right">
+      <th:block th:if="${username != null}">
+        <a th:href="@{/lista-deseos}" class="btn-deseos">Lista de deseos</a>
+        <a th:href="@{/reserva/misReservas/{username}(username=${username})}" class="btn-deseos">Mis reservas</a>
+        <div class="dropdown">
+          <button class="btn-circular">☰</button>
+          <div class="dropdown-content">
+            <a th:href="@{/logout}">Cerrar sesión</a>
+          </div>
+        </div>
+      </th:block>
+      <th:block th:unless="${username != null}">
+        <a th:href="@{/login}" class="btn-deseos">Iniciar sesión</a>
+      </th:block>
+    </div>
+  </nav>
+
+  <!-- CONTENIDO -->
+  <main class="main-content">
+    <section class="contenedor-detalle">
+
+      <!-- INFO INMUEBLE -->
+      <div class="info-inmueble">
+        <div class="box">
+          <h1 th:text="${inmueble.titulo}">Título</h1>
+        </div>
+
+        <div class="box foto-inmueble">
+          <img th:if="${inmueble.foto != null}" th:src="@{/inmuebles/{id}/foto(id=${inmueble.id})}">
+          <div th:if="${inmueble.foto == null}" class="placeholder">Sin imagen</div>
+        </div>
+
+        <div class="box">
+          <p><strong>Ubicación:</strong>
+            <span th:text="${inmueble.localidad}"></span>,
+            <span th:text="${inmueble.provincia}"></span>
+          </p>
+          <p><strong>Dirección:</strong> <span th:text="${inmueble.direccion}"></span></p>
+          <p><strong>Habitaciones:</strong> <span th:text="${inmueble.habitaciones}"></span></p>
+          <p><strong>Baños:</strong> <span th:text="${inmueble.numero_banos}"></span></p>
+          <p class="precio">
+            <strong>Precio:</strong>
+            <span th:text="${inmueble.precio_noche}"></span> €/noche
+          </p>
+        </div>
+      </div>
+
+      <!-- RESERVA -->
+      <div class="reserva-box">
+        <h3>Selecciona tus fechas</h3>
+        <form id="formCrear" th:action="@{'/reserva/crear/' + ${idInmueble}}" th:object="${reserva}" method="post">
+          <input type="hidden" name="idInmueble" th:value="${inmueble.id}">
+          <div class="campo-fecha">
+            <label>Fechas</label>
+
+            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 10px;">
+              <input type="text" id="inputLlegada" name="fechaInicio" placeholder="Llegada" readonly>
+              <input type="text" id="inputSalida" name="fechaFin" placeholder="Salida" readonly>
+            </div>
+
+            <div id="calendarioRango" class="calendario">
+              <div class="calendario-header">
+                <button type="button" id="btnPrev">‹</button>
+                <span id="tituloMeses"></span>
+                <button type="button" id="btnNext">›</button>
+              </div>
+              <div id="contenedorMeses"></div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-reservar-lateral">Reservar</button>
+        </form>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- FECHAS DISPONIBLES DESDE BACKEND -->
+  <script th:inline="javascript">
+    const fechasDisponibles = /*[[${fechasDisponibles}]]*/[];
+    const fechasReservadas =/*[[${fechasReservadas}]]*/[];
+  </script>
+
+  <!-- LÓGICA CALENDARIO -->
+  <script src="/js/reservar.js"></script>
+  <script src="/js/popup.js"></script>
+
+  <!-- POPUP ERROR -->
+  <div id="popupError" class="popup-overlay" style="display:none;">
+    <div class="popup popup-error-modern">
+      <div class="error-icon-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+          stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </div>
+
+      <p id="mensajeError"></p>
+
+      <div class="popup-botones-full">
+        <button type="button" onclick="document.getElementById('popupError').style.display='none'"
+          class="btn-error-full">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!--POPUP RESERVA-->
+  <div id="popupExito" class="popup-overlay" style="display:none;">
+    <div class="popup popup-success-modern">
+      <div class="success-icon-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+          stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+
+      <h2>¡Reserva Confirmada!</h2>
+      <p>Su reserva se ha hecho correctamente. Puede ver el estado de la misma en su ventana de reservas.</p>
+
+      <div class="popup-botones-full">
+        <button type="button" onclick="cerrarPopupExito()" class="btn-exito-full">Entendido</button>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

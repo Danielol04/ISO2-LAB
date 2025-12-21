@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Solicitudes</title>
+    <link rel="stylesheet" href="/css/bandeja.css">
+</head>
+<body>
+    <div class="contenedor-principal">
+        <aside class="sidebar">
+            <div class="usuario-info">
+                <div class="avatar">👤</div>
+                <div class="usuario-nombre"><span th:text="${username}">Usuario</span></div>
+                <p class="rol">Propietario</p>
+            </div>
+            <nav class="menu">
+                <a th:href="@{/home}" class="menu-item">Inicio</a>
+                <a th:href="@{/solicitudes/confirmacionReserva/{username}(username=${username})}" class="menu-item activo">Solicitudes</a>
+                <a th:href="@{/reserva/misReservas/{username}(username=${username})}" class="menu-item">Reservas</a>
+                <a th:href="@{/inmuebles/alta}" class="menu-item" >Registrar Inmuebles</a>
+            </nav>
+        </aside>
+
+        <main class="zona-bandeja">
+            
+            <section class="lista-bandeja">
+                <h2>Solicitudes (<span th:text="${solicitudes.size()}">0</span>)</h2>
+                
+                <div th:if="${#lists.isEmpty(solicitudes)}" class="sin-solicitudes">
+                    <p>No tienes solicitudes pendientes por el momento.</p>
+                </div>
+
+                <div th:unless="${#lists.isEmpty(solicitudes)}">
+                    <ul class="bandeja-lista">
+                        <li class="bandeja-item" th:each="solicitud : ${solicitudes}" 
+                            th:data-id="${solicitud.id}"
+                            th:data-titulo="${solicitud.reserva.inmueble.titulo}"
+                            th:data-nombre="${solicitud.reserva.inquilino.username}"
+                            th:data-fechainicio="${#temporals.format(solicitud.reserva.fechaInicio, 'dd MMM yyyy')}"
+                            th:data-fechafin="${#temporals.format(solicitud.reserva.fechaFin, 'dd MMM yyyy')}"
+                            th:data-noches="${solicitud.noches}"
+                            th:data-precionoche="${solicitud.reserva.inmueble.precio_noche}"
+                            th:data-preciototal="${solicitud.precioTotal}"
+                            th:data-img="@{/inmuebles/{id}/foto(id=${solicitud.reserva.inmueble.id})}">
+
+                            <div class="contenido-item">
+                                <div class="info-principal">
+                                    <strong class="titulo" th:text="${solicitud.reserva.inmueble.titulo}">Título</strong><br>
+                                    <span class="inquilino">Inquilino: <span th:text="${solicitud.reserva.inquilino.username}"></span></span> <br>
+                                    <div class="fechas">
+                                        <small th:text="${#temporals.format(solicitud.reserva.fechaInicio, 'dd MMM')}"></small> - 
+                                        <small th:text="${#temporals.format(solicitud.reserva.fechaFin, 'dd MMM')}"></small>
+                                    </div>
+                                </div>
+                                <small class="fecha-creacion" th:text="${#temporals.format(solicitud.fechaCreacion, 'dd MMM HH:mm')}"></small>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="detalle-bandeja">
+                <div id="detalleContenido" class="detalle-contenido">
+                    <p id="mensaje-placeholder" class="mensaje-placeholder">Selecciona una solicitud para ver los detalles.</p>
+
+                    <div id="detalleInfo" class="hidden">
+                        <h2 id="mdTitulo"></h2>
+                        <div class="img-container">
+                            <img id="mdImg" alt="Imagen inmueble">
+                        </div>
+                        <h3>Detalles de la reserva</h3>
+                        <p><strong>Entrada:</strong> <span id="mdFechaInicio"></span></p>
+                        <p><strong>Salida:</strong> <span id="mdFechaFin"></span></p>
+                        <p><strong>Noches:</strong> <span id="mdNoches"></span></p>
+                        <h3>Inquilino</h3>
+                        <p id="mdNombre"></p>
+                        <h3>Desglose del pago</h3>
+                        <ul>
+                            <li>Precio/noche: <span id="mdPrecioNoche"></span></li>
+                            <li>Total: <strong id="mdPrecioTotal"></strong></li>
+                        </ul>
+                        <div class="acciones">
+                            <form id="formAceptar" method="post" style="display:none;"></form>
+                            <button type="submit" form="formAceptar" class="btn-aceptar">Aceptar</button>
+                            <form id="formRechazar" method="post" style="display:none;"></form>
+                            <button type="submit" form="formRechazar" class="btn-rechazar">Rechazar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/js/detallesSolicitudes.js"></script>
+</body>
+</html>
