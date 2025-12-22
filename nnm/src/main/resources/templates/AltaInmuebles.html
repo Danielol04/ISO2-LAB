@@ -10,23 +10,27 @@
 </head>
 <body>
 <!-- NAVBAR -->
-<nav class="navbar">
+  <nav class="navbar">
+    <!-- Logo a la izquierda -->
     <a th:href="@{/home}" class="logo-link">
-        <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
+      <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
     </a>
-      
+
     <!-- Botones a la derecha -->
     <div class="navbar-right">
-        <a th:href="@{/lista-deseos}" class="btn-deseos">Lista de deseos</a>
-        <a th:href="@{/reserva/misReservas/{username}(username=${username})}" class="btn-deseos">Mis reservas</a>
-        <div class="dropdown">
-            <button class="btn-circular">☰</button>
-            <div class="dropdown-content">
-                <a th:href="@{/logout}">Cerrar sesión</a>
-            </div>
+      <a th:href="@{/solicitudes/confirmacionReserva/{username}(username=${username})}" class="btn-deseos">Solicitudes</a>
+      <a th:href="@{/reserva/misReservas/{username}(username=${username})}" class="btn-deseos">Mis reservas</a>
+      <a th:href="@{/inmuebles/alta}" class="btn-deseos">Registrar Inmuebles</a>
+
+      <div class="dropdown">
+
+        <button class="btn-circular">☰</button>
+        <div class="dropdown-content">
+          <a th:href="@{/logout}">Cerrar sesión</a>
         </div>
+      </div>
     </div>
-</nav>
+  </nav>
   
     <div class="form-container">
         <h1>Registro de Nuevo Inmueble</h1>
