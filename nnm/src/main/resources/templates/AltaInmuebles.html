@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Inmueble</title>
+    
+    <link rel="stylesheet" th:href="@{/css/navbar.css}"> 
+    <link rel="stylesheet" th:href="@{/css/alta-inmuebles.css}">
+    
+</head>
+<body>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a th:href="@{/home}" class="logo-link">
+        <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
+    </a>
+      
+    <!-- Botones a la derecha -->
+    <div class="navbar-right">
+        <a th:href="@{/lista-deseos}" class="btn-deseos">Lista de deseos</a>
+        <a th:href="@{/reserva/misReservas/{username}(username=${username})}" class="btn-deseos">Mis reservas</a>
+        <div class="dropdown">
+            <button class="btn-circular">☰</button>
+            <div class="dropdown-content">
+                <a th:href="@{/logout}">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+</nav>
+  
+    <div class="form-container">
+        <h1>Registro de Nuevo Inmueble</h1>
+
+        <div th:if="${error}" class="message-box error">
+            <p th:text="${error}"></p>
+        </div>
+        <div th:if="${mensaje}" class="message-box success">
+            <p th:text="${mensaje}"></p>
+        </div>
+
+        <form th:action="@{/inmuebles/alta}" th:object="${inmueble}" method="post" enctype="multipart/form-data">
+
+            <div class="form-row">
+                <div class="form-group half-width">
+                    <label for="titulo">Título:</label>
+                    <input type="text" id="titulo" th:field="*{titulo}" placeholder="Ej: Apartamento con vistas al mar" required />
+                </div>
+                <div class="form-group half-width">
+                    <label for="tipo_inmueble">Tipo de Inmueble:</label>
+                    <input type="text" id="tipo_inmueble" th:field="*{tipo_inmueble}" placeholder="Ej: Piso, Casa, Estudio..." required />
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="direccion">Dirección:</label>
+                <input type="text" id="direccion" th:field="*{direccion}" placeholder="Calle, número, piso, puerta" required />
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group third-width">
+                    <label for="localidad">Localidad:</label>
+                    <input type="text" id="localidad" th:field="*{localidad}" required />
+                </div>
+                <div class="form-group third-width">
+                    <label for="provincia">Provincia:</label>
+                    <input type="text" id="provincia" th:field="*{provincia}" required />
+                </div>
+                <div class="form-group third-width">
+                    <label for="codigo_postal">Código Postal:</label>
+                    <input type="text" id="codigo_postal" th:field="*{codigo_postal}" required />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group third-width">
+                    <label for="precio_noche">Precio por Noche (€):</label>
+                    <input type="number" id="precio_noche" th:field="*{precio_noche}" min="0" step="0.01" placeholder="0.00" required />
+                </div>
+                <div class="form-group third-width">
+                    <label for="habitaciones">Habitaciones:</label>
+                    <input type="number" id="habitaciones" th:field="*{habitaciones}" min="1" required />
+                </div>
+                <div class="form-group third-width">
+                    <label for="numero_banos">Número de Baños:</label>
+                    <input type="number" id="numero_banos" th:field="*{numero_banos}" min="1" required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Foto Principal:</label>
+                <input type="file" name="imagen" accept="image/*" class="styled-file-input" required />
+            </div>
+            <div class="button-group">
+                <button type="submit" class="btn-submit">Registrar Inmueble</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
