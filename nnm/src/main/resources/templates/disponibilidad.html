@@ -17,7 +17,8 @@
       <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
     </a>
     <div class="navbar-right">
-      <a th:href="@{/solicitudes/confirmacionReserva/{username}(username=${username})}" class="btn-deseos">Solicitudes</a>
+      <a th:href="@{/solicitudes/confirmacionReserva/{username}(username=${username})}"
+        class="btn-deseos">Solicitudes</a>
       <a th:href="@{/reserva/misReservas/{username}(username=${username})}" class="btn-deseos">Mis reservas</a>
       <a th:href="@{/inmuebles/alta}" class="btn-deseos">Registrar Inmuebles</a>
       <div class="dropdown">
@@ -87,15 +88,16 @@
   <!-- JS CALENDARIO -->
   <script src="/js/disponibilidades.js"></script>
   <script src="/js/popup.js"></script>
-  
+
   <!--JS ELIMINAR DISPONIBILIDAD-->
   <div id="popupEliminar" class="popup-overlay" style="display:none;">
-    <div class="popup">
-      <p>¿Está seguro de que quiere borrar esta disponibilidad?</p>
-      <div class="popup-buttons">
-        <button onclick="cerrarPopup()">No</button>
-        <form id="formEliminar" method="post">
-          <button type="submit">Sí</button>
+    <div class="popup popup-error-modern">
+      <h2>¿Eliminar disponibilidad?</h2>
+      <p>Esta acción no se puede deshacer y el calendario volverá a estar libre.</p>
+      <div class="popup-botones">
+        <button type="button" onclick="cerrarPopup()" class="btn-cancelar">No, volver</button>
+        <form id="formEliminar" method="post" style="flex:1;">
+          <button type="submit" class="btn-confirmar" style="width:100%;">Sí, borrar</button>
         </form>
       </div>
     </div>
@@ -120,4 +122,5 @@
     </div>
   </div>
 </body>
+
 </html>
